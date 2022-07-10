@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
-function App() {
+const App = () => {
 	return (
 		<View style={{ flex: 1 }}>
 			<MapView
