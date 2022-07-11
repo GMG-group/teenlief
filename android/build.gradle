@@ -49,5 +49,10 @@ allprojects {
         }
         google()
         maven { url 'https://www.jitpack.io' }
+
+        // 네이버 지도 저장소
+        maven {
+            url 'https://naver.jfrog.io/artifactory/maven/'
+        }
     }
 }
