@@ -15,13 +15,7 @@ const App = () => {
 	return (
 		<SafeAreaView style={{flex: 1}}>
 			<NavigationContainer ref={navigationRef}>
-				<Stack.Navigator initialRouteName="Main">
-					<Stack.Screen
-						name="Main"
-						component={TabBar}
-						options={{ headerShown: false }}
-					/>
-				</Stack.Navigator>
+				<TabBar />
 			</NavigationContainer>
 		</SafeAreaView>
 	)
