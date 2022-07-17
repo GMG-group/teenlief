@@ -1,15 +1,13 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
+import Login from './components/Login';
 
 const App = () => {
 	return (
-		<View>
-			<Text>
-				Hello
-			</Text>
+		<View style={{flex: 1}}>
+			<Login />
 		</View>
-
-	)
+	);
 }
 
 export default App;
