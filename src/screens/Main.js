@@ -1,19 +1,24 @@
-import React from 'react';
-import NaverMapView from "react-native-nmap";
-import Search from "@components/Search";
-import {View} from "react-native";
+import React, {useEffect} from 'react';
+import { SafeAreaView } from "react-native";
+import {
+	NavigationContainer,
+	NavigationContainerRef
+} from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { TabBar } from '@components/TabBar';
+
+export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
+	React.createRef();
+const Stack = createNativeStackNavigator();
 
 const Main = () => {
 	return (
-		<View>
-			<NaverMapView
-				style={{width: '100%', height: '100%'}}
-				showsMyLocationButton={true}
-			>
-			</NaverMapView>
-
-			<Search />
-		</View>
+		<SafeAreaView style={{flex: 1}}>
+			<NavigationContainer ref={navigationRef}>
+				<TabBar />
+			</NavigationContainer>
+		</SafeAreaView>
 	);
 };
 

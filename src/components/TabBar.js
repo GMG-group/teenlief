@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Feather';
 
 import Bookmark from "@screens/Bookmark";
 import Profile from "@screens/Profile";
-import Main from "@screens/Main";
+import Map from "@screens/Map";
 
 export const TabBar = () => {
 	const _renderIcon = (routeName: string, selectedTab: string) => {
@@ -68,7 +68,7 @@ export const TabBar = () => {
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
 					name="map"
-					component={Main}
+					component={Map}
 				/>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}

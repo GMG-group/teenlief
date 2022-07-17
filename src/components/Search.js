@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import {TextInput, View, StyleSheet, Dimensions, Text, FlatList, ScrollView} from "react-native";
+import {
+	TextInput,
+	View,
+	StyleSheet,
+	Text,
+	ScrollView
+} from "react-native";
 import Icon from "react-native-vector-icons/dist/Feather";
-
-const vw = Dimensions.get('window').width;
-const vh = Dimensions.get('window').height;
+import { vw, vh } from "react-native-css-vh-vw";
 
 const Search = () => {
 	const [search, setSearch] = useState(null);
@@ -11,8 +15,8 @@ const Search = () => {
 
 	return (
 		<View style={styles.container}>
-			<View style={[ styles.search ]}>
-				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+			<View style={styles.search}>
+				<View style={styles.innerSearch}>
 					<Icon name="menu" size={25} color={'#000'} style={{ marginRight: 10 }} />
 					<TextInput
 						style={styles.input}
@@ -20,8 +24,8 @@ const Search = () => {
 						value={search}
 						placeholder="여기서 검색"
 					/>
+					<View style={styles.profileImage}></View>
 				</View>
-				<View style={[ styles.profileImage ]}></View>
 			</View>
 
 			<ScrollView
@@ -55,9 +59,9 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		justifyContent: 'space-between',
 		flexDirection: 'row',
-		width: 0.9 * vw,
+		width: vw(90),
 		height: 50,
-		borderRadius: 0.075 * vw,
+		borderRadius: vw(7.5),
 		alignItems: 'center',
 		paddingLeft: 20,
 		paddingRight: 10,
@@ -72,19 +76,24 @@ const styles = StyleSheet.create({
 		elevation: 10,
 		color: '#000'
 	},
+	innerSearch: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
 	profileImage: {
 		width: 40,
 		height: 40,
-		borderRadius: 0.1 * vw,
-		borderWidth: 1
+		borderRadius: vw(10),
+		borderWidth: 1,
 	},
 	input: {
-		width: 0.6 * vw
+		width: vw(60)
 	},
 	filter: {
 		display: "flex",
 		flexDirection: "row",
-		width: 0.9 * vw,
+		width: vw(90),
 		marginTop: 10
 	},
 	filterItem: {
@@ -97,7 +106,7 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderRadius: 50,
 		marginRight: 10
-	}
+	},
 });
 
 export default Search;
