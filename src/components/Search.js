@@ -39,7 +39,6 @@ const Search = () => {
 					})
 				}
 			</ScrollView>
-
 		</View>
 	);
 };
