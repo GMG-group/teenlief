@@ -83,10 +83,10 @@ const SignUp = ( { navigation } ) => {
 
 const styles = StyleSheet.create({
     container: {
-        display: 'flex',
-        height: 1 * vh,
+        flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-between',
+        backgroundColor: '#FFFAFA',
     },
 });
 
