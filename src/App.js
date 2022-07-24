@@ -5,7 +5,9 @@ import Main from "@screens/Main"
 const App = () => {
 	return (
 		<RecoilRoot>
-			<Main />
+			<React.Suspense>
+				<Main />
+			</React.Suspense>
 		</RecoilRoot>
 	)
 }
