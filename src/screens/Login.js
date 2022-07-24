@@ -11,7 +11,7 @@ import Background from "@components/Background";
 import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import {useRecoilValue, useSetRecoilState} from "recoil";
-import {loginSelector, tokenSelector} from "@apis/selecters"
+import {loginSelector, tokenSelector} from "@apis/selectors"
 import {LOGIN_POST_ERROR} from "@apis/types";
 
 const vw = Dimensions.get('window').width;
