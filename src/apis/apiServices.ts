@@ -1,23 +1,18 @@
-import axios from "axios";
-import {LOGIN_POST_ERROR, USER_GET_ERROR} from "@apis/types";
+import axios, {AxiosResponse} from "axios";
 
 const URL = "http://10.0.2.2:8000";
 
-export async function postLogin(body:any) {
-    return await axios.post (
+export const postLogin = (body:any):Promise<AxiosResponse> => {
+    return axios.post (
         `${URL}/api/accounts/v1/login/`,
         body, {
             withCredentials: false
         },
     )
-        .then((response) => response.data)
-        .catch(err => LOGIN_POST_ERROR);
 }
 
-export async function getUser() {
-    return await axios.get (
+export const getUser = ():Promise<AxiosResponse> => {
+    return axios.get (
         `${URL}/api/accounts/v1/user/`,
     )
-        .then((response) => response.data)
-        .catch(err => USER_GET_ERROR);
 }
