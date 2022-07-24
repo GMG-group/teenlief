@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import {
 	NavigationContainer,
 	NavigationContainerRef
@@ -7,6 +7,8 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { TabBar } from '@components/TabBar';
+import Login from "./Login"
+import SignUp from './SignUp';
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
@@ -16,7 +18,30 @@ const Main = () => {
 	return (
 		<SafeAreaView style={{flex: 1}}>
 			<NavigationContainer ref={navigationRef}>
-				<TabBar />
+			    <Stack.Navigator>
+					<Stack.Screen 
+						name='Login' 
+						component={Login} 
+						options={{
+        			  		headerShown: false,
+        				}}
+						/>
+					<Stack.Screen 
+						name='Sign up' 
+						component={SignUp} 
+						options
+						={{
+          					headerShown: false,
+        				}}
+						/>
+					<Stack.Screen
+						name='Home'
+						component={TabBar}
+						options={{
+							headerShown: false,
+					  	}}
+						/>
+				</Stack.Navigator>
 			</NavigationContainer>
 		</SafeAreaView>
 	);
