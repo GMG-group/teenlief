@@ -1,6 +1,9 @@
 import axios, {AxiosResponse} from "axios";
 
-const URL = "http://10.0.2.2:8000";
+const PROTOCOL = "http://";
+const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
+const IOS_DEV_URL = PROTOCOL +  "127.0.0.1:8000";
+const URL = IOS_DEV_URL;
 
 export const postLogin = (body:any):Promise<AxiosResponse> => {
     return axios.post (
