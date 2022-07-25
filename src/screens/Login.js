@@ -43,7 +43,7 @@ const Login = ( { navigation } ) => {
             setToken({accessToken: loginResponse.access_token, refreshToken: loginResponse.refresh_token});
             navigation.push('Home');
         }
-    },[loginResponse]);
+    },[JSON.stringify(loginResponse)]);
 
     return (
         <SafeAreaView style={styles.container}>
