@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import { SafeAreaView, View } from "react-native";
+import React from 'react';
+import { SafeAreaView } from "react-native";
 import {
 	NavigationContainer,
 	NavigationContainerRef
@@ -7,8 +7,8 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { TabBar } from '@components/TabBar';
-import Login from "./Login"
-import SignUp from './SignUp';
+import Login from "@screens/Login"
+import SignUp from '@screens/SignUp';
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
