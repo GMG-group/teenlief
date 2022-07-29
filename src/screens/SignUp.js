@@ -46,7 +46,7 @@ const SignUp = ( { navigation } ) => {
                     placeHolder={"비밀번호"} 
                     value={password} 
                     setValue={setPassword}
-                    password={false}
+                    password={true}
                     />
                 <CustomInput 
                     placeHolder={"비밀번호 확인"} 
