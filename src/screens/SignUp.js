@@ -40,16 +40,19 @@ const SignUp = ( { navigation } ) => {
                     placeHolder={"이메일"} 
                     value={email} 
                     setValue={setEmail} 
+                    password={false}
                     />
                 <CustomInput 
                     placeHolder={"비밀번호"} 
                     value={password} 
                     setValue={setPassword}
+                    password={false}
                     />
                 <CustomInput 
                     placeHolder={"비밀번호 확인"} 
                     value={confirm} 
                     setValue={setConfirm}
+                    password={true}
                     />
 
                 <TouchableOpacity>

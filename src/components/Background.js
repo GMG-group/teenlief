@@ -1,14 +1,14 @@
-import React from "react";
-import { TextInput, View, StyleSheet, Text, TouchableOpacity, Dimensions, SafeAreaView, Image } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import { View, StyleSheet, Text, Dimensions, Animated, Button } from "react-native";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
-const color = '#1E90FF';
 
 const Background = () => {
     return (
         <View>
-            <View style={styles.background}/>
+            <View style={[styles.background ,{backgroundColor: '#1E90FF'}]}/>
+            <Button title="aaaa" onPress={() => setChangeColor(!changeColor)} />
             <Text style={styles.top}>청소년을 보호하기 위한 teenlief 앱 입니다.</Text>
         </View>
     );
@@ -18,8 +18,7 @@ const styles = StyleSheet.create({
     background: {
         position: 'absolute',
         width: '100%',
-        height: 0.65 * vh,
-        backgroundColor: color,
+        height: 0.6 * vh,
         borderBottomRightRadius: 200,
         borderBottomLeftRadius: 40,
     },

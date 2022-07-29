@@ -1,7 +1,7 @@
 import React from "react";
 import { TextInput, View, StyleSheet, Text, TouchableOpacity, Dimensions, SafeAreaView, Image } from "react-native";
 
-const CustomInput = ( {placeHolder, value, setValue} ) => {
+const CustomInput = ( {placeHolder, value, setValue, password} ) => {
     const onChange = (text) => {
         setValue(text);
     }
@@ -12,6 +12,7 @@ const CustomInput = ( {placeHolder, value, setValue} ) => {
                 placeholder={placeHolder}
                 style={styles.textInput}
                 onChangeText={text => onChange(text)}
+                secureTextEntry={password}
                 />
         </View>
     );
