@@ -22,6 +22,9 @@ module.exports = {
 					'@screens': './src/screens',
 					'@assets': './src/assets',
 					'@query': './src/query',
+					'@apis': './src/apis',
+					'@utils': './src/utils',
+					'@hooks': './src/hooks'
 				},
 			},
 		],

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { View,
          StyleSheet,
          Text, 
@@ -10,6 +10,9 @@ import SwitchSelector from 'react-native-switch-selector';
 import Background from "@components/Background";
 import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
+import {useRecoilValue, useSetRecoilState} from "recoil";
+import {loginSelector, tokenSelector} from "@apis/selectors"
+import {LOGIN_POST_ERROR} from "@apis/types";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -22,13 +25,25 @@ const options = [
 const Login = ( { navigation } ) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [authObj, setAuthObj] = useState({email: "", password: ""})
+    const loginResponse = useRecoilValue(loginSelector(authObj));
+    const setToken = useSetRecoilState(tokenSelector);
 
     const submit = () => {
         console.log(`이메일 :${email}`);
-        console.log(`비밀번호 :${password}`)
-        setEmail("");
-        setPassword("");
+        console.log(`비밀번호 :${password}`);
+        setAuthObj({email: email, password: password});
     }
+
+    useEffect(() => {
+        console.log("loginResponse : ", loginResponse);
+        if(loginResponse === LOGIN_POST_ERROR) {
+            console.log("login fail!");
+        } else {
+            setToken({accessToken: loginResponse.access_token, refreshToken: loginResponse.refresh_token});
+            navigation.push('Home');
+        }
+    },[JSON.stringify(loginResponse)]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -55,7 +70,7 @@ const Login = ( { navigation } ) => {
                 <CustomInput 
                     placeHolder={"password"} 
                     value={password}
-                    setValue={setPassword} 
+                    setValue={setPassword}
                     />
 
                 <TouchableOpacity>
@@ -66,7 +81,7 @@ const Login = ( { navigation } ) => {
 
             {/* bottom */}
             <View style={bottomStyle.container}>
-                <TouchableOpacity style={bottomStyle.login} onPress={() => navigation.push('Home')}>
+                <TouchableOpacity style={bottomStyle.login} onPress={() => submit()}>
                     <View>
                         <Text style={bottomStyle.loginText}>로그인</Text>
                     </View>
