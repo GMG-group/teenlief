@@ -1,14 +1,25 @@
 import { atom } from "recoil";
 
 export interface Token {
-    accessToken: string | null;
-    refreshToken: string | null;
+    accessToken: string;
+    refreshToken: string;
+}
+
+export interface UserInfo {
+    email: string
 }
 
 export const tokenState = atom<Token> ({
     key: "token",
     default: {
-        accessToken: null,
-        refreshToken: null
+        accessToken: "",
+        refreshToken: ""
     }
 });
+
+export const userInfoState = atom<UserInfo> ({
+    key: "userinfo",
+    default: {
+        email: ""
+    }
+})
