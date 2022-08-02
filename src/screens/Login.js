@@ -11,8 +11,9 @@ import Background from "@components/Background";
 import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import {useRecoilValue, useSetRecoilState} from "recoil";
-import {loginSelector, tokenSelector} from "@apis/selectors"
+import {loginSelector} from "@apis/selectors"
 import {LOGIN_POST_ERROR} from "@apis/types";
+import {tokenState} from "@apis/atoms";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -27,7 +28,7 @@ const Login = ( { navigation } ) => {
     const [password, setPassword] = useState("");
     const [authObj, setAuthObj] = useState({email: "", password: ""})
     const loginResponse = useRecoilValue(loginSelector(authObj));
-    const setToken = useSetRecoilState(tokenSelector);
+    const setToken = useSetRecoilState(tokenState);
 
     const submit = () => {
         console.log(`이메일 :${email}`);
