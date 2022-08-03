@@ -19,14 +19,14 @@ const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
 const color = '#1E90FF';
 const options = [
-    { label: '청소년', value: 'teen' },
-    { label: '헬퍼', value: 'helper' },
+    { label: '청소년', value: 'Teen' },
+    { label: '헬퍼', value: 'Helper' },
 ];
 
 const Login = ( { navigation } ) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [authObj, setAuthObj] = useState({email: "", password: ""})
+    const [authObj, setAuthObj] = useState(null)
     const loginResponse = useRecoilValue(loginSelector(authObj));
     const setToken = useSetRecoilState(tokenState);
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { View,
          StyleSheet,
          Text, 
@@ -9,24 +9,52 @@ import { View,
 import Background from "@components/Background";
 import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
+import SwitchSelector from "react-native-switch-selector";
+import {useRecoilValue, useSetRecoilState} from "recoil";
+import {tokenState} from "@apis/atoms";
+import {registrationSelector} from "@apis/selectors";
+import {REGISTRATION_POST_ERROR} from "@apis/types";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
 const color = '#1E90FF';
+const options = [
+    { label: '청소년', value: 'Teen' },
+    { label: '헬퍼', value: 'Helper' },
+];
 
 const SignUp = ( { navigation } ) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [name, setName] = useState("");
     const [confirm, setConfirm] = useState("");
+    const [role, setRole] = useState("Teen");
+    const [body, setBody] = useState(null);
+    const setToken = useSetRecoilState(tokenState);
+    const registrationResponse = useRecoilValue(registrationSelector(body));
 
     const signUpSubmit = () => {
         console.log(`이메일 :${email}`);
+        console.log(`이름 :${name}`)
         console.log(`비밀번호 :${password}`)
         console.log(`비밀번호 확인 :${confirm}`)
-        setEmail("");
-        setPassword("");
-        setConfirm("");
+
+        setBody({email:email, password1:password, password2:confirm, first_name:name, gender:"M", role:role})
     }
+
+    useEffect(() => {
+        console.log(body);
+    },[JSON.stringify(body)]);
+
+    useEffect(() => {
+        console.log("registration response : ", registrationResponse);
+        if(registrationResponse === REGISTRATION_POST_ERROR) {
+            console.log("registration fail!");
+        } else {
+            setToken({accessToken: registrationResponse.access_token, refreshToken: registrationResponse.refresh_token});
+            navigation.push('Home');
+        }
+    },[JSON.stringify(registrationResponse)])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -35,12 +63,27 @@ const SignUp = ( { navigation } ) => {
 
             {/* middle form */}
             <View style={middleStyle.middleContainer}>
+                <SwitchSelector
+                    style={middleStyle.toggle}
+                    options={options}
+                    initial={0}
+                    onPress={value => setRole(value)}
+                    hasPadding={true}
+                    textColor='gray'
+                    buttonColor={color}
+                    height={33}
+                />
                 
                 <CustomInput 
                     placeHolder={"이메일"} 
                     value={email} 
                     setValue={setEmail} 
                     />
+                <CustomInput
+                    placeHolder={"이름"}
+                    value={name}
+                    setValue={setName}
+                />
                 <CustomInput 
                     placeHolder={"비밀번호"} 
                     value={password} 
@@ -52,9 +95,6 @@ const SignUp = ( { navigation } ) => {
                     setValue={setConfirm}
                     />
 
-                <TouchableOpacity>
-                    <Text style={middleStyle.text}>비밀번호를 잊으셨습니까?</Text>
-                </TouchableOpacity>
             </View>
             {/* middle form end */}
 
