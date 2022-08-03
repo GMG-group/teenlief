@@ -21,7 +21,7 @@ GoogleSignin.configure({
     //iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
 });
 
-const SocialLogin = () => {
+const SocialLogin = ({navigation}) => {
     const [user, setUser] = useState();
     const [body, setBody] = useState(null);
     const setToken = useSetRecoilState(tokenState);
@@ -44,8 +44,9 @@ const SocialLogin = () => {
             console.log("login fail!");
         } else {
             setToken({accessToken: googleLoginResponse.access_token, refreshToken: googleLoginResponse.refresh_token});
+            navigation.push("Home")
         }
-    },[googleLoginResponse])
+    },[JSON.stringify(googleLoginResponse)])
 
     const loginGoogle = async () => {
         try {

@@ -88,7 +88,7 @@ const Login = ( { navigation } ) => {
                     </View>
                 </TouchableOpacity>
 
-                <SocialLogin />
+                <SocialLogin navigation={navigation}/>
 
                 <View style={bottomStyle.signupText}>
                     <Text style={{color: 'black'}}>계정이 없으신가요?</Text>
