@@ -10,10 +10,7 @@ import SwitchSelector from 'react-native-switch-selector';
 import Background from "@components/Background";
 import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
-import {useRecoilValue, useSetRecoilState} from "recoil";
-import {loginSelector} from "@apis/selectors"
-import {LOGIN_POST_ERROR} from "@apis/types";
-import {tokenState} from "@apis/atoms";
+import {usePostLoginCallback} from "@apis/apiCallbackes";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -26,25 +23,16 @@ const options = [
 const Login = ( { navigation } ) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [authObj, setAuthObj] = useState(null)
-    const loginResponse = useRecoilValue(loginSelector(authObj));
-    const setToken = useSetRecoilState(tokenState);
+    const postLoginCallback = usePostLoginCallback();
 
     const submit = () => {
         console.log(`이메일 :${email}`);
         console.log(`비밀번호 :${password}`);
-        setAuthObj({email: email, password: password});
+        postLoginCallback({
+            email: email,
+            password: password
+        }).then(r => navigation.push("Home")) ;
     }
-
-    useEffect(() => {
-        console.log("loginResponse : ", loginResponse);
-        if(loginResponse === LOGIN_POST_ERROR) {
-            console.log("login fail!");
-        } else {
-            setToken({accessToken: loginResponse.access_token, refreshToken: loginResponse.refresh_token});
-            navigation.push('Home');
-        }
-    },[JSON.stringify(loginResponse)]);
 
     return (
         <SafeAreaView style={styles.container}>

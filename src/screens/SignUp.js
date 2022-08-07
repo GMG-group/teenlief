@@ -10,10 +10,7 @@ import Background from "@components/Background";
 import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import SwitchSelector from "react-native-switch-selector";
-import {useRecoilValue, useSetRecoilState} from "recoil";
-import {tokenState} from "@apis/atoms";
-import {registrationSelector} from "@apis/selectors";
-import {REGISTRATION_POST_ERROR} from "@apis/types";
+import {usePostLoginCallback, usePostRegistrationCallback} from "@apis/apiCallbackes";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -29,9 +26,7 @@ const SignUp = ( { navigation } ) => {
     const [name, setName] = useState("");
     const [confirm, setConfirm] = useState("");
     const [role, setRole] = useState("Teen");
-    const [body, setBody] = useState(null);
-    const setToken = useSetRecoilState(tokenState);
-    const registrationResponse = useRecoilValue(registrationSelector(body));
+    const postRegistrationCallback = usePostRegistrationCallback();
 
     const signUpSubmit = () => {
         console.log(`이메일 :${email}`);
@@ -39,22 +34,15 @@ const SignUp = ( { navigation } ) => {
         console.log(`비밀번호 :${password}`)
         console.log(`비밀번호 확인 :${confirm}`)
 
-        setBody({email:email, password1:password, password2:confirm, first_name:name, gender:"M", role:role})
-    }
-
-    useEffect(() => {
-        console.log(body);
-    },[JSON.stringify(body)]);
-
-    useEffect(() => {
-        console.log("registration response : ", registrationResponse);
-        if(registrationResponse === REGISTRATION_POST_ERROR) {
-            console.log("registration fail!");
-        } else {
-            setToken({accessToken: registrationResponse.access_token, refreshToken: registrationResponse.refresh_token});
-            navigation.push('Home');
-        }
-    },[JSON.stringify(registrationResponse)])
+        postRegistrationCallback({
+            email: email,
+            password1: password,
+            password2: confirm,
+            first_name: name,
+            gender: "M",
+            role: role
+        }).then(r => {navigation.push("Home")})
+     }
 
     return (
         <SafeAreaView style={styles.container}>

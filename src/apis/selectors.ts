@@ -38,9 +38,13 @@ export const getUserSelector = selector({
 export const googleLoginSelector = selectorFamily<Token, Body>({
     key: 'loginGoogleSelector',
     get: (body) => async ({}) => {
+        console.log("googleLoginSelector ", body);
         if(!body) return GOOGLELOGIN_POST_ERROR;
+        console.log("here!!!!!!!!!!!");
         return postGooleLoginFinish(body)
-            .then((response) => response.data)
+            .then((response) => {
+                console.log(response);
+               return response.data})
             .catch(err => GOOGLELOGIN_POST_ERROR);
     }
 })
