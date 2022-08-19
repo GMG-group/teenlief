@@ -31,7 +31,7 @@ const Login = ( { navigation } ) => {
         postLoginCallback({
             email: email,
             password: password
-        }).then(r => navigation.navigate("Home")) ;
+        }).then(r => navigation.replace("Home")) ;
     }
 
     return (
