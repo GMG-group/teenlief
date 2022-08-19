@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { SafeAreaView } from "react-native";
 import {
 	NavigationContainer,
@@ -10,25 +10,33 @@ import { TabBar } from '@components/TabBar';
 import Login from "@screens/Login"
 import SignUp from '@screens/SignUp';
 import Review from "@screens/Review";
+import {useRecoilValue} from "recoil";
+import {tokenState} from "@apis/atoms";
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
 const Stack = createNativeStackNavigator();
 
 const Main = () => {
+	const token = useRecoilValue(tokenState);
+
+	useEffect(() => {
+		console.log("main.js", token);
+	},[token]);
+
 	return (
 		<SafeAreaView style={{flex: 1}}>
 			<NavigationContainer ref={navigationRef}>
-				<Stack.Navigator>
+			    <Stack.Navigator>
 					<Stack.Screen
-						name='Login'
+						name={'Login'}
 						component={Login}
 						options={{
 							headerShown: false,
 						}}
 					/>
 					<Stack.Screen
-						name='Sign up'
+						name={'Sign up'}
 						component={SignUp}
 						options
 							={{
@@ -36,7 +44,7 @@ const Main = () => {
 						}}
 					/>
 					<Stack.Screen
-						name='Map'
+						name={'Map'}
 						component={TabBar}
 						options={{
 							headerShown: false,
