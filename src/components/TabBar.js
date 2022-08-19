@@ -8,8 +8,8 @@ import Bookmark from "@screens/Bookmark";
 import Profile from "@screens/Profile";
 import Map from "@screens/Map";
 
-export const TabBar = () => {
-	const _renderIcon = (routeName: string, selectedTab: string) => {
+export const TabBar = ({ navigation }) => {
+	const _renderIcon = (routeName, selectedTab) => {
 		let icon = '';
 
 		switch (routeName) {
@@ -29,7 +29,7 @@ export const TabBar = () => {
 			/>
 		);
 	};
-	const renderTabBar = ({ routeName, selectedTab, navigate }: any) => {
+	const renderTabBar = ({ routeName, selectedTab, navigate }) => {
 		return (
 			<TouchableOpacity
 				onPress={() => navigate(routeName)}
@@ -68,7 +68,7 @@ export const TabBar = () => {
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
 					name="map"
-					component={Map}
+					component={() => <Map navigation={navigation} />}
 				/>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}

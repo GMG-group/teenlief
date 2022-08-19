@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { View,
-         StyleSheet,
-         Text, 
-         TouchableOpacity,
-         Dimensions,
-         SafeAreaView
-         } from "react-native";
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    Dimensions,
+    SafeAreaView
+} from "react-native";
 import SwitchSelector from 'react-native-switch-selector';
 import Background from "@components/Background";
 import CustomInput from "@components/CustomInput";
@@ -22,7 +22,7 @@ const options = [
     { label: '헬퍼', value: 'helper' },
 ];
 
-const Login = ( { navigation } ) => {
+const Login = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [authObj, setAuthObj] = useState({email: "", password: ""})
@@ -33,6 +33,7 @@ const Login = ( { navigation } ) => {
         console.log(`이메일 :${email}`);
         console.log(`비밀번호 :${password}`);
         setAuthObj({email: email, password: password});
+        navigation.navigate("Map");
     }
 
     useEffect(() => {
@@ -41,37 +42,36 @@ const Login = ( { navigation } ) => {
             console.log("login fail!");
         } else {
             setToken({accessToken: loginResponse.access_token, refreshToken: loginResponse.refresh_token});
-            navigation.push('Home');
+            navigation.navigate('Home');
         }
     },[JSON.stringify(loginResponse)]);
 
     return (
         <SafeAreaView style={styles.container}>
-            
             <Background />
 
             {/* middle form */}
             <View style={middleStyle.middleContainer}>
-                <SwitchSelector 
+                <SwitchSelector
                     style={middleStyle.toggle}
-                    options={options} 
-                    initial={0} 
-                    onPress={value => console.log(`전역 options변수 참조: ${value}`)} 
+                    options={options}
+                    initial={0}
+                    onPress={value => console.log(`전역 options변수 참조: ${value}`)}
                     hasPadding={true}
                     textColor='gray'
                     buttonColor={color}
                     height={33}
-                    />
-                <CustomInput 
-                    placeHolder={"email"} 
+                />
+                <CustomInput
+                    placeHolder={"email"}
                     value={email}
                     setValue={setEmail}
-                     />
-                <CustomInput 
-                    placeHolder={"password"} 
+                />
+                <CustomInput
+                    placeHolder={"password"}
                     value={password}
                     setValue={setPassword}
-                    />
+                />
 
                 <TouchableOpacity>
                     <Text style={middleStyle.text}>비밀번호를 잊으셨습니까?</Text>

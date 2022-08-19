@@ -9,34 +9,46 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TabBar } from '@components/TabBar';
 import Login from "@screens/Login"
 import SignUp from '@screens/SignUp';
+import Review from "@screens/Review";
+
+export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
+	React.createRef();
+const Stack = createNativeStackNavigator();
 
 const Main = () => {
 	return (
 		<SafeAreaView style={{flex: 1}}>
-			<NavigationContainer>
-			    <Stack.Navigator>
+			<NavigationContainer ref={navigationRef}>
+				<Stack.Navigator>
 					<Stack.Screen
 						name='Login'
 						component={Login}
 						options={{
-        			  		headerShown: false,
-        				}}
-						/>
+							headerShown: false,
+						}}
+					/>
 					<Stack.Screen
 						name='Sign up'
 						component={SignUp}
 						options
-						={{
-          					headerShown: false,
-        				}}
-						/>
+							={{
+							headerShown: false,
+						}}
+					/>
 					<Stack.Screen
-						name='Home'
+						name='Map'
 						component={TabBar}
 						options={{
 							headerShown: false,
-					  	}}
-						/>
+						}}
+					/>
+					<Stack.Screen
+						name={'Review'}
+						component={Review}
+						options={{
+							headerShown: false,
+						}}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</SafeAreaView>
