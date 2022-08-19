@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert, Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
 import { CurvedBottomBar } from 'react-native-curved-bottom-bar';
 import { scale } from 'react-native-utils-scale';
@@ -9,6 +9,12 @@ import Profile from "@screens/Profile";
 import Map from "@screens/Map";
 
 export const TabBar = ({navigation}) => {
+	const [route, setRoute] = useState("Map");
+
+	useEffect(() => {
+		console.log("tabbar", route);
+	},[route])
+
 	const _renderIcon = (routeName: string, selectedTab: string) => {
 		let icon = '';
 
@@ -32,7 +38,10 @@ export const TabBar = ({navigation}) => {
 	const renderTabBar = ({ routeName, selectedTab, navigate }: any) => {
 		return (
 			<TouchableOpacity
-				onPress={() => navigate(routeName)}
+				onPress={() => {
+					setRoute(routeName);
+					navigate(routeName);
+				}}
 				style={{
 					flex: 1,
 					alignItems: 'center',
@@ -43,6 +52,35 @@ export const TabBar = ({navigation}) => {
 		);
 	};
 
+	const MapCircle = () => (
+		<Animated.View style={styles.btnCircle}>
+			<TouchableOpacity
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+				}}
+				onPress={() => {
+					setRoute("Map");
+					navigation.navigate("Map")
+				}}>
+				<Icon name={'search'} color="black" size={scale(25)} />
+			</TouchableOpacity>
+		</Animated.View>
+	)
+
+	const AddMarkerCircle = () => (
+		<Animated.View style={styles.btnCircle}>
+			<TouchableOpacity
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+				}}
+				onPress={() => {navigation.navigate("Map")}}>
+				<Icon name={'map-pin'} color="black" size={scale(25)} />
+			</TouchableOpacity>
+		</Animated.View>
+	)
+
 	return (
 		<View style={{ flex: 1 }}>
 			<CurvedBottomBar.Navigator
@@ -52,23 +90,13 @@ export const TabBar = ({navigation}) => {
 				circleWidth={scale(55)}
 				bgColor="white"
 				initialRouteName="Map"
-				renderCircle={() => (
-					<Animated.View style={styles.btnCircle}>
-						<TouchableOpacity
-							style={{
-								flex: 1,
-								justifyContent: 'center',
-							}}
-							onPress={() => {navigation.navigate("Map")}}>
-							<Icon name={'search'} color="black" size={scale(25)} />
-						</TouchableOpacity>
-					</Animated.View>
-				)}
+				renderCircle={route==="Map" ? AddMarkerCircle : MapCircle}
 				tabBar={renderTabBar}>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
 					name="Map"
 					component={Map}
+					position="CENTER"
 				/>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
