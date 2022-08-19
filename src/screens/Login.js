@@ -10,40 +10,29 @@ import SwitchSelector from 'react-native-switch-selector';
 import Background from "@components/Background";
 import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
-import {useRecoilValue, useSetRecoilState} from "recoil";
-import {loginSelector, tokenSelector} from "@apis/selectors"
-import {LOGIN_POST_ERROR} from "@apis/types";
+import {usePostLoginCallback} from "@apis/apiCallbackes";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
 const color = '#1E90FF';
 const options = [
-    { label: '청소년', value: 'teen' },
-    { label: '헬퍼', value: 'helper' },
+    { label: '청소년', value: 'Teen' },
+    { label: '헬퍼', value: 'Helper' },
 ];
 
 const Login = ( { navigation } ) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [authObj, setAuthObj] = useState({email: "", password: ""})
-    const loginResponse = useRecoilValue(loginSelector(authObj));
-    const setToken = useSetRecoilState(tokenSelector);
+    const postLoginCallback = usePostLoginCallback();
 
     const submit = () => {
         console.log(`이메일 :${email}`);
         console.log(`비밀번호 :${password}`);
-        setAuthObj({email: email, password: password});
+        postLoginCallback({
+            email: email,
+            password: password
+        }).then(r => navigation.replace("Home")) ;
     }
-
-    useEffect(() => {
-        console.log("loginResponse : ", loginResponse);
-        if(loginResponse === LOGIN_POST_ERROR) {
-            console.log("login fail!");
-        } else {
-            setToken({accessToken: loginResponse.access_token, refreshToken: loginResponse.refresh_token});
-            navigation.push('Home');
-        }
-    },[JSON.stringify(loginResponse)]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -87,7 +76,7 @@ const Login = ( { navigation } ) => {
                     </View>
                 </TouchableOpacity>
 
-                <SocialLogin />
+                <SocialLogin navigation={navigation}/>
 
                 <View style={bottomStyle.signupText}>
                     <Text style={{color: 'black'}}>계정이 없으신가요?</Text>

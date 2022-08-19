@@ -8,15 +8,15 @@ import Bookmark from "@screens/Bookmark";
 import Profile from "@screens/Profile";
 import Map from "@screens/Map";
 
-export const TabBar = () => {
+export const TabBar = ({navigation}) => {
 	const _renderIcon = (routeName: string, selectedTab: string) => {
 		let icon = '';
 
 		switch (routeName) {
-			case 'bookmarks':
+			case 'Bookmark':
 				icon = 'bookmark';
 				break;
-			case 'profile':
+			case 'Profile':
 				icon = 'user';
 				break;
 		}
@@ -51,7 +51,7 @@ export const TabBar = () => {
 				height={scale(55)}
 				circleWidth={scale(55)}
 				bgColor="white"
-				initialRouteName="map"
+				initialRouteName="Map"
 				renderCircle={() => (
 					<Animated.View style={styles.btnCircle}>
 						<TouchableOpacity
@@ -59,7 +59,7 @@ export const TabBar = () => {
 								flex: 1,
 								justifyContent: 'center',
 							}}
-							onPress={() => Alert.alert('Click Action')}>
+							onPress={() => {navigation.navigate("Map")}}>
 							<Icon name={'search'} color="black" size={scale(25)} />
 						</TouchableOpacity>
 					</Animated.View>
@@ -67,18 +67,18 @@ export const TabBar = () => {
 				tabBar={renderTabBar}>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
-					name="map"
+					name="Map"
 					component={Map}
 				/>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
-					name="bookmarks"
+					name="Bookmark"
 					position="LEFT"
 					component={Bookmark}
 				/>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
-					name="profile"
+					name="Profile"
 					component={Profile}
 					position="RIGHT"
 				/>
