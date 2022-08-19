@@ -1,0 +1,2 @@
+export const LOGIN_POST_ERROR = "LOGIN_POST_ERROR";
+export const USER_GET_ERROR = "USER_GET_ERROR"
