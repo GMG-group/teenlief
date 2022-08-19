@@ -41,7 +41,7 @@ const SignUp = ( { navigation } ) => {
             first_name: name,
             gender: "M",
             role: role
-        }).then(r => {navigation.push("Home")})
+        }).then(r => {navigation.navigate("Home")})
      }
 
     return (
