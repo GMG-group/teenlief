@@ -1,14 +1,19 @@
 import React from 'react';
 import {RecoilRoot} from "recoil";
+import ReactNativeRecoilPersist, {
+	ReactNativeRecoilPersistGate,
+} from "react-native-recoil-persist";
 import Main from "@screens/Main"
 import {Text} from "react-native";
 
 const App = () => {
 	return (
 		<RecoilRoot>
-			<React.Suspense fallback={<Text>Loading...</Text>}>
-				<Main />
-			</React.Suspense>
+			<ReactNativeRecoilPersistGate store={ReactNativeRecoilPersist}>
+				<React.Suspense fallback={<Text>Loading...</Text>}>
+					<Main />
+				</React.Suspense>
+			</ReactNativeRecoilPersistGate>
 		</RecoilRoot>
 	)
 }
