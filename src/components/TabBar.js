@@ -43,6 +43,10 @@ export const TabBar = ({ navigation }) => {
 		);
 	};
 
+	const RenderMap = () => (
+		<Map navigation={navigation} />
+	)
+
 	return (
 		<View style={{ flex: 1 }}>
 			<CurvedBottomBar.Navigator
@@ -68,7 +72,7 @@ export const TabBar = ({ navigation }) => {
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
 					name="Map"
-					component={() => <Map navigation={navigation} />}
+					component={RenderMap}
 				/>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
