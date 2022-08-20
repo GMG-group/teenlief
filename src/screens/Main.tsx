@@ -55,7 +55,14 @@ const Main = () => {
 						options={{
 							headerShown: false,
 					  	}}
-						/>
+					/>
+					<Stack.Screen
+						name='Review'
+						component={Review}
+						options={{
+							headerShown: false,
+						}}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</SafeAreaView>

@@ -68,7 +68,7 @@ export const TabBar = ({ navigation }) => {
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
 					name="Map"
-					component={() => <Map navigation={navigation} />}
+					component={Map}
 				/>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
