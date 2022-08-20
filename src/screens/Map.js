@@ -10,7 +10,7 @@ const Map = ({ navigation }) => {
 	const bottomSheetModalRef = useRef(null);
 
 	// variables
-	const snapPoints = useMemo(() => ['50%', '100%'], []);
+	const snapPoints = useMemo(() => ['15%', '50%', '100%'], []);
 
 	return (
 		<>
@@ -25,6 +25,7 @@ const Map = ({ navigation }) => {
 			<NaverMapView
 				style={{width: '100%', height: '100%'}}
 				showsMyLocationButton={false}
+				useTextureView={true}
 			>
 				<Marker
 					coordinate={{latitude: 37.5828, longitude: 127.0107}}
