@@ -28,35 +28,34 @@ const Main = () => {
 		<SafeAreaView style={{flex: 1}}>
 			<NavigationContainer ref={navigationRef}>
 			    <Stack.Navigator>
+					{
+						token.accessToken === "" ? (
+							<>
+								<Stack.Screen
+									name='Login'
+									component={Login}
+									options={{
+										headerShown: false,
+									}}
+								/>
+								<Stack.Screen
+									name='Sign up'
+									component={SignUp}
+									options
+										={{
+										headerShown: false,
+									}}
+								/>
+							</>
+						) : null
+					}
 					<Stack.Screen
-						name={'Login'}
-						component={Login}
-						options={{
-							headerShown: false,
-						}}
-					/>
-					<Stack.Screen
-						name={'Sign up'}
-						component={SignUp}
-						options
-							={{
-							headerShown: false,
-						}}
-					/>
-					<Stack.Screen
-						name={'Map'}
+						name='Home'
 						component={TabBar}
 						options={{
 							headerShown: false,
-						}}
-					/>
-					<Stack.Screen
-						name={'Review'}
-						component={Review}
-						options={{
-							headerShown: false,
-						}}
-					/>
+					  	}}
+						/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</SafeAreaView>
