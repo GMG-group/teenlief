@@ -54,3 +54,13 @@ export const usePostMarkerCallback = () => {
         [],
     );
 }
+
+export const useGetMarkerCallback = () => {
+    return useRecoilCallback(({snapshot, set}) =>
+            async () => {
+                const token = await snapshot.getPromise(tokenState);
+                return await getMarker(token.accessToken);
+            },
+        [],
+    );
+}

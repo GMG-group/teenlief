@@ -50,7 +50,19 @@ export const postMarker = (token:string, body:any):Promise<AxiosResponse> => {
         `${URL}/api/marker/`,
         body, {
             headers: {
-                'Authorization': 'Bearer ' + token,
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        }
+    )
+}
+
+export const getMarker = (token:string):Promise<AxiosResponse> => {
+    return axios.get(
+        `${URL}/api/marker/`,
+         {
+            headers: {
+                Authorization: 'Bearer ' + token,
                 'Content-Type': 'application/json'
             }
         }
