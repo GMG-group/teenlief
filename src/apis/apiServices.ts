@@ -44,3 +44,15 @@ export const getUser = (token: string):Promise<AxiosResponse> => {
         }
     )
 }
+
+export const postMarker = (token:string, body:any):Promise<AxiosResponse> => {
+    return axios.post(
+        `${URL}/api/marker/`,
+        body, {
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        }
+    )
+}
