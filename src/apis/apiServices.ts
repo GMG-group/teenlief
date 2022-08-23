@@ -24,6 +24,7 @@ export const postRegistration = (body:any):Promise<AxiosResponse> => {
 }
 
 export const postGooleLoginFinish = (body:any):Promise<AxiosResponse> => {
+    console.log(body)
     return axios.post(
         `${URL}/api/accounts/v1/login/google/finish/`,
         body, {

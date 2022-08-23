@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { View,
-         StyleSheet,
-         Text, 
-         TouchableOpacity, 
-         Dimensions, 
-         SafeAreaView 
-         } from "react-native";
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    Dimensions,
+    SafeAreaView
+} from "react-native";
 import Background from "@components/Background";
 import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
@@ -46,7 +46,6 @@ const SignUp = ( { navigation } ) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            
             <Background />
 
             {/* middle form */}
@@ -61,11 +60,11 @@ const SignUp = ( { navigation } ) => {
                     buttonColor={color}
                     height={33}
                 />
-                
-                <CustomInput 
-                    placeHolder={"이메일"} 
-                    value={email} 
-                    setValue={setEmail} 
+
+                <CustomInput
+                    placeHolder={"이메일"}
+                    value={email}
+                    setValue={setEmail}
                     />
                 <CustomInput
                     placeHolder={"이름"}
@@ -76,12 +75,12 @@ const SignUp = ( { navigation } ) => {
                     placeHolder={"비밀번호"} 
                     value={password} 
                     setValue={setPassword}
-                    />
-                <CustomInput 
-                    placeHolder={"비밀번호 확인"} 
-                    value={confirm} 
+                />
+                <CustomInput
+                    placeHolder={"비밀번호 확인"}
+                    value={confirm}
                     setValue={setConfirm}
-                    />
+                />
 
             </View>
             {/* middle form end */}
@@ -98,13 +97,12 @@ const SignUp = ( { navigation } ) => {
 
                 <View style={bottomStyle.signupText}>
                     <Text style={{color: 'black'}}>계정이 있으신가요?</Text>
-                    <TouchableOpacity onPress={() => navigation.push('Login') }>
+                    <TouchableOpacity onPress={() => navigation.navigate('Login') }>
                         <Text style={{color: color}}> 로그인</Text>
                     </TouchableOpacity>
                 </View>
             </View>
             {/* bottom end */}
-
         </SafeAreaView>
     );
 }

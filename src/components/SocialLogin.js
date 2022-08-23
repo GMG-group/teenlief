@@ -35,7 +35,9 @@ const SocialLogin = ({navigation}) => {
             postGoogleLoginFinishCallback({
                 "code": user.serverAuthCode,
                 "id_token": user.idToken
-            }).then(r => {navigation.replace("Home")})
+            }).then(r => {
+                navigation.navigate("Map")
+            })
         }
 
     },[JSON.stringify(user)]);

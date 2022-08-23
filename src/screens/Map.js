@@ -1,32 +1,46 @@
-import React from 'react';
-import NaverMapView from "react-native-nmap";
-import Search from "@components/Search";
+import React, {useMemo, useRef} from 'react';
+import NaverMapView, { Marker } from "react-native-nmap";
+import {BottomSheetModal} from "@gorhom/bottom-sheet";
 import {Dimensions, StyleSheet, View} from "react-native";
-import {Marker, Path, Polygon, Polyline} from "react-native-nmap/index";
+import Search from "@components/Search";
+import HelperInfoBottomSheet from "@components/HelperInfoBottomSheet";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
 
-const Map = () => {
-	const P0 = {latitude: 37.564362, longitude: 126.977011};
-	const P1 = {latitude: 37.565051, longitude: 126.978567};
-	const P2 = {latitude: 37.565383, longitude: 126.976292};
+const Map = ({ navigation }) => {
+	// ref
+	const bottomSheetModalRef = useRef(null);
+
+	// variables
+	const snapPoints = useMemo(() => ['15%', '50%', '100%'], []);
 
 	return (
-		<View>
-			<View style={styles.centerMarker}></View>
+		<>
+			<BottomSheetModal
+				ref={bottomSheetModalRef}
+				index={0}
+				snapPoints={snapPoints}
+			>
+				<HelperInfoBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} />
+			</BottomSheetModal>
+
 			<NaverMapView
 				style={{width: '100%', height: '100%'}}
-				showsMyLocationButton={true}
+				showsMyLocationButton={false}
+				useTextureView={true}
 			>
-				<Marker coordinate={P0} onClick={() => console.warn('onClick! p0')}/>
-				<Marker coordinate={P1} pinColor="blue" onClick={() => console.warn('onClick! p1')}/>
-				<Marker coordinate={P2} pinColor="red" onClick={() => console.warn('onClick! p2')}/>
-
+				<Marker
+					coordinate={{latitude: 37.5828, longitude: 127.0107}}
+					onClick={() => {
+						console.log("click");
+						bottomSheetModalRef.current?.present();
+					}}
+				/>
 			</NaverMapView>
 
 			<Search />
-		</View>
+		</>
 	);
 };
 
