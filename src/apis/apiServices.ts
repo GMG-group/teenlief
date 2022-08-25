@@ -33,19 +33,22 @@ export const postGooleLoginFinish = (body:any):Promise<AxiosResponse> => {
     )
 }
 
-export const getUser = (token: string):Promise<AxiosResponse> => {
-    return axios.get (
+export const getUser = (token:string):Promise<AxiosResponse> => {
+    console.log("get user", token);
+    return axios.get(
         `${URL}/api/accounts/v1/user/`,
         {
             withCredentials: false,
             headers: {
-                Authorization: token
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json'
             }
         }
     )
 }
 
 export const postMarker = (token:string, body:any):Promise<AxiosResponse> => {
+    console.log("postMarker", body);
     return axios.post(
         `${URL}/api/marker/`,
         body, {
@@ -58,9 +61,11 @@ export const postMarker = (token:string, body:any):Promise<AxiosResponse> => {
 }
 
 export const getMarker = (token:string):Promise<AxiosResponse> => {
+    console.log("get marker", token);
     return axios.get(
         `${URL}/api/marker/`,
          {
+             withCredentials: false,
             headers: {
                 Authorization: 'Bearer ' + token,
                 'Content-Type': 'application/json'

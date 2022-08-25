@@ -1,5 +1,5 @@
 import {useRecoilCallback, useRecoilValue} from "recoil";
-import {getUser, postGooleLoginFinish, postLogin, postMarker, postRegistration} from "@apis/apiServices";
+import {getMarker, getUser, postGooleLoginFinish, postLogin, postMarker, postRegistration} from "@apis/apiServices";
 import {tokenState} from "@apis/atoms";
 import {MARKER_POST_ERROR} from "@apis/types";
 

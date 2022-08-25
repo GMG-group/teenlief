@@ -5,6 +5,8 @@ import {Button, Dimensions, StyleSheet, Text, TouchableOpacity, View} from "reac
 import Search from "@components/Search";
 import HelperInfoBottomSheet from "@components/HelperInfoBottomSheet";
 import {usePostMarkerCallback, usePostRegistrationCallback} from "@apis/apiCallbackes";
+import useApi from "@apis/useApi";
+import {getMarker, getUser, postMarker} from "@apis/apiServices";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -16,16 +18,25 @@ const Map = ({ navigation }) => {
 	// variables
 	const snapPoints = useMemo(() => ['15%', '50%', '100%'], []);
 	const [cameraCoords, setCameraCoords] = useState({latitude: 37.5828, longitude: 127.0107})
-
-	const postMarkerCallback = usePostMarkerCallback();
+	const [loading, resolved, callApi] = useApi(postMarker, true);
 
 	useEffect(() => {
 		console.log(cameraCoords);
 	},[cameraCoords]);
 
+	useEffect(() => {
+		console.log("loading:" , loading);
+
+	},[loading])
+
+	useEffect(() => {
+		console.log("resolved:" , resolved);
+
+	},[resolved])
+
 	const uploadMarker = () => {
 		console.log("upload");
-		postMarkerCallback(
+		callApi(
 			JSON.stringify({
 			"longitude": cameraCoords.longitude,
 			"latitude": cameraCoords.latitude,
