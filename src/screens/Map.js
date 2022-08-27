@@ -11,7 +11,7 @@ import {getMarker, getUser, postMarker} from "@apis/apiServices";
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
 
-const Map = ({ navigation }) => {
+const Map = ({ route, navigation }) => {
 	// ref
 	const bottomSheetModalRef = useRef(null);
 
@@ -19,6 +19,7 @@ const Map = ({ navigation }) => {
 	const snapPoints = useMemo(() => ['15%', '50%', '100%'], []);
 	const [cameraCoords, setCameraCoords] = useState({latitude: 37.5828, longitude: 127.0107})
 	const [loading, resolved, callApi] = useApi(postMarker, true);
+	const { markerUpload } = route.params;
 
 	useEffect(() => {
 		console.log(cameraCoords);
@@ -42,7 +43,7 @@ const Map = ({ navigation }) => {
 			"latitude": cameraCoords.latitude,
 			"image": null,
 			"explanation": "test6"
-		})).then(r => {console.log("marker upload finish", r.data)})
+		}))
 		.catch(err => {console.log(err)});
 	}
 
@@ -55,12 +56,19 @@ const Map = ({ navigation }) => {
 			>
 				<HelperInfoBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} />
 			</BottomSheetModal>
-			<View style={styles.centerMarker}></View>
-			<TouchableOpacity  style={styles.markerUploadButton} onPress={uploadMarker}>
-				<Text style={styles.markerUploadButtonText}>
-					결정
-				</Text>
-			</TouchableOpacity>
+			{
+				markerUpload ? (
+					<>
+						<View style={styles.centerMarker}></View>
+						<TouchableOpacity  style={styles.markerUploadButton} onPress={uploadMarker}>
+							<Text style={styles.markerUploadButtonText}>
+								결정
+							</Text>
+						</TouchableOpacity>
+					</>
+				) : null
+			}
+
 			<NaverMapView
 				style={{width: '100%', height: '100%'}}
 				showsMyLocationButton={false}

@@ -10,6 +10,7 @@ import Map from "@screens/Map";
 
 export const TabBar = ({ navigation }) => {
 	const [route, setRoute] = useState("Map");
+	const [markerUpload, setMarkerUpload] = useState(false);
 	const _renderIcon = (routeName, selectedTab) => {
 		let icon = '';
 		switch (routeName) {
@@ -69,7 +70,12 @@ export const TabBar = ({ navigation }) => {
 					flex: 1,
 					justifyContent: 'center',
 				}}
-				onPress={() => {navigation.navigate("Map")}}>
+				onPress={() => {
+					setMarkerUpload(markerUpload => !markerUpload);
+					navigation.navigate("Map", {
+						markerUpload: markerUpload
+					})
+				}}>
 				<Icon name={'map-pin'} color="black" size={scale(25)} />
 			</TouchableOpacity>
 		</Animated.View>
@@ -90,6 +96,7 @@ export const TabBar = ({ navigation }) => {
 					options={{ headerShown: false }}
 					name="Map"
 					component={Map}
+					initialParams={{ markerUpload: false }}
 					position="CENTER"
 				/>
 				<CurvedBottomBar.Screen
