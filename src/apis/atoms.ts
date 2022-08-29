@@ -10,6 +10,10 @@ export interface UserInfo {
     email: string
 }
 
+export interface Action {
+    action: string;
+}
+
 export const tokenState = atom<Token> ({
     key: "token",
     default: {
@@ -23,5 +27,12 @@ export const userInfoState = atom<UserInfo> ({
     key: "userinfo",
     default: {
         email: ""
+    }
+})
+
+export const actionState = atom<Action> ({
+    key: "action",
+    default: {
+        action: ""
     }
 })

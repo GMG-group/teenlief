@@ -7,10 +7,13 @@ import Icon from 'react-native-vector-icons/Feather';
 import Bookmark from "@screens/Bookmark";
 import Profile from "@screens/Profile";
 import Map from "@screens/Map";
+import {useRecoilState} from "recoil";
+import {actionState} from "@apis/atoms";
+import {mark} from "@babel/runtime/helpers/regeneratorRuntime";
 
 export const TabBar = ({ navigation }) => {
 	const [route, setRoute] = useState("Map");
-	const [markerUpload, setMarkerUpload] = useState(false);
+	const [action, setAction] = useRecoilState(actionState);
 	const _renderIcon = (routeName, selectedTab) => {
 		let icon = '';
 		switch (routeName) {
@@ -71,15 +74,17 @@ export const TabBar = ({ navigation }) => {
 					justifyContent: 'center',
 				}}
 				onPress={() => {
-					setMarkerUpload(markerUpload => !markerUpload);
-					navigation.navigate("Map", {
-						markerUpload: markerUpload
-					})
+					setAction("upload");
+					navigation.navigate("Map")
 				}}>
 				<Icon name={'map-pin'} color="black" size={scale(25)} />
 			</TouchableOpacity>
 		</Animated.View>
 	)
+
+	if(action === "upload") {
+		return <Map/>
+	}
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -96,7 +101,6 @@ export const TabBar = ({ navigation }) => {
 					options={{ headerShown: false }}
 					name="Map"
 					component={Map}
-					initialParams={{ markerUpload: false }}
 					position="CENTER"
 				/>
 				<CurvedBottomBar.Screen
