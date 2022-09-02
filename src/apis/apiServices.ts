@@ -1,4 +1,5 @@
 import axios, {AxiosResponse} from "axios";
+import Config from "react-native-config";
 
 const PROTOCOL = "http://";
 const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
@@ -69,8 +70,8 @@ export const getReverseGeocoding = (cameraCoords: any):Promise<AxiosResponse> =>
         `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${coords}&orders=roadaddr&output=json`,
         {
             headers: {
-                "X-NCP-APIGW-API-KEY-ID": NAVER_MAP_API_KEY, // TODO: env파일에서 가져오기
-                "X-NCP-APIGW-API-KEY": NAVER_MAP_API_SECRET
+                "X-NCP-APIGW-API-KEY-ID": Config.NAVER_MAP_API_KEY, // TODO: env파일에서 가져오기
+                "X-NCP-APIGW-API-KEY": Config.NAVER_MAP_API_SECRET
             }
         }
     )
