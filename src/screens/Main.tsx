@@ -9,8 +9,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TabBar } from '@components/TabBar';
 import Login from "@screens/Login"
 import SignUp from '@screens/SignUp';
-import Review from "@screens/Review";
 import ChatRoom from '@screens/ChatRoom';
+import Review from "@screens/Review";
 import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
 

@@ -5,15 +5,15 @@ import { vw, vh } from "react-native-css-vh-vw";
 
 const Speech = ({name, text, direction}) => {
     return (
-        <View style={[styles.container, direction === 'you' ? {flexDirection: 'row'} : {flexDirection: 'row-reverse'}]}>
+        <View style={[styles.container, direction === 'helper' ? {flexDirection: 'row'} : {flexDirection: 'row-reverse'}]}>
             <View style={styles.border}>
                 <Image style={styles.profile} source={test} />
             </View>
             
-            <View style={direction === 'you' ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
+            <View style={direction === 'helper' ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
                 <Text style={styles.name}>{name}</Text>
                 <View style={styles.speech}>
-                    <View style={[styles.triangle, direction === 'you' ? {transform: [{ rotate: "90deg" }]} : {right: 0}]}></View>
+                    <View style={[styles.triangle, direction === 'helper' ? {transform: [{ rotate: "90deg" }]} : {right: 0}]}></View>
                     <Text style={styles.text}>{text}</Text>
                 </View>
             </View>

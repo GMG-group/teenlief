@@ -1,5 +1,5 @@
-import React from 'react';
-import {Text, TextInput, View, StyleSheet, ScrollView} from "react-native";
+import React, {useRef} from 'react';
+import {Text, TextInput, View, StyleSheet, ScrollView, FlatList} from "react-native";
 import { vw, vh } from "react-native-css-vh-vw";
 import Icon from "react-native-vector-icons/Ionicons";
 import ChatView from '@components/ChatView';
@@ -64,6 +64,8 @@ const testData = [
 ]
 const Bookmark = ({navigation}) => {
 	const filterTag = ["숙식", "숙식", "숙식", "숙식", "숙식", "숙식"];
+
+	const tagListRef = useRef(null);
 	return (
 		<View style={styles.container}>
 			<View style={styles.search}>
@@ -77,7 +79,7 @@ const Bookmark = ({navigation}) => {
 			</View>
 
 
-			<ScrollView
+			{/* <ScrollView
 				style={styles.filter}
 				horizontal={true}
 				scrollEnabled={true}
@@ -91,7 +93,28 @@ const Bookmark = ({navigation}) => {
 						)
 					})
 				}
-			</ScrollView>
+			</ScrollView> */}
+
+			<FlatList
+				ref={tagListRef}
+				data={filterTag}
+				style={styles.filter}
+				contentContainerStyle={{
+					flexGrow: 1,
+					alignItems: 'center',
+					justifyContent: 'center',
+					width: 650,
+				}}
+				renderItem={({item}) =>
+					<View style={styles.filterItem} key={item.id}>
+						<Text style={{color: 'black'}}>{ item }</Text>
+					</View>
+				}
+				keyExtractor={(item, index) => 'key' + index}
+				horizontal
+				showsVerticalScrollIndicator={false}
+				showsHorizontalScrollIndicator={false}
+			/>
 
 			<ScrollView
 				scrollEnabled={true}
@@ -149,7 +172,7 @@ const styles = StyleSheet.create({
 	filter: {
 		display: "flex",
 		flexDirection: "row",
-		width: vw(90),
+		// width: vw(100),
 		marginTop: 10,
 		marginBottom: 30,
 	},
