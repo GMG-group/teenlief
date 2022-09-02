@@ -16,10 +16,6 @@ export const ACTION = {
 } as const;
 type ACTION = typeof ACTION[keyof typeof ACTION];
 
-export interface Action {
-    action: ACTION;
-}
-
 export const tokenState = atom<Token> ({
     key: "token",
     default: {
@@ -36,9 +32,7 @@ export const userInfoState = atom<UserInfo> ({
     }
 })
 
-export const actionState = atom<Action> ({
+export const actionState = atom<ACTION> ({
     key: "action",
-    default: {
-        action: ACTION.Main
-    }
+    default: ACTION.Main
 })
