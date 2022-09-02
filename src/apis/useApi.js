@@ -14,14 +14,14 @@ const useApi = (api, authHeader=false) => {
         return headers
     }
 
-
     const callback = useRecoilCallback(({snapshot, set}) =>
             async (...args) => {
+                console.log("args", args);
                 let access_token;
                 if(authHeader) {
                     access_token = (await snapshot.getPromise(tokenState)).accessToken;
                 }
-                const {data} = await api(authHeader ? makeHeaders(access_token) : null, ...args);
+                const {data} = authHeader ? await api(makeHeaders(access_token), ...args) : await api(...args);
                 setLoading(false);
                 setResolved(data);
                 return data
