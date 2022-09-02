@@ -95,13 +95,6 @@ const Map = ({ route, navigation }) => {
 					})
 				}}
 			>
-				<Marker
-					coordinate={{latitude: 37.5828, longitude: 127.0107}}
-					onClick={() => {
-						console.log("click");
-						bottomSheetModalRef.current?.present();
-					}}
-				/>
 				{
 					(!markersLoading && action !== ACTION.Upload) && markers.map((marker, idx) => (
 						<Marker
