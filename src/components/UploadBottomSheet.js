@@ -2,12 +2,17 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {getReverseGeocoding, postMarker} from "@apis/apiServices";
 import useApi from "@apis/useApi";
+import {useSetRecoilState} from "recoil";
+import {ACTION, actionState} from "@apis/atoms";
 
 const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) => {
 
-    const [address, setAddress] = useState("")
+    const setAction = useSetRecoilState(actionState);
     const [RGloading, RGresolved, getAddr, setLoading] = useApi(getReverseGeocoding, false);
     const [markerLoading, markerResolved, callApi] = useApi(postMarker, true);
+    const [address, setAddress] = useState("");
+    const [holder, setHolder] = useState(false);
+    const [prevCoords, setPrevCoords] = useState(true);
     const [tags, setTags] = useState([
         {
             name: '식사',
@@ -20,8 +25,18 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
     ]);
 
     useEffect(() => {
-        getAddr(cameraCoords);
-    },[cameraCoords])
+        if(!holder && prevCoords !== JSON.stringify(cameraCoords)) {
+            setHolder(true);
+            setPrevCoords(JSON.stringify(cameraCoords));
+            getAddr(cameraCoords)
+            .then(() => {
+                setTimeout(() => {
+                    console.log("holder", holder);
+                    setHolder(false);
+                },3000)
+            });
+        }
+    },[cameraCoords, holder])
 
     useEffect(() => {
         console.log("loading", RGloading);
@@ -50,6 +65,7 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
                 "image": null,
                 "explanation": address
             }))
+            .then(() => {setAction(ACTION.Main)})
             .catch(err => {console.log(err)});
     }
 
