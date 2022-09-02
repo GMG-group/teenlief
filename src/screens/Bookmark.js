@@ -62,7 +62,7 @@ const testData = [
 		favorite: true,
 	},
 ]
-const Bookmark = () => {
+const Bookmark = ({navigation}) => {
 	const filterTag = ["숙식", "숙식", "숙식", "숙식", "숙식", "숙식"];
 	return (
 		<View style={styles.container}>
@@ -104,7 +104,8 @@ const Bookmark = () => {
 								profile={test} 
 								name={item.name} 
 								score={item.score} 
-								favorite={item.favorite} />
+								favorite={item.favorite}
+								navigation={navigation} />
 						)
 					})
 				}

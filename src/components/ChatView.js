@@ -4,11 +4,11 @@ import { vw, vh } from "react-native-css-vh-vw";
 import Icon from "react-native-vector-icons/Ionicons";
 import Star from 'react-native-star-view';
 
-const ChatView = ({profile, name, score, favorite}) => {
+const ChatView = ({navigation, profile, name, score, favorite}) => {
     const [heart, setHeart] = useState(favorite);
 
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={() => navigation.push('ChatRoom')}>
             <View style={styles.leftContainer}>
                 <View style={styles.profileCircle}>
                     <Image style={styles.profile} source={profile} />
@@ -25,7 +25,7 @@ const ChatView = ({profile, name, score, favorite}) => {
             <TouchableOpacity onPress={() => setHeart(!heart)}>
                 <Icon size={30} name={heart ? "heart" : "heart-outline"} color={heart ? "red" : null} />
             </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     name: {
-        fontSize: 20,
+        fontSize: 17,
         fontWeight: 'bold',
     },
     starContainer: {

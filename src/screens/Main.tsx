@@ -10,6 +10,7 @@ import { TabBar } from '@components/TabBar';
 import Login from "@screens/Login"
 import SignUp from '@screens/SignUp';
 import Review from "@screens/Review";
+import ChatRoom from '@screens/ChatRoom';
 import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
 
@@ -62,6 +63,10 @@ const Main = () => {
 						options={{
 							headerShown: false,
 						}}
+					/>
+					<Stack.Screen
+						name='ChatRoom'
+						component={ChatRoom}
 					/>
 				</Stack.Navigator>
 			</NavigationContainer>
