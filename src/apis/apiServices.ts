@@ -60,3 +60,18 @@ export const getMarker = (header: any):Promise<AxiosResponse> => {
         }
     )
 }
+
+export const getReverseGeocoding = (cameraCoords: any):Promise<AxiosResponse> => {
+
+    const coords = `${cameraCoords.longitude},${cameraCoords.latitude}`;
+    console.log("Coords",coords);
+    return axios.get(
+        `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${coords}&orders=roadaddr&output=json`,
+        {
+            headers: {
+                "X-NCP-APIGW-API-KEY-ID": NAVER_MAP_API_KEY, // TODO: env파일에서 가져오기
+                "X-NCP-APIGW-API-KEY": NAVER_MAP_API_SECRET
+            }
+        }
+    )
+}
