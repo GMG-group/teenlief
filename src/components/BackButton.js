@@ -2,14 +2,14 @@ import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native"
 import Icon from "react-native-vector-icons/dist/Feather";
 import React from "react";
 import {vw} from "react-native-css-vh-vw";
-import {actionState} from "@apis/atoms";
+import {ACTION, actionState} from "@apis/atoms";
 import {useRecoilState, useSetRecoilState} from "recoil";
 
 export const BackButton = () => {
     const setAction = useSetRecoilState(actionState);
 
     const onPress = () => {
-        setAction("");
+        setAction(ACTION.Main);
     }
 
     return (

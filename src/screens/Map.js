@@ -20,7 +20,7 @@ const Map = ({ route, navigation }) => {
 
 	// variables
 	const [cameraCoords, setCameraCoords] = useState({latitude: 37.5828, longitude: 127.0107})
-	const [loading, resolved, callApi] = useApi(postMarker, true);
+
 	const action = useRecoilValue(actionState);
 	const snapPoints = useMemo(() => {
 		if(action === ACTION.Main) {
@@ -37,27 +37,12 @@ const Map = ({ route, navigation }) => {
 	},[cameraCoords]);
 
 	useEffect(() => {
-		console.log("resolved:" , resolved);
-
-	},[resolved])
-
-	useEffect(() => {
 		if(action===ACTION.Upload) {
 			bottomSheetModalRef.current?.present();
 		}
 	},[action])
 
-	const uploadMarker = () => {
-		console.log("upload");
-		callApi(
-			JSON.stringify({
-			"longitude": cameraCoords.longitude,
-			"latitude": cameraCoords.latitude,
-			"image": null,
-			"explanation": "test6"
-		}))
-		.catch(err => {console.log(err)});
-	}
+
 
 	const handleBottomSheet = () => {
 		if(action===ACTION.Upload) {
@@ -85,11 +70,7 @@ const Map = ({ route, navigation }) => {
 							<Text style={styles.centerMarkerText}>지정</Text>
 						</View>
 						<View style={styles.centerMarkerCol}></View>
-						<TouchableOpacity  style={styles.markerUploadButton} onPress={uploadMarker}>
-							<Text style={styles.markerUploadButtonText}>
-								결정
-							</Text>
-						</TouchableOpacity>
+
 					</>
 				) : null
 			}
