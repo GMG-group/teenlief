@@ -199,9 +199,15 @@ const styles = StyleSheet.create({
 		width: 90,
 		height: 30,
 		backgroundColor: "white",
-		borderWidth: 1,
 		borderRadius: 50,
-		marginRight: 10
+		marginRight: 10,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		elevation: 3,
 	},
 	activityImages: {
 		display: "flex",
