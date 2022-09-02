@@ -4,7 +4,7 @@ import { CurvedBottomBar } from 'react-native-curved-bottom-bar';
 import { scale } from 'react-native-utils-scale';
 import Icon from 'react-native-vector-icons/Feather';
 
-import Bookmark from "@screens/Bookmark";
+import Bookmark from "~/screens/Bookmark";
 import Profile from "@screens/Profile";
 import Map from "@screens/Map";
 
