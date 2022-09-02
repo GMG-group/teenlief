@@ -20,7 +20,7 @@ const Map = ({ route, navigation }) => {
 
 	// variables
 	const [cameraCoords, setCameraCoords] = useState({latitude: 37.5828, longitude: 127.0107})
-
+	const [markersLoading, markers, getMarkers, setMarkersLoading] = useApi(getMarker, true);
 	const action = useRecoilValue(actionState);
 	const snapPoints = useMemo(() => {
 		if(action === ACTION.Main) {
@@ -31,6 +31,16 @@ const Map = ({ route, navigation }) => {
 	}
 	, [action]);
 
+	useEffect(() => {
+		console.log("action", action);
+		getMarkers();
+	},[])
+
+	useEffect(() => {
+		if(!markersLoading) {
+			console.log("markers", markers);
+		}
+	},[markersLoading])
 
 	useEffect(() => {
 		console.log(cameraCoords);
@@ -43,10 +53,9 @@ const Map = ({ route, navigation }) => {
 	},[action])
 
 
-
 	const handleBottomSheet = () => {
 		if(action===ACTION.Upload) {
-			return <UploadBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} cameraCoords={cameraCoords} /> // TODO: 이거 바꾸기
+			return <UploadBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} cameraCoords={cameraCoords} />
 		} else {
 			return <HelperInfoBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} />
 		}
@@ -93,6 +102,18 @@ const Map = ({ route, navigation }) => {
 						bottomSheetModalRef.current?.present();
 					}}
 				/>
+				{
+					(!markersLoading && action !== ACTION.Upload) && markers.map((marker, idx) => (
+						<Marker
+							key={idx}
+							coordinate={{latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude)}}
+							onClick={() => {
+								console.log("click");
+								bottomSheetModalRef.current?.present();
+							}}
+						/>
+					))
+				}
 			</NaverMapView>
 
 			{
@@ -110,7 +131,7 @@ const styles = StyleSheet.create({
 		height: 30,
 		backgroundColor: "black",
 		left: vw/2-30,
-		top: vh/2-50,
+		top: vh/2-70,
 		zIndex: 2,
 		justifyContent: "center",
 		borderRadius: 5
@@ -121,7 +142,7 @@ const styles = StyleSheet.create({
 		height: 20,
 		backgroundColor: "black",
 		left: vw/2-1,
-		top: vh/2-20,
+		top: vh/2-40,
 		zIndex: 2
 	},
 	centerMarkerText: {
