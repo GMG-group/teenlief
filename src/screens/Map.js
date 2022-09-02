@@ -61,7 +61,7 @@ const Map = ({ route, navigation }) => {
 
 	const handleBottomSheet = () => {
 		if(action===ACTION.Upload) {
-			return <UploadBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} /> // TODO: 이거 바꾸기
+			return <UploadBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} cameraCoords={cameraCoords} /> // TODO: 이거 바꾸기
 		} else {
 			return <HelperInfoBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} />
 		}
