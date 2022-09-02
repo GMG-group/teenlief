@@ -78,23 +78,6 @@ const Bookmark = ({navigation}) => {
 				<Icon name="search-outline" size={25}  />
 			</View>
 
-
-			{/* <ScrollView
-				style={styles.filter}
-				horizontal={true}
-				scrollEnabled={true}
-			>
-				{
-					filterTag.map((item, index) => {
-						return (
-							<View style={styles.filterItem} key={index}>
-								<Text style={{color: 'black'}}>{ item }</Text>
-							</View>
-						)
-					})
-				}
-			</ScrollView> */}
-
 			<FlatList
 				ref={tagListRef}
 				data={filterTag}
