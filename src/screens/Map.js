@@ -4,11 +4,12 @@ import {BottomSheetModal} from "@gorhom/bottom-sheet";
 import {Button, Dimensions, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Search from "@components/Search";
 import HelperInfoBottomSheet from "@components/HelperInfoBottomSheet";
-import {usePostMarkerCallback, usePostRegistrationCallback} from "@apis/apiCallbackes";
 import useApi from "@apis/useApi";
 import {getMarker, getUser, postMarker} from "@apis/apiServices";
 import {useRecoilValue} from "recoil";
-import {actionState} from "@apis/atoms";
+import {ACTION, actionState} from "@apis/atoms";
+import {BackButton} from "@components/BackButton";
+import UploadBottomSheet from "@components/UploadBottomSheet";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -18,24 +19,33 @@ const Map = ({ route, navigation }) => {
 	const bottomSheetModalRef = useRef(null);
 
 	// variables
-	const snapPoints = useMemo(() => ['15%', '50%', '100%'], []);
 	const [cameraCoords, setCameraCoords] = useState({latitude: 37.5828, longitude: 127.0107})
 	const [loading, resolved, callApi] = useApi(postMarker, true);
 	const action = useRecoilValue(actionState);
+	const snapPoints = useMemo(() => {
+		if(action === ACTION.Main) {
+			return ['15%', '50%', '100%'];
+		} else if (action === ACTION.Upload) {
+			return ['20%'];
+		}
+	}
+	, [action]);
+
 
 	useEffect(() => {
 		console.log(cameraCoords);
 	},[cameraCoords]);
 
 	useEffect(() => {
-		console.log("loading:" , loading);
-
-	},[loading])
-
-	useEffect(() => {
 		console.log("resolved:" , resolved);
 
 	},[resolved])
+
+	useEffect(() => {
+		if(action===ACTION.Upload) {
+			bottomSheetModalRef.current?.present();
+		}
+	},[action])
 
 	const uploadMarker = () => {
 		console.log("upload");
@@ -49,6 +59,14 @@ const Map = ({ route, navigation }) => {
 		.catch(err => {console.log(err)});
 	}
 
+	const handleBottomSheet = () => {
+		if(action===ACTION.Upload) {
+			return <UploadBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} /> // TODO: 이거 바꾸기
+		} else {
+			return <HelperInfoBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} />
+		}
+	}
+
 	 return (
 		<>
 			<BottomSheetModal
@@ -56,11 +74,13 @@ const Map = ({ route, navigation }) => {
 				index={0}
 				snapPoints={snapPoints}
 			>
-				<HelperInfoBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} />
+				{handleBottomSheet()}
+				
 			</BottomSheetModal>
 			{
 				action==="upload" ? (
 					<>
+						<BackButton/>
 						<View style={styles.centerMarker}>
 							<Text style={styles.centerMarkerText}>지정</Text>
 						</View>

@@ -8,8 +8,7 @@ import Bookmark from "@screens/Bookmark";
 import Profile from "@screens/Profile";
 import Map from "@screens/Map";
 import {useRecoilState} from "recoil";
-import {actionState} from "@apis/atoms";
-import {mark} from "@babel/runtime/helpers/regeneratorRuntime";
+import {ACTION, actionState} from "@apis/atoms";
 
 export const TabBar = ({ navigation }) => {
 	const [route, setRoute] = useState("Map");
@@ -74,7 +73,7 @@ export const TabBar = ({ navigation }) => {
 					justifyContent: 'center',
 				}}
 				onPress={() => {
-					setAction("upload");
+					setAction(ACTION.Upload);
 					navigation.navigate("Map")
 				}}>
 				<Icon name={'map-pin'} color="black" size={scale(25)} />
