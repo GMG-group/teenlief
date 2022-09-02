@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
 	TextInput,
 	View,
 	StyleSheet,
 	Text,
-	ScrollView
+	ScrollView, FlatList, TouchableOpacity, Dimensions
 } from "react-native";
 import Icon from "react-native-vector-icons/dist/Feather";
 import { vw, vh } from "react-native-css-vh-vw";
@@ -13,36 +13,42 @@ const Search = () => {
 	const [search, setSearch] = useState(null);
 	const filterTag = ["숙식", "숙식", "숙식", "숙식", "숙식", "숙식"]
 
+	const tagListRef = useRef(null);
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.search}>
 				<View style={styles.innerSearch}>
-					<Icon name="menu" size={25} color={'#000'} style={{ marginRight: 10 }} />
 					<TextInput
 						style={styles.input}
 						onChangeText={setSearch}
 						value={search}
 						placeholder="여기서 검색"
 					/>
-					<View style={styles.profileImage}></View>
 				</View>
 			</View>
 
-			<ScrollView
+			<FlatList
+				ref={tagListRef}
+				data={filterTag}
 				style={styles.filter}
-				horizontal={true}
-				scrollEnabled={true}
-			>
-				{
-					filterTag.map((item, index) => {
-						return (
-							<View style={styles.filterItem} key={index}>
-								<Text style={{color: 'black'}}>{ item }</Text>
-							</View>
-						)
-					})
+				contentContainerStyle={{
+					flexGrow: 1,
+					alignItems: 'center',
+					justifyContent: 'center',
+					width: 650,
+				}}
+				renderItem={({item}) =>
+					<View style={styles.filterItem} key={item.id}>
+						<Text style={{color: 'black'}}>{ item }</Text>
+					</View>
 				}
-			</ScrollView>
+				keyExtractor={(item, index) => 'key' + index}
+				horizontal
+				showsVerticalScrollIndicator={false}
+				showsHorizontalScrollIndicator={false}
+			/>
+
 		</View>
 	);
 };
@@ -93,8 +99,7 @@ const styles = StyleSheet.create({
 	filter: {
 		display: "flex",
 		flexDirection: "row",
-		width: vw(90),
-		marginTop: 10
+		marginTop: 10,
 	},
 	filterItem: {
 		display: "flex",
@@ -104,6 +109,7 @@ const styles = StyleSheet.create({
 		height: 30,
 		backgroundColor: "white",
 		borderWidth: 1,
+		borderColor: '#c8c8c8',
 		borderRadius: 50,
 		marginRight: 10
 	},
