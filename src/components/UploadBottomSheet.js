@@ -27,8 +27,12 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
         console.log("loading", RGloading);
         if(!RGloading) {
             console.log("resolved", JSON.stringify(RGresolved));
-            if(RGresolved.status.code === 0)
+            if(RGresolved.status.code === 0) {
                 setAddress(`${RGresolved.results[0].region.area1.name} ${RGresolved.results[0].region.area2.name} ${RGresolved.results[0].region.area3.name} ${RGresolved.results[0].region.area4.name} ${RGresolved.results[0].land?.name} ${RGresolved.results[0].land?.addition0.value}`);
+            } else {
+                setAddress('')
+            }
+
             setLoading(true);
         }
     },[RGloading])
