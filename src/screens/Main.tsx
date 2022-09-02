@@ -28,7 +28,7 @@ const Main = () => {
 		<SafeAreaView style={{flex: 1}}>
 			<NavigationContainer ref={navigationRef}>
 			    <Stack.Navigator>
-					{
+					{/* {
 						token.accessToken === "" ? (
 							<>
 								<Stack.Screen
@@ -48,7 +48,7 @@ const Main = () => {
 								/>
 							</>
 						) : null
-					}
+					} */}
 					<Stack.Screen
 						name='Home'
 						component={TabBar}
