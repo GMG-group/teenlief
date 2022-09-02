@@ -1,22 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import {Text, TextInput, View, StyleSheet, ScrollView, Image, TouchableOpacity} from "react-native";
-import test from "@components/img/test.png";
 import { vw, vh } from "react-native-css-vh-vw";
 import Icon from "react-native-vector-icons/Ionicons";
+import Star from 'react-native-star-view';
 
-const ChatView = () => {
-    const [heart, setHeart] = useState(false);
+const ChatView = ({profile, name, score, favorite}) => {
+    const [heart, setHeart] = useState(favorite);
 
     return (
         <View style={styles.container}>
             <View style={styles.leftContainer}>
                 <View style={styles.profileCircle}>
-                    <Image style={styles.profile} source={test} />
+                    <Image style={styles.profile} source={profile} />
                 </View>
                 
                 <View>
-                    <Text style={styles.name}>홍길동</Text>
-                    <Text>5.0 ㅁㅁㅁㅁㅁㅁ</Text>
+                    <Text style={styles.name}>{name}</Text>
+                    <View style={styles.starContainer}>
+                        <Text>{score.toFixed(1)} : </Text>
+                        <Star score={score} style={styles.star} />
+                    </View>
                 </View>
             </View>
             <TouchableOpacity onPress={() => setHeart(!heart)}>
@@ -56,8 +59,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 100,
         borderColor: '#D3D3D3',
-        width: vh(7),
-        height: vh(7),
+        width: vh(6.7),
+        height: vh(6.7),
         marginRight: 15,
 
     },
@@ -70,6 +73,16 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 20,
         fontWeight: 'bold',
+    },
+    starContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    star: {
+        height: 22,
+        width: 110,
     }
 });
 export default ChatView;

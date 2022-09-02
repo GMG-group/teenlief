@@ -3,7 +3,65 @@ import {Text, TextInput, View, StyleSheet, ScrollView} from "react-native";
 import { vw, vh } from "react-native-css-vh-vw";
 import Icon from "react-native-vector-icons/Ionicons";
 import ChatView from '@components/ChatView';
+import test from "@components/img/test.png";
 
+const testData = [
+	{
+		name: '백준',
+		score: 2.2,
+		favorite: false,
+	},
+	{
+		name: '길동홍',
+		score: 3.0,
+		favorite: true,
+	},
+	{
+		name: '제인도',
+		score: 1.9,
+		favorite: false,
+	},
+	{
+		name: '존도',
+		score: 5.0,
+		favorite: false,
+	},
+	{
+		name: '흠길동',
+		score: 4.5,
+		favorite: false,
+	},
+	{
+		name: '김안동',
+		score: 3.5,
+		favorite: false,
+	},
+	{
+		name: '백준',
+		score: 2.2,
+		favorite: false,
+	},
+	{
+		name: '백준',
+		score: 2.5,
+		favorite: true,
+	},
+	{
+		name: '백준',
+		score: 2.7,
+		favorite: false,
+	},
+	{
+		name: '백준',
+		score: 2.1,
+		favorite: true,
+	},
+	{
+		name: '백준',
+		score: 2.9,
+		favorite: true,
+	},
+]
 const Bookmark = () => {
 	const filterTag = ["숙식", "숙식", "숙식", "숙식", "숙식", "숙식"];
 	return (
@@ -39,19 +97,17 @@ const Bookmark = () => {
 				scrollEnabled={true}
 				style={styles.chatView}>
 				
-				<ChatView />
-				<ChatView />
-				<ChatView />
-				<ChatView />
-				<ChatView />
-				<ChatView />
-				<ChatView />
-				<ChatView />
-				<ChatView />
-				<ChatView />
-				<ChatView />
-				<ChatView />
-				<ChatView />
+				{
+					testData.map((item, index) => {
+						return (
+							<ChatView 
+								profile={test} 
+								name={item.name} 
+								score={item.score} 
+								favorite={item.favorite} />
+						)
+					})
+				}
 			</ScrollView>
 		</View>
 	);
