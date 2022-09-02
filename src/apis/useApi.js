@@ -22,13 +22,13 @@ const useApi = (api, authHeader=false) => {
                     access_token = (await snapshot.getPromise(tokenState)).accessToken;
                 }
                 const {data} = authHeader ? await api(makeHeaders(access_token), ...args) : await api(...args);
-                setLoading(false);
                 setResolved(data);
+                setLoading(false);
                 return data
             },
         [],
     );
-    return [loading, resolved, callback];
+    return [loading, resolved, callback, setLoading];
 }
 
 export default useApi;
