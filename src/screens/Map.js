@@ -10,6 +10,7 @@ import {useRecoilValue} from "recoil";
 import {ACTION, actionState} from "@apis/atoms";
 import {BackButton} from "@components/BackButton";
 import UploadBottomSheet from "@components/UploadBottomSheet";
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -26,7 +27,7 @@ const Map = ({ route, navigation }) => {
 		if(action === ACTION.Main) {
 			return ['15%', '50%', '100%'];
 		} else if (action === ACTION.Upload) {
-			return ['20%'];
+			return ['20%', '40%'];
 		}
 	}
 	, [action]);

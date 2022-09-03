@@ -1,9 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {getReverseGeocoding, postMarker} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useSetRecoilState} from "recoil";
 import {ACTION, actionState} from "@apis/atoms";
+import ImagePicker from 'react-native-image-crop-picker';
+import ImageModal from "react-native-image-modal";
+
+const vw = Dimensions.get('window').width;
+const vh = Dimensions.get('window').height;
 
 const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) => {
 
@@ -13,6 +18,8 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
     const [address, setAddress] = useState("");
     const [holder, setHolder] = useState(false);
     const [prevCoords, setPrevCoords] = useState(true);
+    const [image, setImage] = useState(null);
+
     const [tags, setTags] = useState([
         {
             name: '식사',
@@ -78,6 +85,19 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
         setTags(items);
     }
 
+    const imagePicker = () => {
+        ImagePicker.openCamera({
+            width: 300,
+            height: 400,
+            cropping: true,
+            includeExif: true,
+            mediaType: 'photo',
+        }).then(image => {
+            console.log(image.path);
+            setImage(image);
+        });
+    }
+
     return (
         <View style={styles.container}>
             <TextInput
@@ -101,6 +121,21 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
                     ))
                 }
             </View>
+            {
+                image ? (
+                    <ImageModal style={styles.image} resizeMode={"contain"} source={{uri: image.path}}/>
+                ) : (
+
+                    <TouchableOpacity onPress={imagePicker}>
+                        <View style={styles.imagePickerButton}>
+                            <Text style={styles.imagePickerText}>
+                                이미지
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                )
+            }
+
             <TouchableOpacity onPress={uploadMarker}>
                 <Text style={styles.markerUploadButtonText}>
                     결정
@@ -141,6 +176,19 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         marginRight: 10
     },
+    imagePickerButton: {
+        width: "80%",
+        height: vh/4,
+        backgroundColor: 'lightgray',
+        justifyContent: 'center'
+    },
+    imagePickerText: {
+        alignSelf: 'center'
+    },
+    image: {
+        width: vw/4 * 3,
+        height: vh/4
+    }
 });
 
 export default UploadBottomSheet;
