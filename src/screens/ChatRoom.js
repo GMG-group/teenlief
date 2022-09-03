@@ -6,115 +6,48 @@ import Speech from '@components/Speech';
 import { template } from '@babel/core';
 
 const testData = [
-    {
+    {   
+        id: 1,
         name: '백준준',
         text: '안녕하세요.',
         direction: 'helper',
     },
-    {
+    {   
+        id: 2,
         name: '청소년',
         text: '안녕하세요',
         direction: 'teen',
     },
     {
-        name: '백준준',
-        text: '안녕하세요.',
-        direction: 'helper',
-    },
-    {
+        id: 3,
         name: '청소년',
-        text: '안녕하세요',
-        direction: 'teen',
-    },
-    {
-        name: '백준준',
-        text: '안녕하세요.',
-        direction: 'helper',
-    },
-    {
-        name: '청소년',
-        text: '안녕하세요',
-        direction: 'teen',
-    },
-    {
-        name: '백준준',
-        text: '안녕하세요.',
-        direction: 'helper',
-    },
-    {
-        name: '청소년',
-        text: '안녕하세요',
-        direction: 'teen',
-    },
-    {
-        name: '백준준',
-        text: '안녕하세요.',
-        direction: 'helper',
-    },
-    {
-        name: '청소년',
-        text: '안녕하세요',
-        direction: 'teen',
-    },
-    {
-        name: '백준준',
-        text: '안녕하세요.',
-        direction: 'helper',
-    },
-    {
-        name: '청소년',
-        text: '안녕하세요',
-        direction: 'teen',
-    },
-    {
-        name: '백준준',
-        text: '안녕하세요.',
-        direction: 'helper',
-    },
-    {
-        name: '청소년',
-        text: '안녕하세요',
-        direction: 'teen',
-    },
-    {
-        name: '백준준',
-        text: '안녕하세요.',
-        direction: 'helper',
-    },
-    {
-        name: '청소년',
-        text: '안녕하세요',
-        direction: 'teen',
-    },
-    {
-        name: '백준준',
-        text: '안녕하세요.',
-        direction: 'helper',
-    },
-    {
-        name: '청소년',
-        text: '안녕하세요',
+        text: '하이요',
         direction: 'teen',
     },
 ]
 
 const ChatRoom = () => {
-    const renderItem = ({item}) => (
-        <Speech name={item.name} text={item.text} direction={item.direction} />
-    )
+    const [chatData, setChatData] = useState(testData);
+    const [speechText, setSpeechText] = useState('');
 
+    const onText = () => {
+        setChatData([...chatData, {id: 8, name: '청소년',  text: speechText, direction: 'teen'}]);
+        setSpeechText('');
+    }
     return (
         <View style={{flex: 1}}>
             <FlatList
                 style={styles.container}
-                keyExtractor={item => item.toString()}
-                data={testData}
-                renderItem={renderItem}
+                keyExtractor={item => item.id}
+                data={chatData}
+                renderItem={({item}) => <Speech name={item.name} text={item.text} direction={item.direction} />}
                 />
             <View style={styles.chatContainer}>
                 <Icon name="add-outline" size={25} />
-                <TextInput style={styles.input} />
-                <Icon name="paper-plane-outline" size={25} /> 
+                <TextInput style={styles.input} value={speechText} onChangeText={text => setSpeechText(text)} />
+                <TouchableOpacity onPress={() => onText()}>
+                    <Icon name="paper-plane-outline" size={25} /> 
+                </TouchableOpacity>
             </View>
         </View>
     )
