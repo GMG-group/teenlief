@@ -27,7 +27,7 @@ const Map = ({ route, navigation }) => {
 		if(action === ACTION.Main) {
 			return ['15%', '50%', '100%'];
 		} else if (action === ACTION.Upload) {
-			return ['20%', '40%'];
+			return ['20%', '46%'];
 		}
 	}
 	, [action]);
@@ -68,6 +68,11 @@ const Map = ({ route, navigation }) => {
 				ref={bottomSheetModalRef}
 				index={0}
 				snapPoints={snapPoints}
+				onDismiss={() => {
+					if(action===ACTION.Upload) {
+						bottomSheetModalRef.current?.present();
+					}
+				}}
 			>
 				{handleBottomSheet()}
 				
