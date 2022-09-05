@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {Text, TextInput, View, StyleSheet, ScrollView, Image, TouchableOpacity, FlatList} from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
+import StarIcon from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { vw, vh } from "react-native-css-vh-vw";
 import Speech from '@components/Speech';
 import { template } from '@babel/core';
@@ -26,7 +27,7 @@ const testData = [
     },
 ]
 
-const ChatRoom = () => {
+const ChatRoom = ({navigation, route}) => {
     const [chatData, setChatData] = useState(testData);
     const [speechText, setSpeechText] = useState('');
     const chatRoomRef = useRef();
@@ -37,7 +38,17 @@ const ChatRoom = () => {
     }
     return (
         <View style={{flex: 1}}>
-            <View style={styles.nav}></View>
+            <View style={styles.nav}>
+                <View style={styles.navContainer}>
+                    <Icon name="arrow-back-outline" size={40} />
+                    <Image style={styles.profile} source={route.params.profile} />
+                    <Text style={{fontSize: 18}}>{route.params.name}</Text>
+                </View>
+                <View style={styles.navContainer}>
+                    <StarIcon name="star" size={22} style={{color: 'yellow'}} />
+                    <Text style={styles.marginLeft}>{route.params.score}</Text>
+                </View>
+            </View>
             <FlatList
                 ref={chatRoomRef}
                 style={styles.container}
@@ -66,10 +77,23 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     nav: {
-        height: 60,
-        borderWidth: 2,
-        borderBottomColor: '#D3D3D3',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: vh(7),
         backgroundColor: '#9bbbd4',
+        paddingLeft: 15,
+        paddingRight: 15,
+    },
+    navContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    margin: {
+        marginLeft: 1,
     },
     chatContainer: {
         display: 'flex',
@@ -82,6 +106,12 @@ const styles = StyleSheet.create({
     },
     input: {
         width: vw(80),
-    }
+    },
+    profile: {
+        width: vh(5),
+        height: vh(5),
+        resizeMode: "cover",
+        borderRadius: 100,
+    },
 })
 export default ChatRoom;

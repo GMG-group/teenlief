@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useEffect} from 'react';
 import {Text, TextInput, View, StyleSheet, ScrollView, FlatList} from "react-native";
 import { vw, vh } from "react-native-css-vh-vw";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -64,7 +64,6 @@ const testData = [
 ]
 const Bookmark = ({navigation}) => {
 	const filterTag = ["숙식", "숙식", "숙식", "숙식", "숙식", "숙식"];
-
 	const tagListRef = useRef(null);
 	return (
 		<View style={styles.container}>

@@ -6,12 +6,15 @@ import Star from 'react-native-star-view';
 
 const ChatView = ({navigation, profile, name, score, favorite}) => {
     const [heart, setHeart] = useState(favorite);
-
     return (
-        <TouchableOpacity style={styles.container} onPress={() => navigation.push('ChatRoom')}>
+        <TouchableOpacity style={styles.container} onPress={() => navigation.push('ChatRoom', {
+            profile: profile,
+            name: name,
+            score: score,
+        })}>
             <View style={styles.leftContainer}>
                 <View style={styles.profileCircle}>
-                    <Image style={styles.profile} source={profile} />
+                    {/* <Image style={styles.profile} source={profile} /> */}
                 </View>
                 
                 <View>
