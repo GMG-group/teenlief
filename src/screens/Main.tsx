@@ -67,6 +67,9 @@ const Main = () => {
 					<Stack.Screen
 						name='ChatRoom'
 						component={ChatRoom}
+						options={{
+							headerShown: false,
+						}}
 					/>
 				</Stack.Navigator>
 			</NavigationContainer>

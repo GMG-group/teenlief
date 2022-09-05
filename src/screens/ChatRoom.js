@@ -29,23 +29,29 @@ const testData = [
 const ChatRoom = () => {
     const [chatData, setChatData] = useState(testData);
     const [speechText, setSpeechText] = useState('');
-
+    const chatRoomRef = useRef();
+    const chatBtn = useRef();
     const onText = () => {
         setChatData([...chatData, {id: 8, name: '청소년',  text: speechText, direction: 'teen'}]);
         setSpeechText('');
     }
     return (
         <View style={{flex: 1}}>
+            <View style={styles.nav}></View>
             <FlatList
+                ref={chatRoomRef}
                 style={styles.container}
                 keyExtractor={item => item.id}
                 data={chatData}
                 renderItem={({item}) => <Speech name={item.name} text={item.text} direction={item.direction} />}
+                onLayout={() => chatRoomRef.current.scrollToEnd({animated: false})}
+                onContentSizeChange={() => chatRoomRef.current.scrollToEnd({animated: false})}
+                ListFooterComponent={<View style={{height: 10, backgroundColor: 'transparent',}} />}
                 />
             <View style={styles.chatContainer}>
                 <Icon name="add-outline" size={25} />
                 <TextInput style={styles.input} value={speechText} onChangeText={text => setSpeechText(text)} />
-                <TouchableOpacity onPress={() => onText()}>
+                <TouchableOpacity ref={chatBtn} onPress={() => onText()}>
                     <Icon name="paper-plane-outline" size={25} /> 
                 </TouchableOpacity>
             </View>
@@ -58,6 +64,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#9bbbd4',
         width: '100%',
         height: '100%',
+    },
+    nav: {
+        height: 60,
+        borderWidth: 2,
+        borderBottomColor: '#D3D3D3',
+        backgroundColor: '#9bbbd4',
     },
     chatContainer: {
         display: 'flex',
