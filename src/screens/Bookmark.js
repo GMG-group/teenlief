@@ -99,23 +99,18 @@ const Bookmark = ({navigation}) => {
 				showsHorizontalScrollIndicator={false}
 			/>
 
-			<ScrollView
+			<FlatList
 				scrollEnabled={true}
-				style={styles.chatView}>
-				
-				{
-					testData.map((item, index) => {
-						return (
-							<ChatView 
-								profile={test} 
-								name={item.name} 
-								score={item.score} 
-								favorite={item.favorite}
-								navigation={navigation} />
-						)
-					})
-				}
-			</ScrollView>
+				style={styles.chatView}
+				data={testData}
+                renderItem={({item}) => <ChatView 
+											profile={test} 
+											name={item.name} 
+											score={item.score} 
+											favorite={item.favorite}
+											navigation={navigation} />}
+				ListFooterComponent={<View style={{height: vh(8), backgroundColor: 'transparent',}} />}
+			/>
 		</View>
 	);
 };
