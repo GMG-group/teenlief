@@ -16,6 +16,7 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
     const [RGloading, RGresolved, getAddr, setLoading] = useApi(getReverseGeocoding, false);
     const [markerLoading, markerResolved, callApi] = useApi(postMarker, true);
     const [address, setAddress] = useState("");
+    const [addressDetail, setAddressDetail] = useState("");
     const [holder, setHolder] = useState(false);
     const [prevCoords, setPrevCoords] = useState(true);
     const [image, setImage] = useState(null);
@@ -102,9 +103,17 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
         <View style={styles.container}>
             <TextInput
                 style={styles.input}
-                onChangeText={address}
+                editable={false}
             >
                 <Text>{address}</Text>
+            </TextInput>
+
+            <TextInput
+                style={styles.input}
+                onChangeText={setAddressDetail}
+                placeholder={"상세주소"}
+            >
+                <Text>{addressDetail}</Text>
             </TextInput>
 
             <View style={styles.tag}>
@@ -115,7 +124,7 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
                             key={idx}
                         >
                             <View style={{...styles.tagItem, backgroundColor: tags[idx].selected ? 'black' : 'white'}}>
-                                <Text style={{color: tags[idx].selected ? 'white' : 'black'}}>{tag.name}</Text>
+                                <Text style={{...styles.tagItemText, color: tags[idx].selected ? 'white' : 'black'}}>{tag.name}</Text>
                             </View>
                         </TouchableOpacity>
                     ))
@@ -125,9 +134,8 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
                 image ? (
                     <ImageModal style={styles.image} resizeMode={"contain"} source={{uri: image.path}}/>
                 ) : (
-
-                    <TouchableOpacity onPress={imagePicker}>
-                        <View style={styles.imagePickerButton}>
+                    <TouchableOpacity onPress={imagePicker} style={styles.imagePickerButton}>
+                        <View style={styles.imagePickerView}>
                             <Text style={styles.imagePickerText}>
                                 이미지
                             </Text>
@@ -136,10 +144,12 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
                 )
             }
 
-            <TouchableOpacity onPress={uploadMarker}>
-                <Text style={styles.markerUploadButtonText}>
-                    결정
-                </Text>
+            <TouchableOpacity onPress={uploadMarker} style={styles.markerUploadButton}>
+                <View style={styles.markerUploadView}>
+                    <Text style={styles.markerUploadButtonText}>
+                        결정
+                    </Text>
+                </View>
             </TouchableOpacity>
         </View>
     );
@@ -163,31 +173,57 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
-        marginTop: 10,
-        marginBottom: 10,
+        marginVertical: 12
     },
     tagItem: {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: 90,
-        height: 30,
+        width: 80,
+        height: 24,
         borderWidth: 1,
         borderRadius: 50,
-        marginRight: 10
+        borderColor: "lightgray",
+        marginRight: 10,
+        elevation: 5
+    },
+    tagItemText: {
+        fontSize: 12
     },
     imagePickerButton: {
-        width: "80%",
-        height: vh/4,
+        width: "90%",
+        height: vh/6,
+        alignSelf: 'center',
         backgroundColor: 'lightgray',
-        justifyContent: 'center'
+        borderRadius: 10
+    },
+    imagePickerView: {
+        height: "100%",
+        justifyContent: 'center',
     },
     imagePickerText: {
         alignSelf: 'center'
     },
     image: {
-        width: vw/4 * 3,
-        height: vh/4
+        width: vw,
+        height: vh/6,
+    },
+    markerUploadView: {
+
+    },
+    markerUploadButton: {
+        width: "90%",
+        height: vh/24,
+        alignSelf: "center",
+        backgroundColor: "black",
+        borderRadius: 10,
+        marginTop: 10,
+        justifyContent: "center"
+    },
+    markerUploadButtonText: {
+        alignSelf: "center",
+        color: "white",
+        fontSize: 18
     }
 });
 
