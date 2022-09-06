@@ -5,7 +5,7 @@ import {Button, Dimensions, StyleSheet, Text, TouchableOpacity, View} from "reac
 import Search from "@components/Search";
 import HelperInfoBottomSheet from "@components/HelperInfoBottomSheet";
 import useApi from "@apis/useApi";
-import {getMarker, getUser, postMarker} from "@apis/apiServices";
+import {getMarkerSimple, getUser, postMarker} from "@apis/apiServices";
 import {useRecoilValue} from "recoil";
 import {ACTION, actionState} from "@apis/atoms";
 import {BackButton} from "@components/BackButton";
@@ -21,7 +21,7 @@ const Map = ({ route, navigation }) => {
 
 	// variables
 	const [cameraCoords, setCameraCoords] = useState({latitude: 37.5828, longitude: 127.0107})
-	const [markersLoading, markers, getMarkers, setMarkersLoading] = useApi(getMarker, true);
+	const [markersLoading, markers, getMarkers, setMarkersLoading] = useApi(getMarkerSimple, true);
 	const action = useRecoilValue(actionState);
 	const snapPoints = useMemo(() => {
 		if(action === ACTION.Main) {
@@ -85,7 +85,6 @@ const Map = ({ route, navigation }) => {
 							<Text style={styles.centerMarkerText}>지정</Text>
 						</View>
 						<View style={styles.centerMarkerCol}></View>
-
 					</>
 				) : null
 			}
