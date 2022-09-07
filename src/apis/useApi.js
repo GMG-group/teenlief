@@ -9,7 +9,7 @@ const useApi = (api, authHeader=false) => {
     const makeHeaders = (token) => {
         const headers = {
             'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/json'
         }
         return headers
     }

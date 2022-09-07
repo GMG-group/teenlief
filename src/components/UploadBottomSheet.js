@@ -66,13 +66,22 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
 
     const uploadMarker = () => {
         console.log("upload");
-        callApi(
-            JSON.stringify({
-                "longitude": cameraCoords.longitude,
-                "latitude": cameraCoords.latitude,
-                "image": null,
-                "explanation": address
-            }))
+        let formData = new FormData();
+        formData.append("longitude", cameraCoords.longitude);
+        formData.append("latitude", cameraCoords.latitude);
+        formData.append("image", {
+            uri: image.path,
+            type: image.mime,
+            name: 'addressimage.jpg'
+        });
+        formData.append("explanation", addressDetail);
+        tags.forEach((tag, idx) => {
+            if(tag.selected) {
+                formData.append("tag", idx+1);
+            }
+        })
+
+        callApi(formData)
             .then(() => {setAction(ACTION.Main)})
             .catch(err => {console.log(err)});
     }
