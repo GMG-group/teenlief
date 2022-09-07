@@ -67,17 +67,24 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
 
     const uploadMarker = () => {
         console.log("upload");
-        if(!addressDetail) {
+        if(!address) {
             Toast.show({
                 type: 'error',
-                text1: '업로드 실패',
+                text1: '등록 실패',
+                text2: '이 위치에 등록할 수 없습니다',
+            });
+            return;
+        } else if(!addressDetail) {
+            Toast.show({
+                type: 'error',
+                text1: '등록 실패',
                 text2: '상세주소를 입력하세요',
             });
             return;
         } else if(!image) {
             Toast.show({
                 type: 'error',
-                text1: '업로드 실패',
+                text1: '등록 실패',
                 text2: '이미지를 추가해주세요',
             });
             return;
@@ -178,7 +185,7 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
             <TouchableOpacity onPress={uploadMarker} style={styles.markerUploadButton}>
                 <View style={styles.markerUploadView}>
                     <Text style={styles.markerUploadButtonText}>
-                        결정
+                        등록
                     </Text>
                 </View>
             </TouchableOpacity>
