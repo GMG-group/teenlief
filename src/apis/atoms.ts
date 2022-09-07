@@ -10,6 +10,12 @@ export interface UserInfo {
     email: string
 }
 
+export const ACTION = {
+    Main: 'main',
+    Upload: 'upload'
+} as const;
+type ACTION = typeof ACTION[keyof typeof ACTION];
+
 export const tokenState = atom<Token> ({
     key: "token",
     default: {
@@ -24,4 +30,9 @@ export const userInfoState = atom<UserInfo> ({
     default: {
         email: ""
     }
+})
+
+export const actionState = atom<ACTION> ({
+    key: "action",
+    default: ACTION.Main
 })

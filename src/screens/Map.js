@@ -4,9 +4,12 @@ import {BottomSheetModal} from "@gorhom/bottom-sheet";
 import {Button, Dimensions, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Search from "@components/Search";
 import HelperInfoBottomSheet from "@components/HelperInfoBottomSheet";
-import {usePostMarkerCallback, usePostRegistrationCallback} from "@apis/apiCallbackes";
 import useApi from "@apis/useApi";
-import {getMarker, getUser, postMarker} from "@apis/apiServices";
+import {getMarkerSimple, getUser, postMarker} from "@apis/apiServices";
+import {useRecoilValue} from "recoil";
+import {ACTION, actionState} from "@apis/atoms";
+import {BackButton} from "@components/BackButton";
+import UploadBottomSheet from "@components/UploadBottomSheet";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -16,35 +19,46 @@ const Map = ({ route, navigation }) => {
 	const bottomSheetModalRef = useRef(null);
 
 	// variables
-	const snapPoints = useMemo(() => ['15%', '50%', '100%'], []);
 	const [cameraCoords, setCameraCoords] = useState({latitude: 37.5828, longitude: 127.0107})
-	const [loading, resolved, callApi] = useApi(postMarker, true);
-	const { markerUpload } = route.params;
+	const [markersLoading, markers, getMarkers, setMarkersLoading] = useApi(getMarkerSimple, true);
+	const action = useRecoilValue(actionState);
+	const snapPoints = useMemo(() => {
+		if(action === ACTION.Main) {
+			return ['15%', '50%', '100%'];
+		} else if (action === ACTION.Upload) {
+			return ['20%', '46%'];
+		}
+	}
+	, [action]);
+
+	useEffect(() => {
+		console.log("action", action);
+		getMarkers();
+	},[])
+
+	useEffect(() => {
+		if(!markersLoading) {
+			console.log("markers", markers);
+		}
+	},[markersLoading])
 
 	useEffect(() => {
 		console.log(cameraCoords);
 	},[cameraCoords]);
 
 	useEffect(() => {
-		console.log("loading:" , loading);
+		if(action===ACTION.Upload) {
+			bottomSheetModalRef.current?.present();
+		}
+	},[action])
 
-	},[loading])
 
-	useEffect(() => {
-		console.log("resolved:" , resolved);
-
-	},[resolved])
-
-	const uploadMarker = () => {
-		console.log("upload");
-		callApi(
-			JSON.stringify({
-			"longitude": cameraCoords.longitude,
-			"latitude": cameraCoords.latitude,
-			"image": null,
-			"explanation": "test6"
-		}))
-		.catch(err => {console.log(err)});
+	const handleBottomSheet = () => {
+		if(action===ACTION.Upload) {
+			return <UploadBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} cameraCoords={cameraCoords} />
+		} else {
+			return <HelperInfoBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} />
+		}
 	}
 
 	 return (
@@ -53,18 +67,23 @@ const Map = ({ route, navigation }) => {
 				ref={bottomSheetModalRef}
 				index={0}
 				snapPoints={snapPoints}
+				onDismiss={() => {
+					if(action===ACTION.Upload) {
+						bottomSheetModalRef.current?.present();
+					}
+				}}
 			>
-				<HelperInfoBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} />
+				{handleBottomSheet()}
+				
 			</BottomSheetModal>
 			{
-				markerUpload ? (
+				action==="upload" ? (
 					<>
-						<View style={styles.centerMarker}></View>
-						<TouchableOpacity  style={styles.markerUploadButton} onPress={uploadMarker}>
-							<Text style={styles.markerUploadButtonText}>
-								결정
-							</Text>
-						</TouchableOpacity>
+						<BackButton/>
+						<View style={styles.centerMarker}>
+							<Text style={styles.centerMarkerText}>지정</Text>
+						</View>
+						<View style={styles.centerMarkerCol}></View>
 					</>
 				) : null
 			}
@@ -80,16 +99,24 @@ const Map = ({ route, navigation }) => {
 					})
 				}}
 			>
-				<Marker
-					coordinate={{latitude: 37.5828, longitude: 127.0107}}
-					onClick={() => {
-						console.log("click");
-						bottomSheetModalRef.current?.present();
-					}}
-				/>
+				{
+					(!markersLoading && action !== ACTION.Upload) && markers.map((marker, idx) => (
+						<Marker
+							key={idx}
+							coordinate={{latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude)}}
+							onClick={() => {
+								console.log("click");
+								bottomSheetModalRef.current?.present();
+							}}
+						/>
+					))
+				}
 			</NaverMapView>
 
-			<Search />
+			{
+				action==="upload" ? null : <Search />
+			}
+
 		</>
 	);
 };
@@ -97,12 +124,27 @@ const Map = ({ route, navigation }) => {
 const styles = StyleSheet.create({
 	centerMarker: {
 		position: "absolute",
-		width: 10,
-		height: 10,
-		backgroundColor: "red",
-		left: vw/2-5,
-		top: vh/2-5,
+		width: 60,
+		height: 30,
+		backgroundColor: "black",
+		left: vw/2-30,
+		top: vh/2-70,
+		zIndex: 2,
+		justifyContent: "center",
+		borderRadius: 5
+	},
+	centerMarkerCol: {
+		position: "absolute",
+		width: 2,
+		height: 20,
+		backgroundColor: "black",
+		left: vw/2-1,
+		top: vh/2-40,
 		zIndex: 2
+	},
+	centerMarkerText: {
+		color: "white",
+		alignSelf: "center"
 	},
 	markerUploadButton: {
 		position: "absolute",

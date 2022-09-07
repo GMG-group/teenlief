@@ -1,4 +1,5 @@
 import axios, {AxiosResponse} from "axios";
+import Config from "react-native-config";
 
 const PROTOCOL = "http://";
 const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
@@ -46,7 +47,10 @@ export const postMarker = (header:any, body:any):Promise<AxiosResponse> => {
     return axios.post(
         `${URL}/api/marker/`,
         body, {
-            headers: header
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                ...header
+            }
         }
     )
 }
@@ -57,6 +61,31 @@ export const getMarker = (header: any):Promise<AxiosResponse> => {
          {
              withCredentials: false,
              headers: header
+        }
+    )
+}
+
+export const getReverseGeocoding = (cameraCoords: any):Promise<AxiosResponse> => {
+
+    const coords = `${cameraCoords.longitude},${cameraCoords.latitude}`;
+    console.log("Coords",coords);
+    return axios.get(
+        `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${coords}&orders=roadaddr&output=json`,
+        {
+            headers: {
+                "X-NCP-APIGW-API-KEY-ID": Config.NAVER_MAP_API_KEY, // TODO: env파일에서 가져오기
+                "X-NCP-APIGW-API-KEY": Config.NAVER_MAP_API_SECRET
+            }
+        }
+    )
+}
+
+export const getMarkerSimple = (header: any):Promise<AxiosResponse> => {
+    return axios.get(
+        `${URL}/api/marker-simple/`,
+        {
+            withCredentials: false,
+            headers: header
         }
     )
 }
