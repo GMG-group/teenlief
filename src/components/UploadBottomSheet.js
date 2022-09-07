@@ -89,6 +89,7 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
             });
             return;
         }
+        let flag = true;
         let formData = new FormData();
         formData.append("longitude", cameraCoords.longitude);
         formData.append("latitude", cameraCoords.latitude);
@@ -101,8 +102,18 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
         tags.forEach((tag, idx) => {
             if(tag.selected) {
                 formData.append("tag", idx+1);
+                flag = false;
             }
         })
+
+        if(flag) {
+            Toast.show({
+                type: 'error',
+                text1: '등록 실패',
+                text2: '태그를 하나 이상 선택해주세요',
+            });
+            return
+        }
 
         callApi(formData)
             .then(() => {
