@@ -6,6 +6,7 @@ import {useSetRecoilState} from "recoil";
 import {ACTION, actionState} from "@apis/atoms";
 import ImagePicker from 'react-native-image-crop-picker';
 import ImageModal from "react-native-image-modal";
+import Toast from "react-native-toast-message";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -66,6 +67,21 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
 
     const uploadMarker = () => {
         console.log("upload");
+        if(!addressDetail) {
+            Toast.show({
+                type: 'error',
+                text1: '업로드 실패',
+                text2: '상세주소를 입력하세요',
+            });
+            return;
+        } else if(!image) {
+            Toast.show({
+                type: 'error',
+                text1: '업로드 실패',
+                text2: '이미지를 추가해주세요',
+            });
+            return;
+        }
         let formData = new FormData();
         formData.append("longitude", cameraCoords.longitude);
         formData.append("latitude", cameraCoords.latitude);
@@ -82,7 +98,13 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
         })
 
         callApi(formData)
-            .then(() => {setAction(ACTION.Main)})
+            .then(() => {
+                Toast.show({
+                    type: 'success',
+                    text1: '업로드 성공'
+                });
+                setAction(ACTION.Main)
+            })
             .catch(err => {console.log(err)});
     }
 
