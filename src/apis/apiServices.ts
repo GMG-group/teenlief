@@ -44,12 +44,6 @@ export const getUser = (header:any):Promise<AxiosResponse> => {
 }
 
 export const postMarker = (header:any, body:any):Promise<AxiosResponse> => {
-    console.log("postMarker", body);
-    // let formData = new FormData();
-    // formData.append("longitude", 123);
-    // formData.append("latitude", 123);
-    // formData.append("explanation", "asdf");
-    // formData.append("tag", [1]);
     return axios.post(
         `${URL}/api/marker/`,
         body, {
