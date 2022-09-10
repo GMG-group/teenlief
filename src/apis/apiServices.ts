@@ -55,9 +55,9 @@ export const postMarker = (header:any, body:any):Promise<AxiosResponse> => {
     )
 }
 
-export const getMarker = (header: any):Promise<AxiosResponse> => {
+export const getMarkerDetail = (header: any, id: number):Promise<AxiosResponse> => {
     return axios.get(
-        `${URL}/api/marker/`,
+        `${URL}/api/marker/${id}`,
          {
              withCredentials: false,
              headers: header

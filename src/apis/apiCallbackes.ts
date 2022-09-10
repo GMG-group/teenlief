@@ -1,7 +1,5 @@
 import {useRecoilCallback, useRecoilValue} from "recoil";
 import {
-    getMarker,
-    getUser,
     postGooleLoginFinish,
     postLogin,
     postMarker,

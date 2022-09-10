@@ -1,10 +1,24 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, View, StyleSheet, Image} from "react-native";
 import { TouchableWithoutFeedback } from "@gorhom/bottom-sheet";
 import { vw, vh } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
+import {getMarkerDetail} from "@apis/apiServices";
+import useApi from "@apis/useApi";
 
-const HelperInfoBottomSheet = ({ navigation, bottomSheetModalRef }) => {
+const HelperInfoBottomSheet = ({ navigation, bottomSheetModalRef, selectedMarkerId }) => {
+	const [detailLoading, detailResolved, getDetail] = useApi(getMarkerDetail, true);
+
+	useEffect(() => {
+		getDetail(selectedMarkerId);
+	},[selectedMarkerId])
+
+	useEffect(() => {
+		if(!detailLoading) {
+			console.log(detailResolved);
+		}
+	},[detailLoading])
+
 	return (
 		<View style={styles.container}>
 			{/*들어가야 할 내용*/}
