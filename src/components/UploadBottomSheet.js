@@ -137,7 +137,7 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
 
     const imagePicker = () => {
         ImagePicker.openCamera({
-            width: 300,
+            width: 800,
             height: 400,
             cropping: true,
             includeExif: true,
@@ -256,6 +256,7 @@ const styles = StyleSheet.create({
     image: {
         width: vw,
         height: vh/6,
+        alignSelf: "center"
     },
     markerUploadView: {
 

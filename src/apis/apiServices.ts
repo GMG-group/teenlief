@@ -89,3 +89,10 @@ export const getMarkerSimple = (header: any):Promise<AxiosResponse> => {
         }
     )
 }
+
+export const postTokenRefresh = (body:any):Promise<AxiosResponse> => {
+    return axios.post(
+        `${URL}/api/accounts/v1/token/refresh/`,
+        body
+    );
+}
