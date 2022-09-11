@@ -4,10 +4,10 @@ import StarIcon from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { vw, vh } from "react-native-css-vh-vw";
 import Speech from '@components/Speech';
-import {getChatLog} from "@apis/apiServices";
+import { getChatLog } from "@apis/apiServices";
 import useApi from "@apis/useApi";
-import {useRecoilValue} from "recoil";
-import {tokenState} from "@apis/atoms";
+import { useRecoilValue } from "recoil";
+import { tokenState } from "@apis/atoms";
 
 const ChatRoom = ({ navigation, route }) => {
     const [chatData, setChatData] = useState([]);
