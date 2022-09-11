@@ -6,8 +6,8 @@ export interface Token {
     refreshToken: string;
 }
 
-export interface UserInfo {
-    email: string
+export interface User {
+    user: any
 }
 
 export const tokenState = atom<Token> ({
@@ -19,9 +19,10 @@ export const tokenState = atom<Token> ({
     effects_UNSTABLE: [ReactNativeRecoilPersist.persistAtom],
 });
 
-export const userInfoState = atom<UserInfo> ({
-    key: "userinfo",
+export const userState = atom<User> ({
+    key: "user",
     default: {
-        email: ""
-    }
+        user: null
+    },
+    effects_UNSTABLE: [ReactNativeRecoilPersist.persistAtom],
 })

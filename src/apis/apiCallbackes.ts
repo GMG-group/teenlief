@@ -1,6 +1,6 @@
 import {useRecoilCallback, useRecoilValue} from "recoil";
 import {getMarker, getUser, postGooleLoginFinish, postLogin, postMarker, postRegistration} from "@apis/apiServices";
-import {tokenState} from "@apis/atoms";
+import {tokenState, userState} from "@apis/atoms";
 import {MARKER_POST_ERROR} from "@apis/types";
 
 export const usePostGoogleLoginFinishCallback = () => {
@@ -11,6 +11,10 @@ export const usePostGoogleLoginFinishCallback = () => {
                 set(tokenState, {
                     accessToken: data.access_token,
                     refreshToken: data.refresh_token
+                });
+
+                set(userState, {
+                    user: data.user
                 });
             },
         [],
@@ -26,6 +30,10 @@ export const usePostLoginCallback = () => {
                     accessToken: data.access_token,
                     refreshToken: data.refresh_token
                 });
+
+                set(userState, {
+                    user: data.user
+                });
             },
         [],
     );
@@ -39,6 +47,10 @@ export const usePostRegistrationCallback = () => {
                 set(tokenState, {
                     accessToken: data.access_token,
                     refreshToken: data.refresh_token
+                });
+
+                set(userState, {
+                    user: data.user
                 });
             },
         [],

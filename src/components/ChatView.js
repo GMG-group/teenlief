@@ -4,24 +4,30 @@ import { vw, vh } from "react-native-css-vh-vw";
 import Icon from "react-native-vector-icons/Ionicons";
 import Star from 'react-native-star-view';
 
-const ChatView = ({navigation, profile, name, score, favorite}) => {
-    const [heart, setHeart] = useState(favorite);
+const ChatView = ({ navigation, data }) => {
+    const [heart, setHeart] = useState(data.favorite);
+
     return (
-        <TouchableOpacity style={styles.container} onPress={() => navigation.push('ChatRoom', {
-            profile: profile,
-            name: name,
-            score: score,
-        })}>
+        <TouchableOpacity
+            style={styles.container}
+            onPress={() => navigation.push('ChatRoom', {
+                id: data.id,
+                roomName: data.roomName,
+                profile: data.profile,
+                name: data.name,
+                score: data.score,
+            })}
+        >
             <View style={styles.leftContainer}>
                 <View style={styles.profileCircle}>
                     {/* <Image style={styles.profile} source={profile} /> */}
                 </View>
                 
                 <View>
-                    <Text style={styles.name}>{name}</Text>
+                    <Text style={styles.name}>{data.name}</Text>
                     <View style={styles.starContainer}>
-                        <Text>{score.toFixed(1)} : </Text>
-                        <Star score={score} style={styles.star} />
+                        <Text>{data.score.toFixed(1)} : </Text>
+                        <Star score={data.score} style={styles.star} />
                     </View>
                 </View>
             </View>

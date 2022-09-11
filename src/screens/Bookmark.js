@@ -1,76 +1,37 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {Text, TextInput, View, StyleSheet, ScrollView, FlatList} from "react-native";
 import { vw, vh } from "react-native-css-vh-vw";
 import Icon from "react-native-vector-icons/Ionicons";
 import ChatView from '@components/ChatView';
 import test from "@components/img/test.png";
+import useApi from "@apis/useApi";
+import {getChatRoomList} from "@apis/apiServices";
+import {useRecoilValue} from "recoil";
+import {userState} from "@apis/atoms";
 
-const testData = [
-	{
-		name: '백준',
-		score: 2.2,
-		favorite: false,
-	},
-	{
-		name: '길동홍',
-		score: 3.0,
-		favorite: true,
-	},
-	{
-		name: '제인도',
-		score: 1.9,
-		favorite: false,
-	},
-	{
-		name: '존도',
-		score: 5.0,
-		favorite: false,
-	},
-	{
-		name: '흠길동',
-		score: 4.5,
-		favorite: false,
-	},
-	{
-		name: '김안동',
-		score: 3.5,
-		favorite: false,
-	},
-	{
-		name: '백준',
-		score: 2.2,
-		favorite: false,
-	},
-	{
-		name: '백준',
-		score: 2.5,
-		favorite: true,
-	},
-	{
-		name: '백준',
-		score: 2.7,
-		favorite: false,
-	},
-	{
-		name: '백준',
-		score: 2.1,
-		favorite: true,
-	},
-	{
-		name: '백준',
-		score: 2.9,
-		favorite: true,
-	},
-]
 const Bookmark = ({navigation}) => {
 	const filterTag = ["숙식", "숙식", "숙식", "숙식", "숙식", "숙식"];
 	const tagListRef = useRef(null);
+
+	const user = useRecoilValue(userState);
+	const [loading, resolved, callApi] = useApi(getChatRoomList, true);
+	const [chatroom, setChatroom] = useState([]);
+
+	useEffect(() => {
+		console.log("user", user);
+		callApi(user.user.pk)
+			.then((res) => {
+				console.log(res)
+				setChatroom(res);
+			})
+			.catch((err) => {
+				console.log("Chat Room Error!", err);
+			})
+	}, []);
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.search}>
-				
-				<Icon name="logo-figma" size={25}  />
-				
 				<TextInput
 					style={styles.input}
 					placeholder={"여기서 검색해 주세요"} />
@@ -101,13 +62,20 @@ const Bookmark = ({navigation}) => {
 			<FlatList
 				scrollEnabled={true}
 				style={styles.chatView}
-				data={testData}
-                renderItem={({item}) => <ChatView 
-											profile={test} 
-											name={item.name} 
-											score={item.score} 
-											favorite={item.favorite}
-											navigation={navigation} />}
+				data={chatroom}
+				renderItem={(item) => {
+					return <ChatView
+						data={{
+							id: item.item.id,
+							roomName: item.item.room_name,
+							profile: test,
+							name: item.item.teen.first_name,
+							score: 5.0,
+							favorite: false
+						}}
+						navigation={navigation}
+					/>
+				}}
 				ListFooterComponent={<View style={{height: vh(8), backgroundColor: 'transparent',}} />}
 			/>
 		</View>
@@ -115,12 +83,12 @@ const Bookmark = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
+	container: {
 		display: 'flex',
 		justifyContent: 'space-between',
 		flexDirection: 'column',
 		alignItems: 'center',
-		
+
 	},
 	search: {
 		display: 'flex',
