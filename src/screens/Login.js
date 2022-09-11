@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import { View,
+    Animated,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -19,11 +20,24 @@ const options = [
     { label: '청소년', value: 'Teen' },
     { label: '헬퍼', value: 'Helper' },
 ];
+// (value) => value === changeColor ? null : setChangeColor(!changeColor)
+const AnimationSwitchSelector = Animated.createAnimatedComponent(SwitchSelector);
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const postLoginCallback = usePostLoginCallback();
+    const backgroundAnimation = useRef(new Animated.Value(0)).current;
+    const switchSelectorAnimation = useRef(new Animated.Value(0)).current;
+    const [changeColor, setChangeColor] = useState('Teen');
+
+    useEffect(() => {
+        Animated.timing(switchSelectorAnimation, {
+            toValue: changeColor === 'Teen' ? 0 : 1,
+            useNativerDriver: true,
+            duration: 1000,
+        }).start();
+    }, [switchSelectorAnimation, changeColor]);
 
     const submit = () => {
         console.log(`이메일 :${email}`);
@@ -36,18 +50,24 @@ const Login = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Background />
+            <Background backgroundAnimation={backgroundAnimation} changeColor={changeColor} color={backgroundAnimation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ['#1E90FF', '#8A2BE2'],
+                    })} />
 
             {/* middle form */}
             <View style={middleStyle.middleContainer}>
-                <SwitchSelector
+                <AnimationSwitchSelector
                     style={middleStyle.toggle}
                     options={options}
                     initial={0}
-                    onPress={value => console.log(`전역 options변수 참조: ${value}`)}
+                    onPress={(value) => value === 'Teen' ? setChangeColor('Teen') : setChangeColor('Helper')}
                     hasPadding={true}
                     textColor='gray'
-                    buttonColor={color}
+                    buttonColor={backgroundAnimation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ['#1E90FF', '#8A2BE2'],
+                    })}
                     height={33}
                 />
                 <CustomInput

@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import { View,
+    Animated,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -19,6 +20,7 @@ const options = [
     { label: '청소년', value: 'Teen' },
     { label: '헬퍼', value: 'Helper' },
 ];
+const AnimationSwitchSelector = Animated.createAnimatedComponent(SwitchSelector);
 
 const SignUp = ( { navigation } ) => {
     const [email, setEmail] = useState("");
@@ -27,6 +29,17 @@ const SignUp = ( { navigation } ) => {
     const [confirm, setConfirm] = useState("");
     const [role, setRole] = useState("Teen");
     const postRegistrationCallback = usePostRegistrationCallback();
+    const backgroundAnimation = useRef(new Animated.Value(0)).current;
+    const switchSelectorAnimation = useRef(new Animated.Value(0)).current;
+    const [changeColor, setChangeColor] = useState('Teen');
+
+    useEffect(() => {
+        Animated.timing(switchSelectorAnimation, {
+            toValue: changeColor === 'Teen' ? 0 : 1,
+            useNativerDriver: true,
+            duration: 1000,
+        }).start();
+    }, [switchSelectorAnimation, changeColor]);
 
     const signUpSubmit = () => {
         console.log(`이메일 :${email}`);
@@ -46,18 +59,26 @@ const SignUp = ( { navigation } ) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Background />
+            <Background backgroundAnimation={backgroundAnimation} changeColor={changeColor} color={backgroundAnimation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ['#1E90FF', '#8A2BE2'],
+                    })} />
 
-            {/* middle form */}
             <View style={middleStyle.middleContainer}>
-                <SwitchSelector
+                <AnimationSwitchSelector
                     style={middleStyle.toggle}
                     options={options}
                     initial={0}
-                    onPress={value => setRole(value)}
+                    onPress={(value) => {
+                        value === 'Teen' ? setChangeColor('Teen') : setChangeColor('Helper');
+                        setRole(value);
+                    }}
                     hasPadding={true}
                     textColor='gray'
-                    buttonColor={color}
+                    buttonColor={backgroundAnimation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ['#1E90FF', '#8A2BE2'],
+                    })}
                     height={33}
                 />
 
@@ -83,9 +104,7 @@ const SignUp = ( { navigation } ) => {
                 />
 
             </View>
-            {/* middle form end */}
-
-            {/* bottom */}
+            
             <View style={bottomStyle.container}>
                 <TouchableOpacity style={bottomStyle.login} onPress={() => signUpSubmit()}>
                     <View>
@@ -102,7 +121,7 @@ const SignUp = ( { navigation } ) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            {/* bottom end */}
+            
         </SafeAreaView>
     );
 }
