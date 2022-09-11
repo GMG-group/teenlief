@@ -65,22 +65,30 @@ export const usePostMarkerCallback = () => {
 export const usePostTokenRefreshCallback = () => {
     return useRecoilCallback(({snapshot, set}) =>
             async (body) => {
-                await postTokenRefresh(body)
-                    .then(({data}) => {
+                return await postTokenRefresh(body)
+                    .then((res) => {
+                        const {data} = res;
                         console.log("data", data);
                         set(tokenState, {
                             accessToken: data.access,
                             refreshToken: body.refresh
                         });
+                        return res.status;
                     })
                     .catch(err => {
+                        console.log("token refresh error", err.response.status)
                         if(err.response.status === 401) {
+                            set(tokenState, {
+                                accessToken: '',
+                                refreshToken: ''
+                            });
                             Toast.show({
                                 type: 'error',
-                                text1: 'API에러',
-                                text2: err.response.detail,
+                                text1: '인증 만료',
+                                text2: '재로그인이 필요합니다.',
                             })
                         }
+                        return err.status;
                     });
             },
         [],

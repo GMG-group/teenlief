@@ -21,8 +21,9 @@ export const useApi = (api, authHeader=false) => {
         if(err.response.status === 403) {
             console.log("403")
             return postTokenRefresh({"refresh": refreshToken})
-                .then(() => {
+                .then((status) => {
                     console.log("tokenRefresh finished")
+                    if(status < 500) return;
                     return {data:callback(...args)}
                 })
         }
@@ -37,6 +38,7 @@ export const useApi = (api, authHeader=false) => {
                     accessToken = token.accessToken;
                     refreshToken = token.refreshToken;
                     console.log("accessToken token", accessToken);
+                    console.log("refreshToken token", refreshToken);
                 }
                 const {data} = authHeader ? (
                     await api(makeHeaders(accessToken), ...args)
