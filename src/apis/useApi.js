@@ -9,26 +9,26 @@ const useApi = (api, authHeader=false) => {
     const makeHeaders = (token) => {
         const headers = {
             'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/json'
         }
         return headers
     }
 
-
     const callback = useRecoilCallback(({snapshot, set}) =>
             async (...args) => {
+                console.log("args", args);
                 let access_token;
                 if(authHeader) {
                     access_token = (await snapshot.getPromise(tokenState)).accessToken;
                 }
-                const {data} = await api(authHeader ? makeHeaders(access_token) : null, ...args);
-                setLoading(false);
+                const {data} = authHeader ? await api(makeHeaders(access_token), ...args) : await api(...args);
                 setResolved(data);
+                setLoading(false);
                 return data
             },
         [],
     );
-    return [loading, resolved, callback];
+    return [loading, resolved, callback, setLoading];
 }
 
 export default useApi;

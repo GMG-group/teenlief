@@ -7,6 +7,7 @@ import Main from "@screens/Main"
 import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Text} from "react-native";
+import Toast from "react-native-toast-message";
 
 const App = () => {
 	return (
@@ -16,6 +17,7 @@ const App = () => {
 					<GestureHandlerRootView style={{flex: 1}}>
 						<BottomSheetModalProvider>
 							<Main />
+							<Toast />
 						</BottomSheetModalProvider>
 					</GestureHandlerRootView>
 				</React.Suspense>

@@ -10,6 +10,12 @@ export interface User {
     user: any
 }
 
+export const ACTION = {
+    Main: 'main',
+    Upload: 'upload'
+} as const;
+type ACTION = typeof ACTION[keyof typeof ACTION];
+
 export const tokenState = atom<Token> ({
     key: "token",
     default: {
@@ -25,4 +31,9 @@ export const userState = atom<User> ({
         user: null
     },
     effects_UNSTABLE: [ReactNativeRecoilPersist.persistAtom],
+})
+
+export const actionState = atom<ACTION> ({
+    key: "action",
+    default: ACTION.Main
 })
