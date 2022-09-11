@@ -96,3 +96,10 @@ export const postTokenRefresh = (body:any):Promise<AxiosResponse> => {
         body
     );
 }
+
+export const getTag = (body: any):Promise<AxiosResponse> => {
+    console.log("getTAg1!!")
+    return axios.get(
+        `${URL}/api/tag/`
+    )
+}
