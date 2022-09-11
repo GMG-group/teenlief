@@ -26,6 +26,8 @@ export const useApi = (api, authHeader=false) => {
                     if(status < 500) return;
                     return {data:callback(...args)}
                 })
+        } else {
+            console.log("unhandled error", err.response.status, err.response)
         }
     }
 

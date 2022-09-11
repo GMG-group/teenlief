@@ -7,9 +7,7 @@ import {ACTION, actionState} from "@apis/atoms";
 import ImagePicker from 'react-native-image-crop-picker';
 import ImageModal from "react-native-image-modal";
 import Toast from "react-native-toast-message";
-
-const vw = Dimensions.get('window').width;
-const vh = Dimensions.get('window').height;
+import {vh} from "react-native-css-vh-vw";
 
 const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) => {
 
@@ -60,10 +58,6 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
             setLoading(true);
         }
     },[RGloading])
-
-    useEffect(() => {
-        console.log("selected", tags);
-    },[tags])
 
     const uploadMarker = () => {
         console.log("upload");
@@ -137,13 +131,12 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
 
     const imagePicker = () => {
         ImagePicker.openCamera({
-            width: 800,
-            height: 400,
+            width: 1280,
+            height: 720,
             cropping: true,
             includeExif: true,
             mediaType: 'photo',
         }).then(image => {
-            console.log(image.path);
             setImage(image);
         });
     }
@@ -179,20 +172,21 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
                     ))
                 }
             </View>
+            <TouchableOpacity onPress={imagePicker} style={styles.imagePickerButton}>
             {
                 image ? (
-                    <ImageModal style={styles.image} resizeMode={"contain"} source={{uri: image.path}}/>
+                    <Image style={styles.image} source={{uri: image.path}}/>
                 ) : (
-                    <TouchableOpacity onPress={imagePicker} style={styles.imagePickerButton}>
+
                         <View style={styles.imagePickerView}>
                             <Text style={styles.imagePickerText}>
                                 이미지
                             </Text>
                         </View>
-                    </TouchableOpacity>
+
                 )
             }
-
+            </TouchableOpacity>
             <TouchableOpacity onPress={uploadMarker} style={styles.markerUploadButton}>
                 <View style={styles.markerUploadView}>
                     <Text style={styles.markerUploadButtonText}>
@@ -241,7 +235,7 @@ const styles = StyleSheet.create({
     },
     imagePickerButton: {
         width: "90%",
-        height: vh/6,
+        height: vh(20),
         alignSelf: 'center',
         backgroundColor: 'lightgray',
         borderRadius: 10
@@ -254,16 +248,18 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     image: {
-        width: vw,
-        height: vh/6,
-        alignSelf: "center"
+        width: "100%",
+        height: vh(20),
+        alignSelf: 'center',
+        borderRadius: 10,
+        resizeMode: 'contain'
     },
     markerUploadView: {
 
     },
     markerUploadButton: {
         width: "90%",
-        height: vh/24,
+        height: vh(4),
         alignSelf: "center",
         backgroundColor: "black",
         borderRadius: 10,

@@ -27,7 +27,7 @@ const Map = ({ route, navigation }) => {
 		if(action === ACTION.Main) {
 			return ['15%', '50%', '100%'];
 		} else if (action === ACTION.Upload) {
-			return ['20%', '46%'];
+			return ['20%', '50%'];
 		}
 	}
 	, [action]);
