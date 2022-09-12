@@ -100,7 +100,7 @@ export const getReverseGeocoding = (cameraCoords: any):Promise<AxiosResponse> =>
     )
 }
 
-export const getMarkerSimple = (header: any):Promise<AxiosResponse> => {
+export const getMarker = (header: any):Promise<AxiosResponse> => {
     return axios.get(
         `${URL}/api/marker-simple/`,
         {
