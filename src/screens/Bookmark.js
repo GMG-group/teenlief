@@ -21,7 +21,6 @@ const Bookmark = ({navigation}) => {
 		console.log("user", user);
 		callApi(user.user.pk)
 			.then((res) => {
-				console.log(res)
 				setChatroom(res);
 			})
 			.catch((err) => {

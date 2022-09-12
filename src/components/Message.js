@@ -2,19 +2,29 @@ import React, {useEffect, useState} from 'react';
 import {Text, TextInput, View, StyleSheet, ScrollView, Image, TouchableOpacity} from "react-native";
 import test from "@components/img/test.png";
 import { vw, vh } from "react-native-css-vh-vw";
+import {useRecoilValue} from "recoil";
+import {userState} from "@apis/atoms";
 
-const Speech = ({name, text, direction}) => {
+const Message = (item) => {
+    const user = useRecoilValue(userState);
+
+    useEffect(() => {
+        console.log(item);
+        console.log(user);
+    }, []);
     return (
-        <View style={[styles.container, direction === 'helper' ? {flexDirection: 'row'} : {flexDirection: 'row-reverse'}]}>
-            <View style={styles.border}>
-                <Image style={styles.profile} source={test} />
-            </View>
+        <View style={[styles.container, user.user.pk == item.data.user.id ? {flexDirection: 'row-reverse'} : {flexDirection: 'row'}]}>
+            {
+                user.user.pk != item.data.user.id ?
+                    <View style={styles.border}>
+                        <Image style={styles.profile} source={test} />
+                    </View>
+                    : null
+            }
             
-            <View style={direction === 'helper' ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
-                <Text style={styles.name}>{name}</Text>
-                <View style={styles.speech}>
-                    <View style={[styles.triangle, direction === 'helper' ? {transform: [{ rotate: "90deg" }]} : {right: 0}]}></View>
-                    <Text style={styles.text}>{text}</Text>
+            <View style={user.user.pk == item.data.user.id ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
+                <View style={[styles.speech, item.data.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
+                    <Text style={styles.text}>{item.data.content}</Text>
                 </View>
             </View>
             
@@ -31,22 +41,21 @@ const styles = StyleSheet.create({
     },
     speech: {
         maxWidth: vw(60),
-        backgroundColor: 'white',
+        backgroundColor: '#00A3FF',
         borderRadius: 20,
         padding: 10,
     },
     text: {
-        fontSize: 20,
+        fontSize: 14,
+        color: 'white'
     },
     border: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 41,
-        height: 41,
+        width: 35,
+        height: 35,
         borderRadius: 100,
-        borderWidth: 1,
-        borderColor: 'gray',
         marginRight: 10,
         marginLeft: 10,
     },  
@@ -73,4 +82,4 @@ const styles = StyleSheet.create({
         borderTopColor: "white",
     },
 });
-export default Speech;
+export default Message;

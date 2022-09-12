@@ -1,9 +1,10 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {Text, TextInput, View, StyleSheet, Image, TouchableOpacity, FlatList} from "react-native";
 import StarIcon from 'react-native-vector-icons/AntDesign';
-import Icon from 'react-native-vector-icons/Ionicons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { vw, vh } from "react-native-css-vh-vw";
-import Speech from '@components/Speech';
+import Message from '@components/Message';
 import { getChatLog } from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import { useRecoilValue } from "recoil";
@@ -11,7 +12,7 @@ import { tokenState } from "@apis/atoms";
 
 const ChatRoom = ({ navigation, route }) => {
     const [chatData, setChatData] = useState([]);
-    const [speechText, setSpeechText] = useState('');
+    const [chatInput, setChatInput] = useState('');
     const chatRoomRef = useRef();
     const webSocket = useRef(null);
 
@@ -34,7 +35,6 @@ const ChatRoom = ({ navigation, route }) => {
                     const data = JSON.parse(e.data);
 
                     setChatData((prev) => [...prev, data]);
-                    chatRoomRef.current.scrollToEnd({ animated: false });
                 };
 
                 webSocket.current.onerror = (e) => {
@@ -52,17 +52,22 @@ const ChatRoom = ({ navigation, route }) => {
     }, [route.params.id]);
 
     const onText = () => {
-        webSocket.current.send(JSON.stringify({content: speechText}));
-        setSpeechText('');
+        webSocket.current.send(JSON.stringify({content: chatInput}));
+        setChatInput('');
     }
 
     return (
         <View style={{flex: 1}}>
             <View style={styles.nav}>
                 <View style={styles.navContainer}>
-                    <Icon name="arrow-back-outline" size={40} />
+                    <TouchableOpacity
+                        onPress={() => navigation.goBack()}
+                    >
+                        <EvilIcons name="chevron-left" size={50} color={'black'} />
+                    </TouchableOpacity>
+
                     <Image style={styles.profile} source={route.params.profile} />
-                    <Text style={{fontSize: 18}}>{route.params.name}</Text>
+                    <Text style={{fontSize: 16, color: 'black'}}>{route.params.name}</Text>
                 </View>
                 <View style={styles.navContainer}>
                     <StarIcon name="star" size={22} style={{color: 'yellow'}} />
@@ -76,18 +81,17 @@ const ChatRoom = ({ navigation, route }) => {
                 keyExtractor={(item, index) => index}
                 data={chatData}
                 renderItem={(item) => {
-                    console.log(item)
-                    return <Speech name={item.item.user.first_name} text={item.item.content} />
+                    return <Message data={item.item} />
                 }}
                 onLayout={() => chatRoomRef.current.scrollToEnd({animated: false})}
                 onContentSizeChange={() => chatRoomRef.current.scrollToEnd({animated: false})}
                 ListFooterComponent={<View style={{height: 10, backgroundColor: 'transparent',}} />}
             />
             <View style={styles.chatContainer}>
-                <Icon name="add-outline" size={25} />
-                <TextInput style={styles.input} value={speechText} onChangeText={text => setSpeechText(text)} />
+                <Ionicons name="add-outline" size={25} color={'black'} />
+                <TextInput style={styles.input} value={chatInput} onChangeText={text => setChatInput(text)} />
                 <TouchableOpacity onPress={() => onText()}>
-                    <Icon name="paper-plane-outline" size={25} />
+                    <Ionicons name="paper-plane-outline" size={25} color={'black'} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -96,7 +100,7 @@ const ChatRoom = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#9bbbd4',
+        backgroundColor: '#ffffff',
         width: '100%',
         height: '100%',
     },
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         height: vh(7),
-        backgroundColor: '#9bbbd4',
+        backgroundColor: '#ffffff',
         paddingLeft: 15,
         paddingRight: 15,
     },
@@ -127,15 +131,18 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 55,
         backgroundColor: 'white',
+        paddingLeft: 15,
+        paddingRight: 15,
     },
     input: {
-        width: vw(80),
+        width: vw(75),
     },
     profile: {
-        width: vh(5),
-        height: vh(5),
+        width: 35,
+        height: 35,
         resizeMode: "cover",
         borderRadius: 100,
+        marginRight: 10
     },
 })
 export default ChatRoom;
