@@ -7,8 +7,9 @@ import {
     postTokenRefresh
 } from "@apis/apiServices";
 import {tokenState} from "@apis/atoms";
-import {MARKER_POST_ERROR} from "@apis/types";
 import Toast from "react-native-toast-message";
+import RNRestart from 'react-native-restart';
+import {useState} from "react";
 
 export const usePostGoogleLoginFinishCallback = () => {
     return useRecoilCallback(({snapshot, set}) =>
@@ -63,6 +64,7 @@ export const usePostMarkerCallback = () => {
 }
 
 export const usePostTokenRefreshCallback = () => {
+    const [result, setResult] = useState()
     return useRecoilCallback(({snapshot, set}) =>
             async (body) => {
                 return await postTokenRefresh(body)
@@ -73,7 +75,7 @@ export const usePostTokenRefreshCallback = () => {
                             accessToken: data.access,
                             refreshToken: body.refresh
                         });
-                        return res.status;
+                        return res.response.status
                     })
                     .catch(err => {
                         console.log("token refresh error", err.response.status)
@@ -84,11 +86,14 @@ export const usePostTokenRefreshCallback = () => {
                             });
                             Toast.show({
                                 type: 'error',
-                                text1: '인증 만료',
-                                text2: '재로그인이 필요합니다.',
+                                text1: '인증이 만료되었으므로 재로그인이 필요합니다',
+                                text2: '3초후 재시작합니다.',
                             })
+                            setTimeout(() => {
+                                RNRestart.Restart();
+                            },300)
                         }
-                        return err.status;
+                        return err.response.status
                     });
             },
         [],
