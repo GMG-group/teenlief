@@ -69,12 +69,14 @@ const ChatRoom = ({ navigation, route }) => {
                     <Text style={styles.marginLeft}>{route.params.score}</Text>
                 </View>
             </View>
+
             <FlatList
                 ref={chatRoomRef}
                 style={styles.container}
                 keyExtractor={(item, index) => index}
                 data={chatData}
                 renderItem={(item) => {
+                    console.log(item)
                     return <Speech name={item.item.user.first_name} text={item.item.content} />
                 }}
                 onLayout={() => chatRoomRef.current.scrollToEnd({animated: false})}
