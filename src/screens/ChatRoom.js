@@ -94,7 +94,11 @@ const ChatRoom = ({ navigation, route }) => {
             />
 
             <View style={styles.chatContainer}>
-                <Ionicons name="add-outline" size={25} color={'black'} />
+                <TouchableOpacity
+                    onPress={() => navigation.push('Promise')}
+                >
+                    <Ionicons name="add-outline" size={25} color={'black'} />
+                </TouchableOpacity>
                 <TextInput style={styles.input} value={chatInput} onChangeText={text => setChatInput(text)} />
                 <TouchableOpacity onPress={() => onText()}>
                     <Ionicons name="paper-plane-outline" size={25} color={'black'} />
@@ -119,6 +123,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         paddingLeft: 15,
         paddingRight: 15,
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#e5e5e5',
     },
     navContainer: {
         display: 'flex',
@@ -151,4 +157,5 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
 })
+
 export default ChatRoom;
