@@ -12,7 +12,8 @@ import Background from "@components/Background";
 import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import {usePostLoginCallback} from "@apis/apiCallbackes";
-
+import AnimatedInput from "react-native-animated-input";
+import { FloatingLabelInput } from 'react-native-floating-label-input';
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
 const color = '#1E90FF';
@@ -70,15 +71,17 @@ const Login = ({ navigation }) => {
                     })}
                     height={33}
                 />
-                <CustomInput
-                    placeHolder={"email"}
-                    value={email}
-                    setValue={setEmail}
+                <FloatingLabelInput
+                    label={'label'}
+                    isPassword
+                    customShowPasswordComponent={<Text>Show</Text>}
+                    customHidePasswordComponent={<Text>Hide</Text>}
                 />
-                <CustomInput
-                    placeHolder={"password"}
-                    value={password}
-                    setValue={setPassword}
+                <FloatingLabelInput
+                    label={'label'}
+                    isPassword
+                    customShowPasswordComponent={<Text>Show</Text>}
+                    customHidePasswordComponent={<Text>Hide</Text>}
                 />
 
                 <TouchableOpacity>
