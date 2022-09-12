@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		flexDirection: 'column',
 		alignItems: 'center',
-
+		backgroundColor: 'white',
 	},
 	search: {
 		display: 'flex',

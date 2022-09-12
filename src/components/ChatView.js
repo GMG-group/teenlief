@@ -3,6 +3,7 @@ import {Text, TextInput, View, StyleSheet, ScrollView, Image, TouchableOpacity} 
 import { vw, vh } from "react-native-css-vh-vw";
 import Icon from "react-native-vector-icons/Ionicons";
 import Star from 'react-native-star-view';
+import test from "@components/img/test.png";
 
 const ChatView = ({ navigation, data }) => {
     const [heart, setHeart] = useState(data.favorite);
@@ -19,8 +20,8 @@ const ChatView = ({ navigation, data }) => {
             })}
         >
             <View style={styles.leftContainer}>
-                <View style={styles.profileCircle}>
-                    {/* <Image style={styles.profile} source={profile} /> */}
+                <View style={styles.profile}>
+                     <Image style={styles.profileCircle} source={test} />
                 </View>
                 
                 <View>
@@ -46,13 +47,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderWidth: 2,
-        borderRadius: 10,
-        borderColor: '#D3D3D3',
-        backgroundColor: 'white',
         paddingLeft: 10,
         paddingRight: 10,
         marginBottom: 10,
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#d3d3d3',
     },
     leftContainer: {
         display: 'flex',
@@ -65,19 +64,14 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
-        borderRadius: 100,
-        borderColor: '#D3D3D3',
-        width: vh(6.7),
-        height: vh(6.7),
-        marginRight: 15,
-
+        borderRadius: 20,
+        width: vh(6),
+        height: vh(6),
     },
     profile: {
         width: vh(6),
         height: vh(6),
-        resizeMode: "cover",
-        borderRadius: 100,
+        marginRight: 20,
     },
     name: {
         fontSize: 17,
