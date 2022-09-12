@@ -9,7 +9,6 @@ import {
 import {tokenState} from "@apis/atoms";
 import Toast from "react-native-toast-message";
 import RNRestart from 'react-native-restart';
-import {useState} from "react";
 
 export const usePostGoogleLoginFinishCallback = () => {
     return useRecoilCallback(({snapshot, set}) =>
@@ -64,7 +63,6 @@ export const usePostMarkerCallback = () => {
 }
 
 export const usePostTokenRefreshCallback = () => {
-    const [result, setResult] = useState()
     return useRecoilCallback(({snapshot, set}) =>
             async (body) => {
                 return await postTokenRefresh(body)
@@ -75,7 +73,7 @@ export const usePostTokenRefreshCallback = () => {
                             accessToken: data.access,
                             refreshToken: body.refresh
                         });
-                        return res.response.status
+                        return res.status
                     })
                     .catch(err => {
                         console.log("token refresh error", err.response.status)
