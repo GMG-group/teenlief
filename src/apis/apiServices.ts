@@ -55,9 +55,9 @@ export const postMarker = (header: any, body: any):Promise<AxiosResponse> => {
     )
 }
 
-export const getMarker = (header: any):Promise<AxiosResponse> => {
+export const getMarkerDetail = (header: any, id: number):Promise<AxiosResponse> => {
     return axios.get(
-        `${URL}/api/marker/`,
+        `${URL}/api/marker/${id}`,
          {
              withCredentials: false,
              headers: header
@@ -107,5 +107,19 @@ export const getMarkerSimple = (header: any):Promise<AxiosResponse> => {
             withCredentials: false,
             headers: header
         }
+    )
+}
+
+export const postTokenRefresh = (body:any):Promise<AxiosResponse> => {
+    return axios.post(
+        `${URL}/api/accounts/v1/token/refresh/`,
+        body
+    );
+}
+
+export const getTag = (body: any):Promise<AxiosResponse> => {
+    console.log("getTAg1!!")
+    return axios.get(
+        `${URL}/api/tag/`
     )
 }

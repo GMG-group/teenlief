@@ -1,37 +1,45 @@
 import React, {useEffect, useState} from 'react';
 import {Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {getReverseGeocoding, postMarker} from "@apis/apiServices";
+import {getReverseGeocoding, getTag, postMarker} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useSetRecoilState} from "recoil";
 import {ACTION, actionState} from "@apis/atoms";
 import ImagePicker from 'react-native-image-crop-picker';
 import ImageModal from "react-native-image-modal";
 import Toast from "react-native-toast-message";
-
-const vw = Dimensions.get('window').width;
-const vh = Dimensions.get('window').height;
+import {vh} from "react-native-css-vh-vw";
 
 const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) => {
 
     const setAction = useSetRecoilState(actionState);
     const [RGloading, RGresolved, getAddr, setLoading] = useApi(getReverseGeocoding, false);
     const [markerLoading, markerResolved, callApi] = useApi(postMarker, true);
+    const [tagLoading, tagResolved, tagApi] = useApi(getTag, false);
     const [address, setAddress] = useState("");
     const [addressDetail, setAddressDetail] = useState("");
     const [holder, setHolder] = useState(false);
     const [prevCoords, setPrevCoords] = useState(true);
     const [image, setImage] = useState(null);
 
-    const [tags, setTags] = useState([
-        {
-            name: '식사',
-            selected: false
-        },
-        {
-            name: '숙박',
-            selected: false
-        }
-    ]);
+    const [tags, setTags] = useState();
+
+    useEffect(() => {
+        console.log("get Tag")
+        tagApi()
+            .then((resolved) => {
+                console.log("tag resolved", resolved);
+                setTags(
+                    resolved.map((tag) => ({
+                            ...tag,
+                            selected: false
+                        })
+                    )
+                )
+            })
+            .catch(err => {
+                console.log("error!!!!!!!",err);
+            })
+    },[]);
 
     useEffect(() => {
         if(!holder && prevCoords !== JSON.stringify(cameraCoords)) {
@@ -50,7 +58,6 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
     useEffect(() => {
         console.log("loading", RGloading);
         if(!RGloading) {
-            console.log("resolved", JSON.stringify(RGresolved));
             if(RGresolved.status.code === 0) {
                 setAddress(`${RGresolved.results[0].region.area1.name} ${RGresolved.results[0].region.area2.name} ${RGresolved.results[0].region.area3.name} ${RGresolved.results[0].region.area4.name} ${RGresolved.results[0].land?.name} ${RGresolved.results[0].land?.addition0.value}`);
             } else {
@@ -60,10 +67,6 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
             setLoading(true);
         }
     },[RGloading])
-
-    useEffect(() => {
-        console.log("selected", tags);
-    },[tags])
 
     const uploadMarker = () => {
         console.log("upload");
@@ -137,69 +140,81 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
 
     const imagePicker = () => {
         ImagePicker.openCamera({
-            width: 300,
-            height: 400,
+            width: 1280,
+            height: 720,
             cropping: true,
             includeExif: true,
             mediaType: 'photo',
         }).then(image => {
-            console.log(image.path);
             setImage(image);
         });
     }
 
     return (
         <View style={styles.container}>
-            <TextInput
-                style={styles.input}
-                editable={false}
-            >
-                <Text>{address}</Text>
-            </TextInput>
-
-            <TextInput
-                style={styles.input}
-                onChangeText={setAddressDetail}
-                placeholder={"상세주소"}
-            >
-                <Text>{addressDetail}</Text>
-            </TextInput>
-
-            <View style={styles.tag}>
-                {
-                    tags.map((tag, idx) => (
-                        <TouchableOpacity
-                            onPress={() => {handleChange(idx)}}
-                            key={idx}
+            {
+                tagLoading ? (
+                    <View>
+                        <Text>
+                            loading
+                        </Text>
+                    </View>
+                ) : (
+                    <>
+                        <TextInput
+                            style={styles.input}
+                            editable={false}
                         >
-                            <View style={{...styles.tagItem, backgroundColor: tags[idx].selected ? 'black' : 'white'}}>
-                                <Text style={{...styles.tagItemText, color: tags[idx].selected ? 'white' : 'black'}}>{tag.name}</Text>
+                            <Text>{address}</Text>
+                        </TextInput>
+
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={setAddressDetail}
+                            placeholder={"상세주소"}
+                        >
+                            <Text>{addressDetail}</Text>
+                        </TextInput>
+
+                        <View style={styles.tag}>
+                            {
+                                tags && tags.map((tag, idx) => (
+                                    <TouchableOpacity
+                                        onPress={() => {handleChange(idx)}}
+                                        key={idx}
+                                    >
+                                        <View style={{...styles.tagItem, backgroundColor: tags[idx].selected ? 'black' : 'white'}}>
+                                            <Text style={{...styles.tagItemText, color: tags[idx].selected ? 'white' : 'black'}}>{tag.tag}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                ))
+                            }
+                        </View>
+                        <TouchableOpacity onPress={imagePicker} style={styles.imagePickerButton}>
+                            {
+                                image ? (
+                                    <Image style={styles.image} source={{uri: image.path}}/>
+                                ) : (
+
+                                    <View style={styles.imagePickerView}>
+                                        <Text style={styles.imagePickerText}>
+                                            이미지
+                                        </Text>
+                                    </View>
+
+                                )
+                            }
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={uploadMarker} style={styles.markerUploadButton}>
+                            <View style={styles.markerUploadView}>
+                                <Text style={styles.markerUploadButtonText}>
+                                    등록
+                                </Text>
                             </View>
                         </TouchableOpacity>
-                    ))
-                }
-            </View>
-            {
-                image ? (
-                    <ImageModal style={styles.image} resizeMode={"contain"} source={{uri: image.path}}/>
-                ) : (
-                    <TouchableOpacity onPress={imagePicker} style={styles.imagePickerButton}>
-                        <View style={styles.imagePickerView}>
-                            <Text style={styles.imagePickerText}>
-                                이미지
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
+                    </>
                 )
             }
-
-            <TouchableOpacity onPress={uploadMarker} style={styles.markerUploadButton}>
-                <View style={styles.markerUploadView}>
-                    <Text style={styles.markerUploadButtonText}>
-                        등록
-                    </Text>
-                </View>
-            </TouchableOpacity>
         </View>
     );
 };
@@ -241,7 +256,7 @@ const styles = StyleSheet.create({
     },
     imagePickerButton: {
         width: "90%",
-        height: vh/6,
+        height: vh(20),
         alignSelf: 'center',
         backgroundColor: 'lightgray',
         borderRadius: 10
@@ -254,15 +269,18 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     image: {
-        width: vw,
-        height: vh/6,
+        width: "100%",
+        height: vh(20),
+        alignSelf: 'center',
+        borderRadius: 10,
+        resizeMode: 'contain'
     },
     markerUploadView: {
 
     },
     markerUploadButton: {
         width: "90%",
-        height: vh/24,
+        height: vh(4),
         alignSelf: "center",
         backgroundColor: "black",
         borderRadius: 10,
