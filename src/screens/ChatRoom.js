@@ -83,8 +83,8 @@ const ChatRoom = ({ navigation, route }) => {
                 renderItem={(item) => {
                     return <Message data={item.item} />
                 }}
-                onLayout={() => chatRoomRef.current.scrollToEnd({animated: false})}
-                onContentSizeChange={() => chatRoomRef.current.scrollToEnd({animated: false})}
+                onLayout={() => chatRoomRef.current.scrollToEnd({animated: true})}
+                onContentSizeChange={() => chatRoomRef.current.scrollToEnd({animated: true})}
                 ListFooterComponent={<View style={{height: 10, backgroundColor: 'transparent',}} />}
             />
             <View style={styles.chatContainer}>
