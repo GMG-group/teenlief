@@ -22,36 +22,34 @@ const ChatRoom = ({ navigation, route }) => {
     useEffect(() => {
         callApi(route.params.id)
             .then((res) => {
-                setChatData(res);
+                webSocket.current = new WebSocket(`ws://10.0.2.2:8000/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
+
+                webSocket.current.onopen = () => {
+                    console.log('connected');
+                    setChatData(res);
+                };
+
+                webSocket.current.onmessage = (e) => {
+                    console.log('receive', e);
+                    const data = JSON.parse(e.data);
+
+                    setChatData((prev) => [...prev, data]);
+                    chatRoomRef.current.scrollToEnd({ animated: false });
+                };
+
+                webSocket.current.onerror = (e) => {
+                    console.log('errror!', e);
+                };
+
+                webSocket.current.onclose = (e) => {
+                    console.log('close!', e);
+                };
+
+                return () => {
+                    webSocket.current.close();
+                };
             })
-    }, []);
-
-    useEffect(() => {
-        webSocket.current = new WebSocket(`ws://10.0.2.2:8000/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
-
-        webSocket.current.onopen = () => {
-            console.log('connected')
-        };
-
-        webSocket.current.onmessage = (e) => {
-            console.log('receive', e);
-            const data = JSON.parse(e.data);
-
-            setChatData([...chatData, {content: data.content, user: {first_name: data.user.first_name}}]);
-        };
-
-        webSocket.current.onerror = (e) => {
-            console.log('errror!', e);
-        };
-
-        webSocket.current.onclose = (e) => {
-            console.log('close!', e);
-        };
-
-        return () => {
-            webSocket.current.close();
-        };
-    }, [route.params.roomName]);
+    }, [route.params.id]);
 
     const onText = () => {
         webSocket.current.send(JSON.stringify({content: speechText}));
@@ -74,7 +72,7 @@ const ChatRoom = ({ navigation, route }) => {
             <FlatList
                 ref={chatRoomRef}
                 style={styles.container}
-                keyExtractor={item => item.id}
+                keyExtractor={(item, index) => index}
                 data={chatData}
                 renderItem={(item) => {
                     return <Speech name={item.item.user.first_name} text={item.item.content} />
