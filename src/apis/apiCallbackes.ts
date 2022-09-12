@@ -91,7 +91,7 @@ export const usePostTokenRefreshCallback = () => {
                             })
                             setTimeout(() => {
                                 RNRestart.Restart();
-                            },300)
+                            },3000)
                         }
                         return err.response.status
                     });
