@@ -63,14 +63,15 @@ const ChatRoom = ({ navigation, route }) => {
                     <TouchableOpacity
                         onPress={() => navigation.goBack()}
                     >
-                        <EvilIcons name="chevron-left" size={50} color={'black'} />
+                        <EvilIcons name="chevron-left" size={45} color={'black'} />
                     </TouchableOpacity>
 
                     <Image style={styles.profile} source={route.params.profile} />
                     <Text style={{fontSize: 16, color: 'black'}}>{route.params.name}</Text>
                 </View>
+
                 <View style={styles.navContainer}>
-                    <StarIcon name="star" size={22} style={{color: 'yellow'}} />
+                    <StarIcon name="star" size={20} style={{color: '#ffd45b'}} />
                     <Text style={styles.marginLeft}>{route.params.score}</Text>
                 </View>
             </View>
@@ -80,13 +81,18 @@ const ChatRoom = ({ navigation, route }) => {
                 style={styles.container}
                 keyExtractor={(item, index) => index}
                 data={chatData}
-                renderItem={(item) => {
-                    return <Message data={item.item} />
+                renderItem={({item, index}) => {
+                    if (index > 0 && item.user.id == chatData[index - 1].user.id) {
+                        return <Message item={item} displayProfile={false} />
+                    } else {
+                        return <Message item={item} displayProfile={true} />
+                    }
                 }}
                 onLayout={() => chatRoomRef.current.scrollToEnd({animated: true})}
                 onContentSizeChange={() => chatRoomRef.current.scrollToEnd({animated: true})}
                 ListFooterComponent={<View style={{height: 10, backgroundColor: 'transparent',}} />}
             />
+
             <View style={styles.chatContainer}>
                 <Ionicons name="add-outline" size={25} color={'black'} />
                 <TextInput style={styles.input} value={chatInput} onChangeText={text => setChatInput(text)} />
@@ -120,8 +126,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    margin: {
-        marginLeft: 1,
+    marginLeft: {
+        marginLeft: 10,
     },
     chatContainer: {
         display: 'flex',

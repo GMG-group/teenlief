@@ -5,7 +5,7 @@ import { vw, vh } from "react-native-css-vh-vw";
 import {useRecoilValue} from "recoil";
 import {userState} from "@apis/atoms";
 
-const Message = (item) => {
+const Message = ({ item, displayProfile }) => {
     const user = useRecoilValue(userState);
 
     useEffect(() => {
@@ -13,18 +13,23 @@ const Message = (item) => {
         console.log(user);
     }, []);
     return (
-        <View style={[styles.container, user.user.pk == item.data.user.id ? {flexDirection: 'row-reverse'} : {flexDirection: 'row'}]}>
+        <View style={[styles.container, user.user.pk == item.user.id ? {flexDirection: 'row-reverse'} : {flexDirection: 'row'}]}>
             {
-                user.user.pk != item.data.user.id ?
-                    <View style={styles.border}>
-                        <Image style={styles.profile} source={test} />
-                    </View>
-                    : null
+                user.user.pk != item.user.id ?
+                    (
+                        displayProfile ?
+                            <View style={styles.border}>
+                                <Image style={styles.profile} source={test} />
+                            </View>
+                            :
+                            <View style={styles.border}>
+                            </View>
+                    ) : null
             }
             
-            <View style={user.user.pk == item.data.user.id ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
-                <View style={[styles.speech, item.data.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
-                    <Text style={styles.text}>{item.data.content}</Text>
+            <View style={user.user.pk == item.user.id ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
+                <View style={[styles.speech, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
+                    <Text style={styles.text}>{item.content}</Text>
                 </View>
             </View>
             
