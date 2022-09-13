@@ -67,7 +67,10 @@ const Promise = ({ navigation, route }) => {
                 </View>
 
                 <TouchableOpacity
-                    onPress={() => route.params.ws.send(JSON.stringify({content: `/약속/${promise.getMonth() + 1}/${promise.getDate()}/${promise.getHours()}/${promise.getMinutes()}`}))}
+                    onPress={() => {
+                        route.params.ws.send(JSON.stringify({content: `/약속/${promise.getMonth() + 1}/${promise.getDate()}/${promise.getHours()}/${promise.getMinutes()}`}))
+                        navigation.goBack();
+                    }}
                 >
                     <View style={styles.finishButton}>
                         <Text style={{color: 'white'}}>완료</Text>
