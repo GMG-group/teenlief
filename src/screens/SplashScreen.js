@@ -22,7 +22,7 @@ const SplashScreen = () => {
                 height="70%" 
                 asset={src} />
             
-            <Lottie source={require('../components/img/96954-loading.json')} autoPlay loop />
+            <Lottie source={require('../components/img/splash.json')} autoPlay loop />
             <Text style={styles.text}>GMG group</Text>
         </View>
     )
