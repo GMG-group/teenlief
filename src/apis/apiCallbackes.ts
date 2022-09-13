@@ -7,7 +7,7 @@ import {
     postTokenRefresh,
     getUser
 } from "@apis/apiServices";
-import {tokenState} from "@apis/atoms";
+import {tokenState, userState} from "@apis/atoms";
 import Toast from "react-native-toast-message";
 import RNRestart from 'react-native-restart';
 
