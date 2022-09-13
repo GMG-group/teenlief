@@ -27,7 +27,7 @@ const Main = () => {
 
 	return (
 		<SafeAreaView style={{flex: 1}}>
-			{/* <NavigationContainer ref={navigationRef}>
+			<NavigationContainer ref={navigationRef}>
 			    <Stack.Navigator>
 					{
 						token.accessToken === "" ? (
@@ -65,8 +65,8 @@ const Main = () => {
 						}}
 					/>
 				</Stack.Navigator>
-			</NavigationContainer> */}
-			<SplashScreen />
+			</NavigationContainer>
+			{/* <SplashScreen /> */}
 		</SafeAreaView>
 	);
 };

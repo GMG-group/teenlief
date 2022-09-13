@@ -11,14 +11,19 @@ import { View,
 import src from "@components/img/teenliefLogo.svg";
 import { WithLocalSvg } from 'react-native-svg';
 import { vw, vh } from "react-native-css-vh-vw";
+import Lottie from 'lottie-react-native';
 
 const SplashScreen = () => {
     return (
         <View style={styles.container}>
+            
             <WithLocalSvg
-                width="50%" 
-                height="50%" 
+                width="70%" 
+                height="70%" 
                 asset={src} />
+            
+            <Lottie source={require('../components/img/96954-loading.json')} autoPlay loop />
+            <Text style={styles.text}>GMG group</Text>
         </View>
     )
 }
@@ -28,8 +33,13 @@ const styles = StyleSheet.create({
         width: vw(100),
         height: vh(100),
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
+    },
+    text: {
+        position: 'absolute',
+        bottom: 100,
+        fontSize: 27,
+        color: '#D3D3D3',
     },
     logo: {
         width: 1000,
