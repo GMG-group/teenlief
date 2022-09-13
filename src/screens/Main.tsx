@@ -12,6 +12,7 @@ import SignUp from '@screens/SignUp';
 import Review from "@screens/Review";
 import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
+import SplashScreen from '@screens/SplashScreen';
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
@@ -26,7 +27,7 @@ const Main = () => {
 
 	return (
 		<SafeAreaView style={{flex: 1}}>
-			<NavigationContainer ref={navigationRef}>
+			{/* <NavigationContainer ref={navigationRef}>
 			    <Stack.Navigator>
 					{
 						token.accessToken === "" ? (
@@ -64,7 +65,8 @@ const Main = () => {
 						}}
 					/>
 				</Stack.Navigator>
-			</NavigationContainer>
+			</NavigationContainer> */}
+			<SplashScreen />
 		</SafeAreaView>
 	);
 };
