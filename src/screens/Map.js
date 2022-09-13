@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import NaverMapView, { Marker } from "react-native-nmap";
 import {BottomSheetModal} from "@gorhom/bottom-sheet";
-import {Button, Dimensions, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Button, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Search from "@components/Search";
 import HelperInfoBottomSheet from "@components/HelperInfoBottomSheet";
 import useApi from "@apis/useApi";
@@ -104,13 +104,22 @@ const Map = ({ route, navigation }) => {
 					(!markersLoading && action !== ACTION.Upload) && markers.map((marker, idx) => (
 						<Marker
 							key={idx}
+							width={60}
+							height={60}
 							coordinate={{latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude)}}
 							onClick={() => {
 								console.log("click",marker.id);
 								setSelectedMarkerId(marker.id);
 								bottomSheetModalRef.current?.present();
 							}}
-						/>
+						><View style={{flexDirection: 'row'}}>
+							<Image
+								source={require('../assets/images/marker_blue.png')}
+								style={{width:60, height:60}}
+								fadeDuration={0}
+							/>
+						</View>
+						</Marker>
 					))
 				}
 			</NaverMapView>
