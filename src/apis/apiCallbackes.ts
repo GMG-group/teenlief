@@ -5,12 +5,9 @@ import {
     postMarker,
     postRegistration,
     postTokenRefresh,
-    getMarker,
     getUser
 } from "@apis/apiServices";
 import {tokenState, userState} from "@apis/atoms";
-import {MARKER_POST_ERROR} from "@apis/types";
-import {tokenState} from "@apis/atoms";
 import Toast from "react-native-toast-message";
 import RNRestart from 'react-native-restart';
 
@@ -73,16 +70,6 @@ export const usePostMarkerCallback = () => {
             async (body) => {
                 const token = await snapshot.getPromise(tokenState);
                 return await postMarker(token.accessToken, body);
-            },
-        [],
-    );
-}
-
-export const useGetMarkerCallback = () => {
-    return useRecoilCallback(({snapshot, set}) =>
-            async () => {
-                const token = await snapshot.getPromise(tokenState);
-                return await getMarker(token.accessToken);
             },
         [],
     );
