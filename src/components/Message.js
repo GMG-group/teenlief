@@ -20,9 +20,9 @@ export const PromiseMessage = ({ item, displayProfile }) => {
     }, [item]);
 
     return (
-        <View style={[styles.container, user.user.pk == item.user.id ? {flexDirection: 'row-reverse'} : {flexDirection: 'row'}, {marginBottom: 5}]}>
+        <View style={[styles.container, user.user.id == item.user.id ? {flexDirection: 'row-reverse'} : {flexDirection: 'row'}, {marginBottom: 5}]}>
             {
-                user.user.pk != item.user.id ?
+                user.user.id != item.user.id ?
                     (
                         displayProfile ?
                             <View style={styles.border}>
@@ -34,7 +34,7 @@ export const PromiseMessage = ({ item, displayProfile }) => {
                     ) : null
             }
 
-            <View style={user.user.pk == item.user.id ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
+            <View style={user.user.id == item.user.id ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
                 <View style={styles.promise}>
                     <Text style={styles.promiseHeaderText}>약속</Text>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -59,9 +59,9 @@ export const Message = ({ item, displayProfile }) => {
     const user = useRecoilValue(userState);
 
     return (
-        <View style={[styles.container, user.user.pk == item.user.id ? {flexDirection: 'row-reverse'} : {flexDirection: 'row'}]}>
+        <View style={[styles.container, user.user.id == item.user.id ? {flexDirection: 'row-reverse'} : {flexDirection: 'row'}]}>
             {
-                user.user.pk != item.user.id ?
+                user.user.id != item.user.id ?
                     (
                         displayProfile ?
                             <View style={styles.border}>
@@ -73,7 +73,7 @@ export const Message = ({ item, displayProfile }) => {
                     ) : null
             }
             
-            <View style={user.user.pk == item.user.id ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
+            <View style={user.user.id == item.user.id ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
                 <View style={[styles.speech, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
                     <Text style={styles.text}>{item.content}</Text>
                 </View>
