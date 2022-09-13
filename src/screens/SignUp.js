@@ -12,6 +12,8 @@ import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import SwitchSelector from "react-native-switch-selector";
 import {usePostLoginCallback, usePostRegistrationCallback} from "@apis/apiCallbackes";
+import { FloatingLabelInput } from 'react-native-floating-label-input';
+import Icon from 'react-native-vector-icons/Entypo';
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -30,6 +32,7 @@ const SignUp = ( { navigation } ) => {
     const [role, setRole] = useState("Teen");
     const postRegistrationCallback = usePostRegistrationCallback();
     const backgroundAnimation = useRef(new Animated.Value(0)).current;
+    const blobChangeAnimation = useRef(new Animated.Value(0)).current;
     const switchSelectorAnimation = useRef(new Animated.Value(0)).current;
     const [changeColor, setChangeColor] = useState('Teen');
 
@@ -59,10 +62,19 @@ const SignUp = ( { navigation } ) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Background backgroundAnimation={backgroundAnimation} changeColor={changeColor} color={backgroundAnimation.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: ['#1E90FF', '#8A2BE2'],
-                    })} />
+            <Background
+                backgroundAnimation={backgroundAnimation}
+                blobChangeAnimation={blobChangeAnimation}
+                changeColor={changeColor} 
+                blobColor={blobChangeAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['#16A9FC', '#B355FC']
+                })}
+                color={backgroundAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['#00A3FF', '#AE46FF'],
+                })}
+                />
 
             <View style={middleStyle.middleContainer}>
                 <AnimationSwitchSelector
@@ -82,25 +94,87 @@ const SignUp = ( { navigation } ) => {
                     height={33}
                 />
 
-                <CustomInput
-                    placeHolder={"이메일"}
+                <FloatingLabelInput
+                    label={'email'}
                     value={email}
-                    setValue={setEmail}
-                    />
-                <CustomInput
-                    placeHolder={"이름"}
+                    onChangeText={value => setEmail(value)}
+                    containerStyles={{
+                        height: 60,
+                        border: 'none',
+                        borderBottomWidth: 2,
+                        borderColor: 'white',
+                        marginBottom: 10,
+                    }}
+                      customLabelStyles={{
+                        color: 'white',
+                        colorFocused: 'white',
+                        colorBlurred: 'white',
+                        fontSizeFocused: 15,
+                        fontSizeBlurred: 17,
+                    }}
+                />
+                <FloatingLabelInput
+                    label={'name'}
                     value={name}
-                    setValue={setName}
+                    onChangeText={value => setName(value)}
+                    containerStyles={{
+                        height: 60,
+                        border: 'none',
+                        borderBottomWidth: 2,
+                        borderColor: 'white',
+                        marginBottom: 10,
+                    }}
+                      customLabelStyles={{
+                        color: 'white',
+                        colorFocused: 'white',
+                        colorBlurred: 'white',
+                        fontSizeFocused: 15,
+                        fontSizeBlurred: 17,
+                    }}
                 />
-                <CustomInput 
-                    placeHolder={"비밀번호"} 
-                    value={password} 
-                    setValue={setPassword}
-                />
-                <CustomInput
-                    placeHolder={"비밀번호 확인"}
+                <FloatingLabelInput
+                    label={'password'}
+                    value={password}
+                    onChangeText={value => setPassword(value)}
+                    isPassword
+                    customShowPasswordComponent={<Icon name="eye" size={25} color="white" />}
+                    customHidePasswordComponent={<Icon name="eye-with-line" size={25} color="white" />}
+                    containerStyles={{
+                        height: 60,
+                        border: 'none',
+                        borderBottomWidth: 2,
+                        borderColor: 'white',
+                        marginBottom: 10,
+                    }}
+                      customLabelStyles={{
+                        color: 'white',
+                        colorFocused: 'white',
+                        colorBlurred: 'white',
+                        fontSizeFocused: 15,
+                        fontSizeBlurred: 17,
+                    }}
+                    />
+                <FloatingLabelInput
+                    label={'confirm'}
                     value={confirm}
-                    setValue={setConfirm}
+                    onChangeText={value => setConfirm(value)}
+                    isPassword
+                    customShowPasswordComponent={<Icon name="eye" size={25} color="white" />}
+                    customHidePasswordComponent={<Icon name="eye-with-line" size={25} color="white" />}
+                    containerStyles={{
+                        height: 60,
+                        border: 'none',
+                        borderBottomWidth: 2,
+                        borderColor: 'white',
+                        marginBottom: 10,
+                    }}
+                      customLabelStyles={{
+                        color: 'white',
+                        colorFocused: 'white',
+                        colorBlurred: 'white',
+                        fontSizeFocused: 15,
+                        fontSizeBlurred: 17,
+                    }}
                 />
 
             </View>
@@ -137,8 +211,6 @@ const styles = StyleSheet.create({
 
 const middleStyle = StyleSheet.create({
     middleContainer: {
-        justifyContent: 'flex-start',
-        height: 0.4*vh,
         marginLeft: '5%',
         marginRight: '5%',
     },

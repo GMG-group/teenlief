@@ -12,7 +12,7 @@ import Background from "@components/Background";
 import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import {usePostLoginCallback} from "@apis/apiCallbackes";
-import AnimatedInput from "react-native-animated-input";
+import Icon from 'react-native-vector-icons/Entypo';
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -21,7 +21,7 @@ const options = [
     { label: '청소년', value: 'Teen' },
     { label: '헬퍼', value: 'Helper' },
 ];
-// (value) => value === changeColor ? null : setChangeColor(!changeColor)
+
 const AnimationSwitchSelector = Animated.createAnimatedComponent(SwitchSelector);
 
 const Login = ({ navigation }) => {
@@ -29,6 +29,7 @@ const Login = ({ navigation }) => {
     const [password, setPassword] = useState("");
     const postLoginCallback = usePostLoginCallback();
     const backgroundAnimation = useRef(new Animated.Value(0)).current;
+    const blobChangeAnimation = useRef(new Animated.Value(0)).current;
     const switchSelectorAnimation = useRef(new Animated.Value(0)).current;
     const [changeColor, setChangeColor] = useState('Teen');
 
@@ -51,12 +52,20 @@ const Login = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Background backgroundAnimation={backgroundAnimation} changeColor={changeColor} color={backgroundAnimation.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: ['#1E90FF', '#8A2BE2'],
-                    })} />
+            <Background
+                backgroundAnimation={backgroundAnimation}
+                blobChangeAnimation={blobChangeAnimation}
+                changeColor={changeColor} 
+                blobColor={blobChangeAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['#16A9FC', '#B355FC']
+                })}
+                color={backgroundAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['#00A3FF', '#AE46FF'],
+                })}
+                />
 
-            {/* middle form */}
             <View style={middleStyle.middleContainer}>
                 <AnimationSwitchSelector
                     style={middleStyle.toggle}
@@ -67,30 +76,57 @@ const Login = ({ navigation }) => {
                     textColor='gray'
                     buttonColor={backgroundAnimation.interpolate({
                         inputRange: [0, 1],
-                        outputRange: ['#1E90FF', '#8A2BE2'],
+                        outputRange: ['#00A3FF', '#AE46FF'],
                     })}
                     height={33}
                 />
-                <FloatingLabelInput
-                    label={'label'}
-                    isPassword
-                    customShowPasswordComponent={<Text>Show</Text>}
-                    customHidePasswordComponent={<Text>Hide</Text>}
-                />
-                <FloatingLabelInput
-                    label={'label'}
-                    isPassword
-                    customShowPasswordComponent={<Text>Show</Text>}
-                    customHidePasswordComponent={<Text>Hide</Text>}
-                />
+                    <FloatingLabelInput
+                        label={'email'}
+                        value={email}
+                        onChangeText={value => setEmail(value)}
+                        containerStyles={{
+                            height: 60,
+                            border: 'none',
+                            borderBottomWidth: 2,
+                            borderColor: 'white',
+                            marginBottom: 10,
+                        }}
+                          customLabelStyles={{
+                            color: 'white',
+                            colorFocused: 'white',
+                            colorBlurred: 'white',
+                            fontSizeFocused: 15,
+                            fontSizeBlurred: 17,
+                        }}
+                    />
+                    <FloatingLabelInput
+                        label={'password'}
+                        value={password}
+                        onChangeText={value => setPassword(value)}
+                        isPassword
+                        customShowPasswordComponent={<Icon name="eye" size={25} color="white" />}
+                        customHidePasswordComponent={<Icon name="eye-with-line" size={25} color="white" />}
+                        containerStyles={{
+                            height: 60,
+                            border: 'none',
+                            borderBottomWidth: 2,
+                            borderColor: 'white',
+                            marginBottom: 10,
+                        }}
+                          customLabelStyles={{
+                            color: 'white',
+                            colorFocused: 'white',
+                            colorBlurred: 'white',
+                            fontSizeFocused: 15,
+                            fontSizeBlurred: 17,
+                        }}
+                    />
 
                 <TouchableOpacity>
                     <Text style={middleStyle.text}>비밀번호를 잊으셨습니까?</Text>
                 </TouchableOpacity>
             </View>
-            {/* middle form end */}
-
-            {/* bottom */}
+            
             <View style={bottomStyle.container}>
                 <TouchableOpacity style={bottomStyle.login} onPress={() => submit()}>
                     <View>
@@ -107,7 +143,6 @@ const Login = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            {/* bottom end */}
 
         </SafeAreaView>
     );
@@ -124,17 +159,17 @@ const styles = StyleSheet.create({
 
 const middleStyle = StyleSheet.create({
     middleContainer: {
-        justifyContent: 'flex-start',
-        height: 0.4*vh,
+        display: 'flex',
         marginLeft: '5%',
         marginRight: '5%',
+        marginBottom: 100,
     },
     text: {
         fontWeight: 'bold',
     },
     toggle: {
-        marginBottom: 10,
-        width: '50%'
+        width: '50%',
+        marginBottom: 5,
     }
 });
 
