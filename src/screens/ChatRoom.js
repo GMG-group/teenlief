@@ -4,11 +4,11 @@ import StarIcon from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { vw, vh } from "react-native-css-vh-vw";
-import Message from '@components/Message';
+import { Message, PromiseMessage } from '@components/Message';
 import { getChatLog } from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import { useRecoilValue } from "recoil";
-import { tokenState } from "@apis/atoms";
+import {tokenState, userState} from "@apis/atoms";
 
 const ChatRoom = ({ navigation, route }) => {
     const [chatData, setChatData] = useState([]);
@@ -17,6 +17,7 @@ const ChatRoom = ({ navigation, route }) => {
     const webSocket = useRef(null);
 
     const token = useRecoilValue(tokenState);
+    const user = useRecoilValue(userState);
 
     const [loading, resolved, callApi] = useApi(getChatLog, true);
 
@@ -67,7 +68,13 @@ const ChatRoom = ({ navigation, route }) => {
                     </TouchableOpacity>
 
                     <Image style={styles.profile} source={route.params.profile} />
-                    <Text style={{fontSize: 16, color: 'black'}}>{route.params.name}</Text>
+                    <Text style={{fontSize: 16, color: 'black'}}>
+                        {
+                            user.user.id === route.params.teen.id
+                                ? route.params.helper.first_name
+                                : route.params.teen.first_name
+                        }
+                    </Text>
                 </View>
 
                 <View style={styles.navContainer}>
@@ -83,9 +90,19 @@ const ChatRoom = ({ navigation, route }) => {
                 data={chatData}
                 renderItem={({item, index}) => {
                     if (index > 0 && item.user.id == chatData[index - 1].user.id) {
-                        return <Message item={item} displayProfile={false} />
+                        // content 의 앞 3글자가 '/약속' 일 경우 약속 메시지로 처리
+                        if (item.content.slice(0, 3) === '/약속') {
+                            return <PromiseMessage item={item} displayProfile={false} />
+                        } else {
+                            return <Message item={item} displayProfile={false} />
+                        }
                     } else {
-                        return <Message item={item} displayProfile={true} />
+                        // content 의 앞 3글자가 '/약속' 일 경우 약속 메시지로 처리
+                        if (item.content.slice(0, 3) === '/약속') {
+                            return <PromiseMessage item={item} displayProfile={true} />
+                        } else {
+                            return <Message item={item} displayProfile={true} />
+                        }
                     }
                 }}
                 onLayout={() => chatRoomRef.current.scrollToEnd({animated: true})}
@@ -94,7 +111,19 @@ const ChatRoom = ({ navigation, route }) => {
             />
 
             <View style={styles.chatContainer}>
-                <Ionicons name="add-outline" size={25} color={'black'} />
+                <TouchableOpacity
+                    onPress={() => navigation.push(
+                        'Promise',
+                        {
+                            ws: webSocket.current,
+                            roomName: route.params.roomName,
+                            helper: route.params.helper,
+                            teen: route.params.teen,
+                        }
+                    )}
+                >
+                    <Ionicons name="add-outline" size={25} color={'black'} />
+                </TouchableOpacity>
                 <TextInput style={styles.input} value={chatInput} onChangeText={text => setChatInput(text)} />
                 <TouchableOpacity onPress={() => onText()}>
                     <Ionicons name="paper-plane-outline" size={25} color={'black'} />
@@ -119,6 +148,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         paddingLeft: 15,
         paddingRight: 15,
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#e5e5e5',
     },
     navContainer: {
         display: 'flex',
@@ -151,4 +182,5 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
 })
+
 export default ChatRoom;

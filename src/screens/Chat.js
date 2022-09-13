@@ -9,7 +9,7 @@ import {getChatRoomList} from "@apis/apiServices";
 import {useRecoilValue} from "recoil";
 import {userState} from "@apis/atoms";
 
-const Bookmark = ({navigation}) => {
+const Chat = ({navigation}) => {
 	const filterTag = ["숙식", "숙식", "숙식", "숙식", "숙식", "숙식"];
 	const tagListRef = useRef(null);
 
@@ -26,6 +26,7 @@ const Bookmark = ({navigation}) => {
 			.catch((err) => {
 				console.log("Chat Room Error!", err);
 			})
+		console.log("user",user)
 	}, []);
 
 	return (
@@ -68,7 +69,8 @@ const Bookmark = ({navigation}) => {
 							id: item.item.id,
 							roomName: item.item.room_name,
 							profile: test,
-							name: item.item.teen.first_name,
+							helper: item.item.helper,
+							teen: item.item.teen,
 							score: 5.0,
 							favorite: false
 						}}
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		flexDirection: 'column',
 		alignItems: 'center',
-		backgroundColor: 'white',
+		backgroundColor: '#eeeeee',
 	},
 	search: {
 		display: 'flex',
@@ -144,4 +146,4 @@ const styles = StyleSheet.create({
 		marginBottom: vh(1),
 	},
 });
-export default Bookmark;
+export default Chat;

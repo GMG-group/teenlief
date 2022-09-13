@@ -13,6 +13,7 @@ import ChatRoom from '@screens/ChatRoom';
 import Review from "@screens/Review";
 import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
+import Promise from "@screens/Promise";
 import SplashScreen from '@screens/SplashScreen';
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
@@ -68,6 +69,13 @@ const Main = () => {
 					<Stack.Screen
 						name='ChatRoom'
 						component={ChatRoom}
+						options={{
+							headerShown: false,
+						}}
+					/>
+					<Stack.Screen
+						name='Promise'
+						component={Promise}
 						options={{
 							headerShown: false,
 						}}
