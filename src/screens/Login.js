@@ -27,6 +27,10 @@ const AnimationSwitchSelector = Animated.createAnimatedComponent(SwitchSelector)
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [emailColor, setEmailColor] = useState('white');
+    const [emailLabel, setEmailLabel] = useState('email');
+    const [passwordColor, setPasswordColor] = useState('white');
+    const [passwordLabel,  setPasswordLabel] = useState('passoword')
     const postLoginCallback = usePostLoginCallback();
     const backgroundAnimation = useRef(new Animated.Value(0)).current;
     const blobChangeAnimation = useRef(new Animated.Value(0)).current;
@@ -44,6 +48,13 @@ const Login = ({ navigation }) => {
     const submit = () => {
         console.log(`이메일 :${email}`);
         console.log(`비밀번호 :${password}`);
+        if (email === '') {
+            setEmailColor('red');
+            setEmailLabel('email을 확인해 주세요');
+        } else if (password === '') {
+            setPasswordColor('red');
+            setPasswordLabel('password를 확인해 주세요');
+        }
         postLoginCallback({
             email: email,
             password: password
@@ -81,42 +92,42 @@ const Login = ({ navigation }) => {
                     height={33}
                 />
                     <FloatingLabelInput
-                        label={'email'}
+                        label={emailLabel}
                         value={email}
                         onChangeText={value => setEmail(value)}
                         containerStyles={{
                             height: 60,
                             border: 'none',
                             borderBottomWidth: 2,
-                            borderColor: 'white',
+                            borderColor: emailColor,
                             marginBottom: 10,
                         }}
                           customLabelStyles={{
-                            color: 'white',
-                            colorFocused: 'white',
-                            colorBlurred: 'white',
+                            color: emailColor,
+                            colorFocused: emailColor,
+                            colorBlurred: emailColor,
                             fontSizeFocused: 15,
                             fontSizeBlurred: 17,
                         }}
                     />
                     <FloatingLabelInput
-                        label={'password'}
+                        label={passwordLabel}
                         value={password}
                         onChangeText={value => setPassword(value)}
                         isPassword
-                        customShowPasswordComponent={<Icon name="eye" size={25} color="white" />}
-                        customHidePasswordComponent={<Icon name="eye-with-line" size={25} color="white" />}
+                        customShowPasswordComponent={<Icon name="eye" size={25} color={passwordColor} />}
+                        customHidePasswordComponent={<Icon name="eye-with-line" size={25} color={passwordColor} />}
                         containerStyles={{
                             height: 60,
                             border: 'none',
                             borderBottomWidth: 2,
-                            borderColor: 'white',
+                            borderColor: passwordColor,
                             marginBottom: 10,
                         }}
                           customLabelStyles={{
-                            color: 'white',
-                            colorFocused: 'white',
-                            colorBlurred: 'white',
+                            color: passwordColor,
+                            colorFocused: passwordColor,
+                            colorBlurred: passwordColor,
                             fontSizeFocused: 15,
                             fontSizeBlurred: 17,
                         }}

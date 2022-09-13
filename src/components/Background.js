@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     background: {
         position: 'absolute',
         width: '100%',
-        height: 0.65 * vh,
+        height: 0.7 * vh,
         borderBottomRightRadius: 200,
         borderBottomLeftRadius: 40,
     },
@@ -72,10 +72,6 @@ const styles = StyleSheet.create({
         width: 220,
         height: 220,
         backgroundColor: '#B355FC',
-        // borderTopStartRadius: 40,
-        // borderTopRightRadius: 100,
-        // borderBottomRightRadius: 70,
-        // borderBottomStartRadius: 100,
     },
     top: {
         marginTop: 50,

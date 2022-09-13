@@ -213,6 +213,7 @@ const middleStyle = StyleSheet.create({
     middleContainer: {
         marginLeft: '5%',
         marginRight: '5%',
+        marginBottom: '20%'
     },
     text: {
         fontWeight: 'bold',
