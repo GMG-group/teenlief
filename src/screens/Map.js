@@ -20,13 +20,14 @@ const Map = ({ route, navigation }) => {
 
 	// variables
 	const [cameraCoords, setCameraCoords] = useState({latitude: 37.5828, longitude: 127.0107})
+	const [selectedMarkerId, setSelectedMarkerId] = useState();
 	const [markersLoading, markers, getMarkers, setMarkersLoading] = useApi(getMarkerSimple, true);
 	const action = useRecoilValue(actionState);
 	const snapPoints = useMemo(() => {
 		if(action === ACTION.Main) {
 			return ['15%', '50%', '100%'];
 		} else if (action === ACTION.Upload) {
-			return ['20%', '46%'];
+			return ['20%', '50%'];
 		}
 	}
 	, [action]);
@@ -57,7 +58,7 @@ const Map = ({ route, navigation }) => {
 		if(action===ACTION.Upload) {
 			return <UploadBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} cameraCoords={cameraCoords} />
 		} else {
-			return <HelperInfoBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} />
+			return <HelperInfoBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} selectedMarkerId={selectedMarkerId}/>
 		}
 	}
 
@@ -105,7 +106,8 @@ const Map = ({ route, navigation }) => {
 							key={idx}
 							coordinate={{latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude)}}
 							onClick={() => {
-								console.log("click");
+								console.log("click",marker.id);
+								setSelectedMarkerId(marker.id);
 								bottomSheetModalRef.current?.present();
 							}}
 						/>

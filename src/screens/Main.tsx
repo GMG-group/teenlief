@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TabBar } from '@components/TabBar';
 import Login from "@screens/Login"
 import SignUp from '@screens/SignUp';
+import ChatRoom from '@screens/ChatRoom';
 import Review from "@screens/Review";
 import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
@@ -60,6 +61,13 @@ const Main = () => {
 					<Stack.Screen
 						name='Review'
 						component={Review}
+						options={{
+							headerShown: false,
+						}}
+					/>
+					<Stack.Screen
+						name='ChatRoom'
+						component={ChatRoom}
 						options={{
 							headerShown: false,
 						}}

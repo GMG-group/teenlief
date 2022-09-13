@@ -17,8 +17,8 @@ const App = () => {
 					<GestureHandlerRootView style={{flex: 1}}>
 						<BottomSheetModalProvider>
 							<Main />
-							<Toast />
 						</BottomSheetModalProvider>
+						<Toast />
 					</GestureHandlerRootView>
 				</React.Suspense>
 			</ReactNativeRecoilPersistGate>
