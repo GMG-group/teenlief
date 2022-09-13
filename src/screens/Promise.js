@@ -4,7 +4,7 @@ import EvilIcons from "react-native-vector-icons/EvilIcons";
 import {vh, vw} from "react-native-css-vh-vw";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const Promise = ({ navigation }) => {
+const Promise = ({ navigation, route }) => {
     const [promise, setPromise] = useState(new Date());
     const [showDateTimePicker, setShowDateTimePicker] = useState(false);
     const [mode, setMode] = useState('date');
@@ -66,9 +66,13 @@ const Promise = ({ navigation }) => {
                     <Text style={{color: 'black'}}>30분 전</Text>
                 </View>
 
-                <View style={styles.finishButton}>
-                    <Text style={{color: 'white'}}>완료</Text>
-                </View>
+                <TouchableOpacity
+                    onPress={() => route.params.ws.send(JSON.stringify({content: `/약속/${promise.getMonth() + 1}/${promise.getDate()}/${promise.getHours()}/${promise.getMinutes()}`}))}
+                >
+                    <View style={styles.finishButton}>
+                        <Text style={{color: 'white'}}>완료</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         </View>
     );
