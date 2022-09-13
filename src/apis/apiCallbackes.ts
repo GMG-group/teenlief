@@ -4,7 +4,9 @@ import {
     postLogin,
     postMarker,
     postRegistration,
-    postTokenRefresh
+    postTokenRefresh,
+    getMarker,
+    getUser
 } from "@apis/apiServices";
 import {tokenState} from "@apis/atoms";
 import Toast from "react-native-toast-message";
@@ -18,6 +20,10 @@ export const usePostGoogleLoginFinishCallback = () => {
                 set(tokenState, {
                     accessToken: data.access_token,
                     refreshToken: data.refresh_token
+                });
+
+                set(userState, {
+                    user: data.user
                 });
             },
         [],
@@ -33,6 +39,10 @@ export const usePostLoginCallback = () => {
                     accessToken: data.access_token,
                     refreshToken: data.refresh_token
                 });
+
+                set(userState, {
+                    user: data.user
+                });
             },
         [],
     );
@@ -47,6 +57,10 @@ export const usePostRegistrationCallback = () => {
                     accessToken: data.access_token,
                     refreshToken: data.refresh_token
                 });
+
+                set(userState, {
+                    user: data.user
+                });
             },
         [],
     );
@@ -57,6 +71,16 @@ export const usePostMarkerCallback = () => {
             async (body) => {
                 const token = await snapshot.getPromise(tokenState);
                 return await postMarker(token.accessToken, body);
+            },
+        [],
+    );
+}
+
+export const useGetMarkerCallback = () => {
+    return useRecoilCallback(({snapshot, set}) =>
+            async () => {
+                const token = await snapshot.getPromise(tokenState);
+                return await getMarker(token.accessToken);
             },
         [],
     );

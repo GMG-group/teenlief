@@ -9,9 +9,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TabBar } from '@components/TabBar';
 import Login from "@screens/Login"
 import SignUp from '@screens/SignUp';
+import ChatRoom from '@screens/ChatRoom';
 import Review from "@screens/Review";
 import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
+import SplashScreen from '@screens/SplashScreen';
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
@@ -63,8 +65,16 @@ const Main = () => {
 							headerShown: false,
 						}}
 					/>
+					<Stack.Screen
+						name='ChatRoom'
+						component={ChatRoom}
+						options={{
+							headerShown: false,
+						}}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
+			{/* <SplashScreen /> */}
 		</SafeAreaView>
 	);
 };
