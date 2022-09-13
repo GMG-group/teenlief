@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert, Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { CurvedBottomBar } from 'react-native-curved-bottom-bar';
 import { scale } from 'react-native-utils-scale';
@@ -52,7 +52,7 @@ export const TabBar = ({ navigation }) => {
 	};
 
 	const MapCircle = () => (
-		<Animated.View style={{...styles.btnCircle, backgroundColor: user.user.role==='Helper' ? '#AE46FF' : '#00A3FF'}}>
+		<Animated.View style={{...styles.btnCircle, backgroundColor: user.user?.role==='Helper' ? '#AE46FF' : '#00A3FF'}}>
 			<TouchableOpacity
 				style={{
 					flex: 1,
@@ -69,7 +69,7 @@ export const TabBar = ({ navigation }) => {
 	)
 
 	const AddMarkerCircle = () => (
-		<Animated.View style={{...styles.btnCircle, backgroundColor: user.user.role==='Helper' ? '#AE46FF' : '#00A3FF'}}>
+		<Animated.View style={{...styles.btnCircle, backgroundColor: user.user?.role==='Helper' ? '#AE46FF' : '#00A3FF'}}>
 			<TouchableOpacity
 				style={{
 					flex: 1,
@@ -98,7 +98,7 @@ export const TabBar = ({ navigation }) => {
 				circleWidth={scale(60)}
 				bgColor="white"
 				initialRouteName="Map"
-				renderCircle={route==="Map" && user.user.role==="Helper" ? AddMarkerCircle : MapCircle}
+				renderCircle={route==="Map" && user.user?.role==="Helper" ? AddMarkerCircle : MapCircle}
 				tabBar={renderTabBar}>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}

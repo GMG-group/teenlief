@@ -8,7 +8,7 @@ import { Message, PromiseMessage } from '@components/Message';
 import { getChatLog } from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import { useRecoilValue } from "recoil";
-import { tokenState } from "@apis/atoms";
+import {tokenState, userState} from "@apis/atoms";
 
 const ChatRoom = ({ navigation, route }) => {
     const [chatData, setChatData] = useState([]);
@@ -17,6 +17,7 @@ const ChatRoom = ({ navigation, route }) => {
     const webSocket = useRef(null);
 
     const token = useRecoilValue(tokenState);
+    const user = useRecoilValue(userState);
 
     const [loading, resolved, callApi] = useApi(getChatLog, true);
 
@@ -67,7 +68,13 @@ const ChatRoom = ({ navigation, route }) => {
                     </TouchableOpacity>
 
                     <Image style={styles.profile} source={route.params.profile} />
-                    <Text style={{fontSize: 16, color: 'black'}}>{route.params.name}</Text>
+                    <Text style={{fontSize: 16, color: 'black'}}>
+                        {
+                            user.user.id === route.params.teen.id
+                                ? route.params.helper.first_name
+                                : route.params.teen.first_name
+                        }
+                    </Text>
                 </View>
 
                 <View style={styles.navContainer}>
@@ -105,7 +112,15 @@ const ChatRoom = ({ navigation, route }) => {
 
             <View style={styles.chatContainer}>
                 <TouchableOpacity
-                    onPress={() => navigation.push('Promise', {ws: webSocket.current})}
+                    onPress={() => navigation.push(
+                        'Promise',
+                        {
+                            ws: webSocket.current,
+                            roomName: route.params.roomName,
+                            helper: route.params.helper,
+                            teen: route.params.teen,
+                        }
+                    )}
                 >
                     <Ionicons name="add-outline" size={25} color={'black'} />
                 </TouchableOpacity>

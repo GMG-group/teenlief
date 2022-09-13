@@ -4,9 +4,12 @@ import { vw, vh } from "react-native-css-vh-vw";
 import Icon from "react-native-vector-icons/Ionicons";
 import Star from 'react-native-star-view';
 import test from "@components/img/test.png";
+import {useRecoilValue} from "recoil";
+import {userState} from "@apis/atoms";
 
 const ChatView = ({ navigation, data }) => {
     const [heart, setHeart] = useState(data.favorite);
+    const user = useRecoilValue(userState);
 
     return (
         <TouchableOpacity
@@ -15,7 +18,8 @@ const ChatView = ({ navigation, data }) => {
                 id: data.id,
                 roomName: data.roomName,
                 profile: data.profile,
-                name: data.name,
+                teen: data.teen,
+                helper: data.helper,
                 score: data.score,
             })}
         >
@@ -25,7 +29,11 @@ const ChatView = ({ navigation, data }) => {
                 </View>
                 
                 <View>
-                    <Text style={styles.name}>{data.name}</Text>
+                    <Text style={styles.name}>
+                        {
+                            user.user.id === data.teen.id ? data.helper.first_name : data.teen.first_name
+                        }
+                    </Text>
                     <View style={styles.starContainer}>
                         <Text>{data.score.toFixed(1)} : </Text>
                         <Star score={data.score} style={styles.star} />

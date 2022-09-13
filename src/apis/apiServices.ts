@@ -123,3 +123,13 @@ export const getTag = (body: any):Promise<AxiosResponse> => {
         `${URL}/api/tag/`
     )
 }
+
+export const checkUserMarkerExists = (header: any, id: any):Promise<AxiosResponse> => {
+    return axios.get(
+        `${URL}/api/check-user-marker-exists/${id}/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}

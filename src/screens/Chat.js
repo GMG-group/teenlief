@@ -69,7 +69,8 @@ const Chat = ({navigation}) => {
 							id: item.item.id,
 							roomName: item.item.room_name,
 							profile: test,
-							name: item.item.teen.first_name,
+							helper: item.item.helper,
+							teen: item.item.teen,
 							score: 5.0,
 							favorite: false
 						}}

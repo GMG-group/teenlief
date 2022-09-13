@@ -1,19 +1,29 @@
 import React, {useEffect, useState} from 'react';
-import {Platform, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import {vh, vw} from "react-native-css-vh-vw";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import useApi from "@apis/useApi";
+import {checkUserMarkerExists, getChatLog, getMarkerSimple} from "@apis/apiServices";
 
 const Promise = ({ navigation, route }) => {
     const [promise, setPromise] = useState(new Date());
     const [showDateTimePicker, setShowDateTimePicker] = useState(false);
     const [mode, setMode] = useState('date');
 
+    const [markersLoading, markers, getMarkers, setMarkersLoading] = useApi(getMarkerSimple, true);
+    const [loading, userMarkerExists, callApi] = useApi(checkUserMarkerExists, true);
+
     const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 
     useEffect(() => {
-        console.log(promise);
-    }, [promise]);
+        callApi(route.params.helper.id);
+
+        getMarkers()
+            .then((res) => {
+                console.log(res);
+            })
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -68,11 +78,12 @@ const Promise = ({ navigation, route }) => {
 
                 <TouchableOpacity
                     onPress={() => {
-                        route.params.ws.send(JSON.stringify({content: `/약속/${promise.getMonth() + 1}/${promise.getDate()}/${promise.getHours()}/${promise.getMinutes()}`}))
+                        route.params.ws.send(JSON.stringify({content: `/약속/${promise.getMonth() + 1}/${promise.getDate()}/${promise.getHours()}/${promise.getMinutes()}/${userMarkerExists}`}))
                         navigation.goBack();
                     }}
+                    disabled={!userMarkerExists}
                 >
-                    <View style={styles.finishButton}>
+                    <View style={[styles.finishButton, !userMarkerExists ? {backgroundColor: '#252525'} : null]}>
                         <Text style={{color: 'white'}}>완료</Text>
                     </View>
                 </TouchableOpacity>
