@@ -14,7 +14,7 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
     const setAction = useSetRecoilState(actionState);
     const [RGloading, RGresolved, getAddr, setLoading] = useApi(getReverseGeocoding, false);
     const [markerLoading, markerResolved, callApi] = useApi(postMarker, true);
-    const [tagLoading, tagResolved, tagApi] = useApi(getTag, false);
+    const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
     const [address, setAddress] = useState("");
     const [addressDetail, setAddressDetail] = useState("");
     const [holder, setHolder] = useState(false);

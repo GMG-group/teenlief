@@ -3,10 +3,10 @@ import {Text, View, StyleSheet, Image} from "react-native";
 import { TouchableWithoutFeedback } from "@gorhom/bottom-sheet";
 import { vw, vh } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
-import {getMarkerDetail} from "@apis/apiServices";
+import {getMarkerDetail, getTag} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 
-const MarkerDetail = ({bottomSheetModalRef, detail}) => {
+const MarkerDetail = ({bottomSheetModalRef, detail, tags}) => {
 	return (
 		<>
 		<View style={styles.helperInfoContainer}>
@@ -41,15 +41,14 @@ const MarkerDetail = ({bottomSheetModalRef, detail}) => {
 					<Text>오전 9:00부터 메세지 가능</Text>
 				</View>
 				<View style={styles.tag}>
-					<View style={styles.tagItem}>
-						<Text style={{color: 'black'}}>숙식</Text>
-					</View>
-					<View style={styles.tagItem}>
-						<Text style={{color: 'black'}}>숙식</Text>
-					</View>
-					<View style={styles.tagItem}>
-						<Text style={{color: 'black'}}>숙식</Text>
-					</View>
+					{
+						detail.tag.map((tagNum) => (
+							<View key={"tag"+tagNum} style={styles.tagItem}>
+								<Text style={{color: 'black'}}>{tags[tagNum-1].tag}</Text>
+							</View>
+						))
+					}
+
 				</View>
 			</View>
 			<View style={styles.activityImages}>
@@ -65,10 +64,7 @@ const MarkerDetail = ({bottomSheetModalRef, detail}) => {
 					<Text style={{color: "black"}}>저는 헬퍼 홍길동입니다.</Text>
 				</View>
 				<View style={styles.helperContentItem}>
-					<Text style={{color: "black"}}>저는 헬퍼 홍길동입니다.</Text>
-				</View>
-				<View style={styles.helperContentItem}>
-					<Text style={{color: "black"}}>저는 헬퍼 홍길동입니다.</Text>
+					<Text style={{color: "black"}}>{detail.explanation}</Text>
 				</View>
 			</View>
 			<View style={styles.review}>
@@ -104,9 +100,12 @@ const MarkerDetail = ({bottomSheetModalRef, detail}) => {
 
 const HelperInfoBottomSheet = ({ navigation, bottomSheetModalRef, selectedMarkerId }) => {
 	const [detailLoading, detailResolved, getDetail] = useApi(getMarkerDetail, true);
+	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
 
 	useEffect(() => {
 		getDetail(selectedMarkerId);
+		tagApi();
+		console.log("HelperInfoBottomSheet")
 	},[selectedMarkerId])
 
 	useEffect(() => {
@@ -128,12 +127,12 @@ const HelperInfoBottomSheet = ({ navigation, bottomSheetModalRef, selectedMarker
 			{/*8. 헬퍼의 활동 사진(이건 헬퍼가 직접 올리는건가?)*/}
 			{/*9. 북마크 버튼*/}
 			{
-				detailLoading ? (
+				(tagLoading || detailLoading) ? (
 					<View>
 						<Text>Loading</Text>
 					</View>
 				) : (
-					<MarkerDetail bottomSheetModalRef={bottomSheetModalRef} detail={detailResolved}/>
+					<MarkerDetail bottomSheetModalRef={bottomSheetModalRef} detail={detailResolved} tags={tagResolved}/>
 				)
 			}
 
@@ -207,7 +206,6 @@ const styles = StyleSheet.create({
 		display: "flex",
 		width: "70%",
 		justifyContent: "space-between",
-		marginTop: '3%'
 	},
 	canHelpInfoText: {
 		display: "flex",
@@ -220,8 +218,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "flex-start",
 		alignItems: "center",
-		marginTop: 10,
-		marginBottom: 10,
+		marginTop: 10
 	},
 	tagItem: {
 		display: "flex",
@@ -230,6 +227,7 @@ const styles = StyleSheet.create({
 		width: 90,
 		height: 30,
 		backgroundColor: "white",
+		borderColor: "lightgray",
 		borderRadius: 50,
 		marginRight: 10,
 		shadowColor: "#000",
@@ -245,7 +243,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		marginTop: 20,
+		marginTop: 10,
 		marginBottom: 20
 	},
 	activityImageContainer: {
