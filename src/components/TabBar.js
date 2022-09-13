@@ -1,36 +1,38 @@
 import React, {useState} from 'react';
-import {Alert, Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Alert, Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { CurvedBottomBar } from 'react-native-curved-bottom-bar';
 import { scale } from 'react-native-utils-scale';
-import Icon from 'react-native-vector-icons/Feather';
-
-import Bookmark from "~/screens/Bookmark";
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Chat from "~/screens/Chat";
 import Profile from "@screens/Profile";
 import Map from "@screens/Map";
-import {useRecoilState} from "recoil";
-import {ACTION, actionState} from "@apis/atoms";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {ACTION, actionState, userState} from "@apis/atoms";
 
 export const TabBar = ({ navigation }) => {
 	const [route, setRoute] = useState("Map");
 	const [action, setAction] = useRecoilState(actionState);
-	const _renderIcon = (routeName, selectedTab) => {
-		let icon = '';
-		switch (routeName) {
-			case 'Bookmark':
-				icon = 'bookmark';
-				break;
-			case 'Profile':
-				icon = 'user';
-				break;
-		}
+	const user = useRecoilValue(userState);
 
-		return (
-			<Icon
-				name={icon}
-				size={scale(25)}
-				color={routeName === selectedTab ? 'black' : 'gray'}
-			/>
-		);
+	const _renderIcon = (routeName, selectedTab) => {
+		if(routeName === 'Chat') {
+			return (
+				<EntypoIcon
+					name={'chat'}
+					size={scale(25)}
+					color={routeName === selectedTab ? 'black' : 'gray'}
+				/>
+			)
+		} else if(routeName === 'Profile') {
+			return (
+				<Ionicons
+					name={'person-circle-sharp'}
+					size={scale(30)}
+					color={routeName === selectedTab ? 'black' : 'gray'}
+				/>
+			)
+		}
 	};
 	const renderTabBar = ({ routeName, selectedTab, navigate }) => {
 		return (
@@ -50,7 +52,7 @@ export const TabBar = ({ navigation }) => {
 	};
 
 	const MapCircle = () => (
-		<Animated.View style={styles.btnCircle}>
+		<Animated.View style={{...styles.btnCircle, backgroundColor: user.user.role==='Helper' ? '#AE46FF' : '#00A3FF'}}>
 			<TouchableOpacity
 				style={{
 					flex: 1,
@@ -60,23 +62,25 @@ export const TabBar = ({ navigation }) => {
 					setRoute("Map");
 					navigation.navigate("Map")
 				}}>
-				<Icon name={'search'} color="black" size={scale(25)} />
+				<EntypoIcon style={{alignSelf: 'center'}} name={'home'} color="white" size={scale(25)} />
+				<Text  style={styles.btnCircleText}>홈 화면</Text>
 			</TouchableOpacity>
 		</Animated.View>
 	)
 
 	const AddMarkerCircle = () => (
-		<Animated.View style={styles.btnCircle}>
+		<Animated.View style={{...styles.btnCircle, backgroundColor: user.user.role==='Helper' ? '#AE46FF' : '#00A3FF'}}>
 			<TouchableOpacity
 				style={{
 					flex: 1,
-					justifyContent: 'center',
+					justifyContent: 'center'
 				}}
 				onPress={() => {
 					setAction(ACTION.Upload);
 					navigation.navigate("Map")
 				}}>
-				<Icon name={'map-pin'} color="black" size={scale(25)} />
+				<EntypoIcon style={{alignSelf: 'center'}} name={'flag'} color="white" size={scale(25)} />
+				<Text style={styles.btnCircleText}>깃발 놓기</Text>
 			</TouchableOpacity>
 		</Animated.View>
 	)
@@ -90,11 +94,11 @@ export const TabBar = ({ navigation }) => {
 			<CurvedBottomBar.Navigator
 				style={styles.bottomBar}
 				strokeWidth={0.5}
-				height={scale(55)}
-				circleWidth={scale(55)}
+				height={scale(60)}
+				circleWidth={scale(60)}
 				bgColor="white"
 				initialRouteName="Map"
-				renderCircle={route==="Map" ? AddMarkerCircle : MapCircle}
+				renderCircle={route==="Map" && user.user.role==="Helper" ? AddMarkerCircle : MapCircle}
 				tabBar={renderTabBar}>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
@@ -104,9 +108,9 @@ export const TabBar = ({ navigation }) => {
 				/>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
-					name="Bookmark"
+					name="Chat"
 					position="LEFT"
-					component={Bookmark}
+					component={Chat}
 				/>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}
@@ -128,14 +132,14 @@ const styles = StyleSheet.create({
 		marginVertical: scale(5),
 	},
 	bottomBar: {
+
 	},
 	btnCircle: {
-		width: scale(60),
-		height: scale(60),
+		width: scale(65),
+		height: scale(65),
 		borderRadius: scale(35),
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: 'white',
 		padding: scale(10),
 		shadowColor: '#000',
 		shadowOffset: {
@@ -144,8 +148,13 @@ const styles = StyleSheet.create({
 		},
 		shadowOpacity: 0.2,
 		shadowRadius: 1.41,
-		elevation: 1,
+		elevation: 5,
 		bottom: scale(30),
+	},
+	btnCircleText: {
+		marginTop: 4,
+		color: 'white',
+		fontSize: 9,
 	},
 	imgCircle: {
 		width: scale(30),
