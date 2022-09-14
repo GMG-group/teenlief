@@ -98,7 +98,7 @@ const MarkerDetail = ({bottomSheetModalRef, detail, tags}) => {
 	)
 }
 
-const HelperInfoBottomSheet = ({ navigation, bottomSheetModalRef, selectedMarkerId }) => {
+const MarkerDetailBottomSheet = ({ navigation, bottomSheetModalRef, selectedMarkerId }) => {
 	const [detailLoading, detailResolved, getDetail] = useApi(getMarkerDetail, true);
 	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
 
@@ -309,4 +309,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default HelperInfoBottomSheet;
+export default MarkerDetailBottomSheet;
