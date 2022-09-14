@@ -10,6 +10,8 @@ import useApi from "@apis/useApi";
 import { useRecoilValue } from "recoil";
 import {tokenState, userState} from "@apis/atoms";
 
+import test from "@components/img/test.png";
+
 const ChatRoom = ({ navigation, route }) => {
     const [chatData, setChatData] = useState([]);
     const [chatInput, setChatInput] = useState('');
@@ -67,7 +69,7 @@ const ChatRoom = ({ navigation, route }) => {
                         <EvilIcons name="chevron-left" size={45} color={'black'} />
                     </TouchableOpacity>
 
-                    <Image style={styles.profile} source={route.params.profile} />
+                    <Image style={styles.profile} source={test} />
                     <Text style={{fontSize: 16, color: 'black'}}>
                         {
                             user.user.id === route.params.teen.id
@@ -92,14 +94,14 @@ const ChatRoom = ({ navigation, route }) => {
                     if (index > 0 && item.user.id == chatData[index - 1].user.id) {
                         // content 의 앞 3글자가 '/약속' 일 경우 약속 메시지로 처리
                         if (item.content.slice(0, 3) === '/약속') {
-                            return <PromiseMessage item={item} displayProfile={false} />
+                            return <PromiseMessage navigation={navigation} item={item} displayProfile={false} />
                         } else {
                             return <Message item={item} displayProfile={false} />
                         }
                     } else {
                         // content 의 앞 3글자가 '/약속' 일 경우 약속 메시지로 처리
                         if (item.content.slice(0, 3) === '/약속') {
-                            return <PromiseMessage item={item} displayProfile={true} />
+                            return <PromiseMessage navigation={navigation} item={item} displayProfile={true} />
                         } else {
                             return <Message item={item} displayProfile={true} />
                         }

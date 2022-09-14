@@ -1,17 +1,23 @@
 import React, {useEffect} from 'react';
 import {Text, View, StyleSheet, Image} from "react-native";
-import { TouchableWithoutFeedback } from "@gorhom/bottom-sheet";
+import {TouchableOpacity, TouchableWithoutFeedback} from "@gorhom/bottom-sheet";
 import { vw, vh } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
-import {getMarkerDetail, getTag} from "@apis/apiServices";
+import {getMarkerDetail, getTag, postChatRoom} from "@apis/apiServices";
 import useApi from "@apis/useApi";
+import {useRecoilValue} from "recoil";
+import {userState} from "@apis/atoms";
 
-const MarkerDetail = ({bottomSheetModalRef, detail, tags}) => {
+const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
+	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
+
+	const user = useRecoilValue(userState);
+
 	return (
-		<>
-		<View style={styles.helperInfoContainer}>
-			<View style={styles.helperInfo}>
-				<View style={styles.profileImage}>
+		<View>
+			<View style={styles.helperInfoContainer}>
+				<View style={styles.helperInfo}>
+					<View style={styles.profileImage}>
 
 				</View>
 				<View style={styles.helperInfoText}>
@@ -28,73 +34,93 @@ const MarkerDetail = ({bottomSheetModalRef, detail, tags}) => {
 				</View>
 			</View>
 
-			<View style={styles.connectButton}>
-				<TouchableWithoutFeedback onPress={() => console.log("연결")}>
-					<Text style={{color: "#ffffff"}}>연결</Text>
-				</TouchableWithoutFeedback>
-			</View>
-		</View>
-		<ScrollView>
-			<View style={styles.canHelpInfo}>
-				<View style={styles.canHelpInfoText}>
-					<Text style={{color: "#26c967"}}>메세지 가능</Text>
-					<Text>오전 9:00부터 메세지 가능</Text>
-				</View>
-				<View style={styles.tag}>
-					{
-						detail.tag.map((tagNum) => (
-							<View key={"tag"+tagNum} style={styles.tagItem}>
-								<Text style={{color: 'black'}}>{tags[tagNum-1].tag}</Text>
-							</View>
-						))
-					}
+				<View style={styles.connectButton}>
+					<TouchableOpacity
+						onPress={() => {
+							if (!postResolved) {
+								const formData = new FormData();
+								formData.append('helper_id', detail.helper.id);
+								formData.append('teen_id', user.user.id);
+								postChatRoomApi(formData)
+									.then((res) => {
+										navigation.navigate('ChatRoom', {
+											id: res.id,
+											roomName: res.room_name,
+											teen: res.teen,
+											helper: res.helper,
+										});
 
+										bottomSheetModalRef.current?.close();
+									})
+								console.log("연결");
+							}
+						}}
+					>
+						<Text style={{color: "#ffffff"}}>연결</Text>
+					</TouchableOpacity>
 				</View>
 			</View>
-			<View style={styles.activityImages}>
-				<Image source={{uri: detail.image}} style={styles.activityImage1} />
-				{/*<View style={styles.activityImageContainer}>*/}
-				{/*	<Image source={require("../../imageTest1.png")} style={styles.activityImage2} />*/}
-				{/*	<Image source={require("../../imageTest1.png")} style={styles.activityImage2} />*/}
-				{/*</View>*/}
-			</View>
-			<View>
-				<Text style={{fontSize: 24}}>개요</Text>
-				<View style={styles.helperContentItem}>
-					<Text style={{color: "black"}}>저는 헬퍼 홍길동입니다.</Text>
-				</View>
-				<View style={styles.helperContentItem}>
-					<Text style={{color: "black"}}>{detail.explanation}</Text>
-				</View>
-			</View>
-			<View style={styles.review}>
-				<View style={styles.reviewHeader}>
-					<View style={styles.reviewHeaderLeft}>
-						<Text style={{color: "#ffc107", fontSize: 30}}>5.0</Text>
-						<Text style={{color: "#ffc107", fontSize: 20}}>
-							★★★★★
-						</Text>
-						<Text>(119개)</Text>
+			<ScrollView>
+				<View style={styles.canHelpInfo}>
+					<View style={styles.canHelpInfoText}>
+						<Text style={{color: "#26c967"}}>메세지 가능</Text>
+						<Text>오전 9:00부터 메세지 가능</Text>
 					</View>
-					<View style={styles.reviewHeaderRight}>
-						<View>
-							<Text>친철해요</Text>
-							<Text>맛이 좋아요</Text>
-							<Text>김다원해요</Text>
-						</View>
-						<View style={styles.reviewHeaderRightMoreButton}>
-							<TouchableWithoutFeedback onPress={() => {
-								navigation.navigate('Review');
-								bottomSheetModalRef.current.close();
-							}}>
-								<Text style={{color: "#2990f6"}}>모든 리뷰 보기</Text>
-							</TouchableWithoutFeedback>
-						</View>
+					<View style={styles.tag}>
+						{
+							detail.tag.map((tagNum) => (
+								<View key={"tag"+tagNum} style={styles.tagItem}>
+									<Text style={{color: 'black'}}>{tags[tagNum-1].tag}</Text>
+								</View>
+							))
+						}
+
 					</View>
 				</View>
-			</View>
-		</ScrollView>
-		</>
+				<View style={styles.activityImages}>
+					<Image source={{uri: detail.image}} style={styles.activityImage1} />
+					{/*<View style={styles.activityImageContainer}>*/}
+					{/*	<Image source={require("../../imageTest1.png")} style={styles.activityImage2} />*/}
+					{/*	<Image source={require("../../imageTest1.png")} style={styles.activityImage2} />*/}
+					{/*</View>*/}
+				</View>
+				<View>
+					<Text style={{fontSize: 24}}>개요</Text>
+					<View style={styles.helperContentItem}>
+						<Text style={{color: "black"}}>저는 헬퍼 홍길동입니다.</Text>
+					</View>
+					<View style={styles.helperContentItem}>
+						<Text style={{color: "black"}}>{detail.explanation}</Text>
+					</View>
+				</View>
+				<View style={styles.review}>
+					<View style={styles.reviewHeader}>
+						<View style={styles.reviewHeaderLeft}>
+							<Text style={{color: "#ffc107", fontSize: 30}}>5.0</Text>
+							<Text style={{color: "#ffc107", fontSize: 20}}>
+								★★★★★
+							</Text>
+							<Text>(119개)</Text>
+						</View>
+						<View style={styles.reviewHeaderRight}>
+							<View>
+								<Text>친철해요</Text>
+								<Text>맛이 좋아요</Text>
+								<Text>김다원해요</Text>
+							</View>
+							<View style={styles.reviewHeaderRightMoreButton}>
+								<TouchableWithoutFeedback onPress={() => {
+									navigation.navigate('Review');
+									bottomSheetModalRef.current.close();
+								}}>
+									<Text style={{color: "#2990f6"}}>모든 리뷰 보기</Text>
+								</TouchableWithoutFeedback>
+							</View>
+						</View>
+					</View>
+				</View>
+			</ScrollView>
+		</View>
 	)
 }
 
@@ -132,7 +158,12 @@ const MarkerDetailBottomSheet = ({ navigation, bottomSheetModalRef, selectedMark
 						<Text>Loading</Text>
 					</View>
 				) : (
-					<MarkerDetail bottomSheetModalRef={bottomSheetModalRef} detail={detailResolved} tags={tagResolved}/>
+					<MarkerDetail
+						bottomSheetModalRef={bottomSheetModalRef}
+						detail={detailResolved}
+						tags={tagResolved}
+						navigation={navigation}
+					/>
 				)
 			}
 

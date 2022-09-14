@@ -5,7 +5,7 @@ import { vw, vh } from "react-native-css-vh-vw";
 import {useRecoilValue} from "recoil";
 import {userState} from "@apis/atoms";
 
-export const PromiseMessage = ({ item, displayProfile }) => {
+export const PromiseMessage = ({ navigation, item, displayProfile }) => {
     const user = useRecoilValue(userState);
     const [promise, setPromise] = useState(new Date());
 
@@ -45,9 +45,9 @@ export const PromiseMessage = ({ item, displayProfile }) => {
                         <Text style={{fontSize: 18, color: 'black'}}>알림</Text>
                         <Text style={styles.promiseTimeText}>30 분 전</Text>
                     </View>
-                    <View style={[styles.promiseFinButton, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
-                        <Text style={{color: 'white'}}>종료</Text>
-                    </View>
+                    <TouchableOpacity onPress={() => {navigation.navigate("Review", {helper: item.user})}} style={[styles.promiseFinButton, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
+                        <Text style={{color: 'white'}}>완료</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
 
