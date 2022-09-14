@@ -15,7 +15,7 @@ const MarkerDetail = ({bottomSheetModalRef, detail, tags}) => {
 
 				</View>
 				<View style={styles.helperInfoText}>
-					<Text adjustsFontSizeToFit style={styles.name}>{detail.helper.first_name}</Text>
+					<Text style={styles.name}>{detail.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
 						<Text>5.0</Text>
 						<Text style={styles.helperStar}>
@@ -98,7 +98,7 @@ const MarkerDetail = ({bottomSheetModalRef, detail, tags}) => {
 	)
 }
 
-const HelperInfoBottomSheet = ({ navigation, bottomSheetModalRef, selectedMarkerId }) => {
+const MarkerDetailBottomSheet = ({ navigation, bottomSheetModalRef, selectedMarkerId }) => {
 	const [detailLoading, detailResolved, getDetail] = useApi(getMarkerDetail, true);
 	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
 
@@ -309,4 +309,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default HelperInfoBottomSheet;
+export default MarkerDetailBottomSheet;
