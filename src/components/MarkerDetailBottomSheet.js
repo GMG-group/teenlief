@@ -15,7 +15,7 @@ const MarkerDetail = ({bottomSheetModalRef, detail, tags}) => {
 
 				</View>
 				<View style={styles.helperInfoText}>
-					<Text adjustsFontSizeToFit style={styles.name}>{detail.helper.first_name}</Text>
+					<Text style={styles.name}>{detail.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
 						<Text>5.0</Text>
 						<Text style={styles.helperStar}>
