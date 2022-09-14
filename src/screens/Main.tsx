@@ -11,6 +11,7 @@ import Login from "@screens/Login"
 import SignUp from '@screens/SignUp';
 import ChatRoom from '@screens/ChatRoom';
 import Review from "@screens/Review";
+import ReviewList from "@screens/ReviewList";
 import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
 import Promise from "@screens/Promise";
@@ -83,6 +84,7 @@ const Main = () => {
 				</Stack.Navigator>
 			</NavigationContainer>
 			{/* <SplashScreen /> */}
+			
 		</SafeAreaView>
 	);
 };
