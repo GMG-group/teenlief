@@ -2,10 +2,10 @@ import axios, {AxiosResponse} from "axios";
 import Config from "react-native-config";
 
 const PROTOCOL = "http://";
-const IP = "112.145.103.184:8000";
+const DOMAIN = "teenlief.com"
 const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
 const IOS_DEV_URL = PROTOCOL +  "127.0.0.1:8000";
-const URL = PROTOCOL + IP;
+const URL = PROTOCOL + DOMAIN;
 
 export const postLogin = (body: any):Promise<AxiosResponse> => {
     return axios.post (
