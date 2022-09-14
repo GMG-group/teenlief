@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { SafeAreaView } from "react-native";
 import {
 	NavigationContainer,
@@ -22,6 +22,7 @@ const Stack = createNativeStackNavigator();
 
 const Main = () => {
 	const token = useRecoilValue(tokenState);
+	const [splash, setSplash] = useState(true);
 
 	useEffect(() => {
 		console.log("main.js", token);
@@ -29,60 +30,66 @@ const Main = () => {
 
 	return (
 		<SafeAreaView style={{flex: 1}}>
-			<NavigationContainer ref={navigationRef}>
-			    <Stack.Navigator>
-					{
-						token.accessToken === "" ? (
-							<>
-								<Stack.Screen
-									name='Login'
-									component={Login}
-									options={{
-										headerShown: false,
-									}}
-								/>
-								<Stack.Screen
-									name='Sign up'
-									component={SignUp}
-									options
-										={{
-										headerShown: false,
-									}}
-								/>
-							</>
-						) : null
-					}
-					<Stack.Screen
-						name='Home'
-						component={TabBar}
-						options={{
-							headerShown: false,
-					  	}}
+			{
+				splash ?
+					<SplashScreen
+						setSplash={setSplash}
 					/>
-					<Stack.Screen
-						name='Review'
-						component={Review}
-						options={{
-							headerShown: false,
-						}}
-					/>
-					<Stack.Screen
-						name='ChatRoom'
-						component={ChatRoom}
-						options={{
-							headerShown: false,
-						}}
-					/>
-					<Stack.Screen
-						name='Promise'
-						component={Promise}
-						options={{
-							headerShown: false,
-						}}
-					/>
-				</Stack.Navigator>
-			</NavigationContainer>
-			{/* <SplashScreen /> */}
+					:
+					<NavigationContainer ref={navigationRef}>
+						<Stack.Navigator>
+							{
+								token.accessToken === "" ? (
+									<>
+										<Stack.Screen
+											name='Login'
+											component={Login}
+											options={{
+												headerShown: false,
+											}}
+										/>
+										<Stack.Screen
+											name='Sign up'
+											component={SignUp}
+											options
+												={{
+												headerShown: false,
+											}}
+										/>
+									</>
+								) : null
+							}
+							<Stack.Screen
+								name='Home'
+								component={TabBar}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name='Review'
+								component={Review}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name='ChatRoom'
+								component={ChatRoom}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name='Promise'
+								component={Promise}
+								options={{
+									headerShown: false,
+								}}
+							/>
+						</Stack.Navigator>
+					</NavigationContainer>
+			}
 		</SafeAreaView>
 	);
 };
