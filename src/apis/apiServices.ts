@@ -133,3 +133,13 @@ export const checkUserMarkerExists = (header: any, id: any):Promise<AxiosRespons
         }
     )
 }
+
+export const getShelters = (header: any) :Promise<AxiosResponse> => {
+    return axios.get(
+        `${URL}/api/shelter/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
