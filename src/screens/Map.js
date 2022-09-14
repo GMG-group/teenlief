@@ -128,7 +128,7 @@ const Map = ({ route, navigation }) => {
 							}}
 						><View style={{flexDirection: 'row'}}>
 							<Image
-								source={require('../assets/images/marker_blue.png')}
+								source={require('../assets/images/marker_helper.png')}
 								style={{width:60, height:60}}
 								fadeDuration={0}
 							/>
@@ -148,7 +148,7 @@ const Map = ({ route, navigation }) => {
 							}}
 						><View style={{flexDirection: 'row'}}>
 							<Image
-								source={require('../assets/images/marker_blue.png')}
+								source={require('../assets/images/marker_shelter.png')}
 								style={{width:60, height:60}}
 								fadeDuration={0}
 							/>
