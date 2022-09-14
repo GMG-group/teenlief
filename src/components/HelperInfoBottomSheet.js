@@ -19,20 +19,20 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 				<View style={styles.helperInfo}>
 					<View style={styles.profileImage}>
 
-					</View>
-					<View style={styles.helperInfoText}>
-						<Text adjustsFontSizeToFit style={styles.name}>{detail.helper.first_name}</Text>
-						<View style={styles.helperStarContainer}>
-							<Text>5.0</Text>
-							<Text style={styles.helperStar}>
-								★★★★★
-							</Text>
-							<Text>
-								(119개)
-							</Text>
-						</View>
+				</View>
+				<View style={styles.helperInfoText}>
+					<Text style={styles.name}>{detail.helper.first_name}</Text>
+					<View style={styles.helperStarContainer}>
+						<Text>5.0</Text>
+						<Text style={styles.helperStar}>
+							★★★★★
+						</Text>
+						<Text>
+							(119개)
+						</Text>
 					</View>
 				</View>
+			</View>
 
 				<View style={styles.connectButton}>
 					<TouchableOpacity
