@@ -133,3 +133,15 @@ export const checkUserMarkerExists = (header: any, id: any):Promise<AxiosRespons
         }
     )
 }
+
+export const postChatRoom = (header: any, body: any):Promise<AxiosResponse> => {
+    return axios.post(
+        `${URL}/api/chat/`,
+        body, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                ...header
+            }
+        }
+    )
+}
