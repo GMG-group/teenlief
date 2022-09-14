@@ -145,3 +145,13 @@ export const postChatRoom = (header: any, body: any):Promise<AxiosResponse> => {
         }
     )
 }
+
+export const getShelters = (header: any) :Promise<AxiosResponse> => {
+    return axios.get(
+        `${URL}/api/shelter/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}

@@ -56,7 +56,7 @@ export const useApi = (api, authHeader=false) => {
                 if(!status) return;
                 setResolved(data);
                 setLoading(false);
-                console.log("final data",data);
+                // console.log("final data",data);
                 return data
             },
         [],

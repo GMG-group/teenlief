@@ -89,7 +89,7 @@ const SignUp = ( { navigation } ) => {
                     textColor='gray'
                     buttonColor={backgroundAnimation.interpolate({
                         inputRange: [0, 1],
-                        outputRange: ['#1E90FF', '#8A2BE2'],
+                        outputRange: ['#00A3FF', '#AE46FF'],
                     })}
                     height={33}
                 />
