@@ -13,16 +13,24 @@ import { WithLocalSvg } from 'react-native-svg';
 import { vw, vh } from "react-native-css-vh-vw";
 import Lottie from 'lottie-react-native';
 
-const SplashScreen = () => {
+const SplashScreen = ({
+    setSplash
+}) => {
     return (
         <View style={styles.container}>
-            
             <WithLocalSvg
                 width="70%" 
                 height="70%" 
                 asset={src} />
             
-            <Lottie source={require('../components/img/splash.json')} autoPlay loop />
+            <Lottie
+                source={require('../components/img/splash.json')}
+                autoPlay
+                loop={false}
+                onAnimationFinish={() => {
+                    setSplash(false);
+                }}
+            />
             <Text style={styles.text}>GMG group</Text>
         </View>
     )
