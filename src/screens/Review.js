@@ -4,10 +4,13 @@ import StarRating from 'react-native-star-rating-widget';
 import { vw, vh } from "react-native-css-vh-vw";
 import { TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {useRecoilValue} from "recoil";
+import {userState} from "@apis/atoms";
 
-const Review = ({navigation}) => {
+const Review = ({route, navigation}) => {
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
+    const {helper} = route.params;
 
     return (
         <View style={styles.container}>
@@ -27,8 +30,8 @@ const Review = ({navigation}) => {
             </TouchableOpacity>
 
             <Image style={styles.profile} source={require("../components/img/test.png")} />
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>홍길동</Text>
-            <Text style={{fontSize: 15, marginBottom: 5}}>email1111@email.com</Text>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>{helper.first_name}</Text>
+            <Text style={{fontSize: 15, marginBottom: 5}}>{helper.email}</Text>
             <View>
                 <StarRating
                     style={{marginBottom: 5}}
@@ -40,7 +43,7 @@ const Review = ({navigation}) => {
 
             <TextInput value={review} onChangeText={setReview} multiline={true} numberOfLines = {20} style={styles.textInput} />
             
-            <TouchableOpacity style={styles.btn}>
+            <TouchableOpacity style={styles.btn} onPress={() => {navigation.navigate("Home")}}>
                 <Text style={{color: 'white', fontSize: 17}}>완료</Text>
             </TouchableOpacity>
         </View>

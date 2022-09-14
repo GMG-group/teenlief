@@ -92,14 +92,14 @@ const ChatRoom = ({ navigation, route }) => {
                     if (index > 0 && item.user.id == chatData[index - 1].user.id) {
                         // content 의 앞 3글자가 '/약속' 일 경우 약속 메시지로 처리
                         if (item.content.slice(0, 3) === '/약속') {
-                            return <PromiseMessage item={item} displayProfile={false} />
+                            return <PromiseMessage navigation={navigation} item={item} displayProfile={false} />
                         } else {
                             return <Message item={item} displayProfile={false} />
                         }
                     } else {
                         // content 의 앞 3글자가 '/약속' 일 경우 약속 메시지로 처리
                         if (item.content.slice(0, 3) === '/약속') {
-                            return <PromiseMessage item={item} displayProfile={true} />
+                            return <PromiseMessage navigation={navigation} item={item} displayProfile={true} />
                         } else {
                             return <Message item={item} displayProfile={true} />
                         }
