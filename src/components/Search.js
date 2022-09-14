@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
 	TextInput,
 	View,
@@ -8,10 +8,28 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/dist/Feather";
 import { vw, vh } from "react-native-css-vh-vw";
+import useApi from "@apis/useApi";
+import {getTag} from "@apis/apiServices";
 
 const Search = () => {
 	const [search, setSearch] = useState(null);
-	const filterTag = ["숙식", "숙식", "숙식", "숙식", "숙식", "숙식"]
+	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
+	const [filterTag, setFilterTag] = useState([]);
+
+	useEffect(() => {
+		if(!tagLoading) {
+			setFilterTag(
+				tagResolved.map(tag => (
+					tag.tag
+				))
+			)
+		}
+
+	}, [tagLoading]);
+
+	useEffect(() => {
+		tagApi()
+	},[]);
 
 	const tagListRef = useRef(null);
 
