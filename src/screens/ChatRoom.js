@@ -10,6 +10,8 @@ import useApi from "@apis/useApi";
 import { useRecoilValue } from "recoil";
 import {tokenState, userState} from "@apis/atoms";
 
+import test from "@components/img/test.png";
+
 const ChatRoom = ({ navigation, route }) => {
     const [chatData, setChatData] = useState([]);
     const [chatInput, setChatInput] = useState('');
@@ -67,7 +69,7 @@ const ChatRoom = ({ navigation, route }) => {
                         <EvilIcons name="chevron-left" size={45} color={'black'} />
                     </TouchableOpacity>
 
-                    <Image style={styles.profile} source={route.params.profile} />
+                    <Image style={styles.profile} source={test} />
                     <Text style={{fontSize: 16, color: 'black'}}>
                         {
                             user.user.id === route.params.teen.id
