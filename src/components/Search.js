@@ -55,7 +55,6 @@ const Search = ({displayTag}) => {
 					alignItems: 'center',
 					justifyContent: 'center',
 					width: filterTag.length * 110,
-					// 6 -> 650
 				}}
 				renderItem={({item}) =>
 					<View style={styles.filterItem} key={item.id}>

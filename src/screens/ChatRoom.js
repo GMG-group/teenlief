@@ -5,7 +5,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { vw, vh } from "react-native-css-vh-vw";
 import { Message, PromiseMessage } from '@components/Message';
-import { getChatLog } from "@apis/apiServices";
+import {DOMAIN, getChatLog} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import { useRecoilValue } from "recoil";
 import {tokenState, userState} from "@apis/atoms";
@@ -26,7 +26,7 @@ const ChatRoom = ({ navigation, route }) => {
     useEffect(() => {
         callApi(route.params.id)
             .then((res) => {
-                webSocket.current = new WebSocket(`ws://teenlief.com:8000/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
+                webSocket.current = new WebSocket(`ws://${DOMAIN}/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
 
                 webSocket.current.onopen = () => {
                     console.log('connected');
