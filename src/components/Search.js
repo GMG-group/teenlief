@@ -11,7 +11,7 @@ import { vw, vh } from "react-native-css-vh-vw";
 import useApi from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
 
-const Search = () => {
+const Search = ({displayTag}) => {
 	const [search, setSearch] = useState(null);
 	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
 	const [filterTag, setFilterTag] = useState([]);
@@ -28,7 +28,7 @@ const Search = () => {
 	}, [tagLoading]);
 
 	useEffect(() => {
-		tagApi()
+		displayTag && tagApi()
 	},[]);
 
 	const tagListRef = useRef(null);
