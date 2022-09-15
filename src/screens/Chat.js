@@ -11,9 +11,6 @@ import {userState} from "@apis/atoms";
 import Search from "@components/Search";
 
 const Chat = ({navigation}) => {
-	const filterTag = ["숙식", "숙식", "숙식", "숙식", "숙식", "숙식"];
-	const tagListRef = useRef(null);
-
 	const user = useRecoilValue(userState);
 	const [loading, resolved, callApi] = useApi(getChatRoomList, true);
 	const [chatroom, setChatroom] = useState([]);
@@ -32,8 +29,7 @@ const Chat = ({navigation}) => {
 
 	return (
 		<View style={styles.container}>
-			<Search displayTag={false}/>
-
+			<Search displayTag={false} />
 			<FlatList
 				scrollEnabled={true}
 				style={styles.chatView}
@@ -111,6 +107,7 @@ const styles = StyleSheet.create({
 	},
 	chatView: {
 		display: 'flex',
+		marginTop: 80,
 		height: '80%',
 		width: vw(90),
 	},
