@@ -8,6 +8,7 @@ import {TouchableWithoutFeedback} from "@gorhom/bottom-sheet";
 import {vh, vw} from "react-native-css-vh-vw";
 import { Shadow } from 'react-native-shadow-2';
 import {Line} from "react-native-svg";
+import {logout} from "@utils/Logout";
 
 const ProfileCard = ({user}) => {
 	return (
@@ -62,17 +63,7 @@ const Profile = () => {
 	const [user, setUser] = useRecoilState(userState)
 	const [token, setToken] = useRecoilState(tokenState);
 
-	const logout = () => {
-		setToken(
-			{
-				accessToken: "",
-				refreshToken: ""
-			}
-		)
-		setTimeout(() => {
-			RNRestart.Restart();
-		},500)
-	}
+
 
 	return (
 		<ScrollView>
@@ -114,7 +105,7 @@ const Profile = () => {
 			{
 				user.user.role === "Helper" ? (<LineButton title={"계좌 관리"}/>) : null
 			}
-			<LineButton title={"로그아웃"} onPress={logout}/>
+			<LineButton title={"로그아웃"} onPress={() => {logout(setToken)}}/>
 		</View>
 		</ScrollView>
 	);
