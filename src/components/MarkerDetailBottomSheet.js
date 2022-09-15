@@ -87,7 +87,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 				<View>
 					<Text style={{fontSize: 24}}>개요</Text>
 					<View style={styles.helperContentItem}>
-						<Text style={{color: "black"}}>저는 헬퍼 홍길동입니다.</Text>
+						<Text style={{color: "black"}}>저는 헬퍼 {detail.helper.first_name}입니다.</Text>
 					</View>
 					<View style={styles.helperContentItem}>
 						<Text style={{color: "black"}}>{detail.explanation}</Text>

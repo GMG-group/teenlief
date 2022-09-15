@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useRecoilState} from "recoil";
 import {Touchable} from "react-native-toast-message/lib/src/components/Touchable";
 import {tokenState, userState} from "@apis/atoms";
@@ -15,9 +15,9 @@ const ProfileCard = ({user}) => {
 			<View style={{...profileCardStyles.profileCard, backgroundColor:user.role==="Helper" ? '#AE46FF' : '#00A3FF'}}>
 				<View style={profileCardStyles.userInfoContainer}>
 					<View style={profileCardStyles.userInfo}>
-						<View style={profileCardStyles.profileImage}>
+						<Image style={profileCardStyles.profileImage} source={require('../components/img/test.png')}>
 
-						</View>
+						</Image>
 						<View style={profileCardStyles.helperInfoText}>
 							<Text style={profileCardStyles.name}>{user.first_name}</Text>
 							<View style={profileCardStyles.helperStarContainer}>
