@@ -17,9 +17,9 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 		<View>
 			<View style={styles.helperInfoContainer}>
 				<View style={styles.helperInfo}>
-					<View style={styles.profileImage}>
+					<Image style={styles.profileImage} source={require('./img/test.png')}>
 
-				</View>
+					</Image>
 				<View style={styles.helperInfoText}>
 					<Text style={styles.name}>{detail.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
