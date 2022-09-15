@@ -1,13 +1,14 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useRecoilState} from "recoil";
 import {Touchable} from "react-native-toast-message/lib/src/components/Touchable";
 import {tokenState, userState} from "@apis/atoms";
 import RNRestart from "react-native-restart";
 import {TouchableWithoutFeedback} from "@gorhom/bottom-sheet";
-import {vw} from "react-native-css-vh-vw";
+import {vh, vw} from "react-native-css-vh-vw";
 import { Shadow } from 'react-native-shadow-2';
 import {Line} from "react-native-svg";
+import {logout} from "@utils/Logout";
 
 const ProfileCard = ({user}) => {
 	return (
@@ -15,9 +16,7 @@ const ProfileCard = ({user}) => {
 			<View style={{...profileCardStyles.profileCard, backgroundColor:user.role==="Helper" ? '#AE46FF' : '#00A3FF'}}>
 				<View style={profileCardStyles.userInfoContainer}>
 					<View style={profileCardStyles.userInfo}>
-						<View style={profileCardStyles.profileImage}>
-
-						</View>
+						<Image style={profileCardStyles.profileImage} source={require('../components/img/test.png')}/>
 						<View style={profileCardStyles.helperInfoText}>
 							<Text style={profileCardStyles.name}>{user.first_name}</Text>
 							<View style={profileCardStyles.helperStarContainer}>
@@ -27,9 +26,7 @@ const ProfileCard = ({user}) => {
 					</View>
 
 					<View style={profileCardStyles.connectButton}>
-						<TouchableWithoutFeedback onPress={() => console.log("연결")}>
-							<Text style={{color: "#ffffff"}}>앱 아이콘</Text>
-						</TouchableWithoutFeedback>
+						<Image style={{width: 40, height: 40}} source={require('@assets/images/app_icon.png')}/>
 					</View>
 				</View>
 				<Text style={profileCardStyles.role}>{user.role}</Text>
@@ -66,19 +63,10 @@ const Profile = () => {
 	const [user, setUser] = useRecoilState(userState)
 	const [token, setToken] = useRecoilState(tokenState);
 
-	const logout = () => {
-		setToken(
-			{
-				accessToken: "",
-				refreshToken: ""
-			}
-		)
-		setTimeout(() => {
-			RNRestart.Restart();
-		},500)
-	}
+
 
 	return (
+		<ScrollView>
 		<View style={containerStyles.container}>
 			<ProfileCard user={user.user}/>
 
@@ -86,12 +74,15 @@ const Profile = () => {
 			{
 				user.user.role==="Helper" ? (
 					<>
-						<Text style={{...containerStyles.label, marginTop: 30}}>돈 관리</Text>
+						<Text style={{...containerStyles.label, marginTop: 30}}>포인트 관리</Text>
 						<CircularContainer title={`포인트 ${10000}원`}>
 							<CircularButton title={"출금하기"} color={'#AE46FF'}/>
 						</CircularContainer>
-						<Text style={{...containerStyles.label, marginTop: 30}}>리뷰 관리</Text>
+						<Text style={{...containerStyles.label, marginTop: 30}}>활동 관리</Text>
 						<CircularContainer title={`현재 등록된 리뷰 ${100}개`}>
+							<CircularButton title={"전체보기"} color={'#AE46FF'}/>
+						</CircularContainer>
+						<CircularContainer title={`현재 등록된 마커 ${3}개`} style={{marginTop: 12}}>
 							<CircularButton title={"전체보기"} color={'#AE46FF'}/>
 						</CircularContainer>
 					</>
@@ -114,8 +105,9 @@ const Profile = () => {
 			{
 				user.user.role === "Helper" ? (<LineButton title={"계좌 관리"}/>) : null
 			}
-			<LineButton title={"로그아웃"} onPress={logout}/>
+			<LineButton title={"로그아웃"} onPress={() => {logout(setToken)}}/>
 		</View>
+		</ScrollView>
 	);
 };
 
@@ -123,7 +115,8 @@ const containerStyles = StyleSheet.create({
 	container: {
 		flex: 1,
 		padding: 24,
-		alignItems: 'center'
+		alignItems: 'center',
+		height: vh(110)
 	},
 	label: {
 		marginVertical: 12,

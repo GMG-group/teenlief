@@ -5,12 +5,14 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { vw, vh } from "react-native-css-vh-vw";
 import { Message, PromiseMessage } from '@components/Message';
-import { getChatLog } from "@apis/apiServices";
+import {DOMAIN, getChatLog} from "@apis/apiServices";
 import useApi from "@apis/useApi";
-import { useRecoilValue } from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import {tokenState, userState} from "@apis/atoms";
 
 import test from "@components/img/test.png";
+import Toast from "react-native-toast-message";
+import {logout} from "@utils/Logout";
 
 const ChatRoom = ({ navigation, route }) => {
     const [chatData, setChatData] = useState([]);
@@ -18,7 +20,7 @@ const ChatRoom = ({ navigation, route }) => {
     const chatRoomRef = useRef();
     const webSocket = useRef(null);
 
-    const token = useRecoilValue(tokenState);
+    const [token, setToken] = useRecoilState(tokenState);
     const user = useRecoilValue(userState);
 
     const [loading, resolved, callApi] = useApi(getChatLog, true);
@@ -26,7 +28,7 @@ const ChatRoom = ({ navigation, route }) => {
     useEffect(() => {
         callApi(route.params.id)
             .then((res) => {
-                webSocket.current = new WebSocket(`ws://10.0.2.2:8000/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
+                webSocket.current = new WebSocket(`ws://${DOMAIN}/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
 
                 webSocket.current.onopen = () => {
                     console.log('connected');
@@ -55,7 +57,20 @@ const ChatRoom = ({ navigation, route }) => {
     }, [route.params.id]);
 
     const onText = () => {
-        webSocket.current.send(JSON.stringify({content: chatInput}));
+
+        if(chatInput.includes('ㅅㅂ') || chatInput.includes('비속어') || chatInput.includes('fuck')) {
+            Toast.show({
+                type: 'error',
+                text1: '비속어 또는 부적절한 단어가 감지되었습니다.',
+                text2: '계정이 차단 됩니다.',
+            })
+            setTimeout(() => {
+                logout(setToken);
+            }, 3000);
+            webSocket.current.send(JSON.stringify({content: "***"}));
+        } else {
+            webSocket.current.send(JSON.stringify({content: chatInput}));
+        }
         setChatInput('');
     }
 

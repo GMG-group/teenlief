@@ -28,9 +28,9 @@ export const useApi = (api, authHeader=false) => {
                 })
         } else {
             console.log("unhandled error", err.response.status, err.response)
-            setTimeout(() => {
-                callback(...args);
-            }, 3000)
+            // setTimeout(() => {
+            //     callback(...args);
+            // }, 3000)
             return {status:false};
         }
     }

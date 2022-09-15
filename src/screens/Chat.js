@@ -8,11 +8,9 @@ import useApi from "@apis/useApi";
 import {getChatRoomList} from "@apis/apiServices";
 import {useRecoilValue} from "recoil";
 import {userState} from "@apis/atoms";
+import Search from "@components/Search";
 
 const Chat = ({navigation}) => {
-	const filterTag = ["숙식", "숙식", "숙식", "숙식", "숙식", "숙식"];
-	const tagListRef = useRef(null);
-
 	const user = useRecoilValue(userState);
 	const [loading, resolved, callApi] = useApi(getChatRoomList, true);
 	const [chatroom, setChatroom] = useState([]);
@@ -31,34 +29,7 @@ const Chat = ({navigation}) => {
 
 	return (
 		<View style={styles.container}>
-			<View style={styles.search}>
-				<TextInput
-					style={styles.input}
-					placeholder={"여기서 검색해 주세요"} />
-				<Icon name="search-outline" size={25}  />
-			</View>
-
-			<FlatList
-				ref={tagListRef}
-				data={filterTag}
-				style={styles.filter}
-				contentContainerStyle={{
-					flexGrow: 1,
-					alignItems: 'center',
-					justifyContent: 'center',
-					width: 650,
-				}}
-				renderItem={({item}) =>
-					<View style={styles.filterItem} key={item.id}>
-						<Text style={{color: 'black'}}>{ item }</Text>
-					</View>
-				}
-				keyExtractor={(item, index) => 'key' + index}
-				horizontal
-				showsVerticalScrollIndicator={false}
-				showsHorizontalScrollIndicator={false}
-			/>
-
+			<Search displayTag={false} />
 			<FlatList
 				scrollEnabled={true}
 				style={styles.chatView}
@@ -136,6 +107,7 @@ const styles = StyleSheet.create({
 	},
 	chatView: {
 		display: 'flex',
+		marginTop: 80,
 		height: '80%',
 		width: vw(90),
 	},

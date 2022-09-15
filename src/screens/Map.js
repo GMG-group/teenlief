@@ -159,7 +159,7 @@ const Map = ({ route, navigation }) => {
 			</NaverMapView>
 
 			{
-				action==="upload" ? null : <Search />
+				action==="upload" ? null : <Search displayTag={true}/>
 			}
 
 		</>

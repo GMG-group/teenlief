@@ -17,9 +17,9 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 		<View>
 			<View style={styles.helperInfoContainer}>
 				<View style={styles.helperInfo}>
-					<View style={styles.profileImage}>
+					<Image style={styles.profileImage} source={require('./img/test.png')}>
 
-				</View>
+					</Image>
 				<View style={styles.helperInfoText}>
 					<Text style={styles.name}>{detail.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
@@ -87,7 +87,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 				<View>
 					<Text style={{fontSize: 24}}>개요</Text>
 					<View style={styles.helperContentItem}>
-						<Text style={{color: "black"}}>저는 헬퍼 홍길동입니다.</Text>
+						<Text style={{color: "black"}}>저는 헬퍼 {detail.helper.first_name}입니다.</Text>
 					</View>
 					<View style={styles.helperContentItem}>
 						<Text style={{color: "black"}}>{detail.explanation}</Text>
@@ -104,9 +104,9 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 						</View>
 						<View style={styles.reviewHeaderRight}>
 							<View>
-								<Text>친철해요</Text>
-								<Text>맛이 좋아요</Text>
-								<Text>김다원해요</Text>
+								<Text>헬퍼분이 너무 친절하세요!</Text>
+								<Text>제 은인이십니다</Text>
+								<Text>감사합니다.. 나중에 꼭 보답할게요</Text>
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
