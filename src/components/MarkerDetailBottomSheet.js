@@ -104,9 +104,9 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 						</View>
 						<View style={styles.reviewHeaderRight}>
 							<View>
-								<Text>친철해요</Text>
-								<Text>맛이 좋아요</Text>
-								<Text>김다원해요</Text>
+								<Text>헬퍼분이 너무 친절하세요!</Text>
+								<Text>제 은인이십니다</Text>
+								<Text>감사합니다.. 나중에 꼭 보답할게요</Text>
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
