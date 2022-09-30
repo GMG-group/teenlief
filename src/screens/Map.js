@@ -11,6 +11,7 @@ import {ACTION, actionState} from "@apis/atoms";
 import {BackButton} from "@components/BackButton";
 import UploadBottomSheet from "@components/UploadBottomSheet";
 import ShelterDetailBottomSheet from "@components/ShelterDetailBottomSheet";
+import {CustomMarker} from "@components/CustomMarker";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -115,45 +116,37 @@ const Map = ({ route, navigation }) => {
 			>
 				{
 					(!markersLoading && action !== ACTION.Upload) && markers.map((marker, idx) => (
-						<Marker
-							key={idx}
-							width={60}
-							height={60}
-							coordinate={{latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude)}}
+						<CustomMarker
+							marker={marker}
+							idx={idx}
 							onClick={() => {
-								console.log("click",marker.id);
 								setSelectedMarkerId(marker.id);
 								setShelterPressed(false);
 								bottomSheetModalRef.current?.present();
 							}}
-						><View style={{flexDirection: 'row'}}>
+						>
 							<Image
 								source={require('../assets/images/marker_helper.png')}
 								style={{width:60, height:60}}
 								fadeDuration={0}
 							/>
-						</View>
-						</Marker>
+						</CustomMarker>
 					))}
 				{(!sheltersLoading && action !== ACTION.Upload) && shelters.map((shelter, idx) => (
-						<Marker
-							key={idx}
-							width={60}
-							height={60}
-							coordinate={{latitude: parseFloat(shelter.latitude), longitude: parseFloat(shelter.longitude)}}
-							onClick={() => {
-								setShelterPressed(true);
-								setSelectedShelter(shelter);
-								bottomSheetModalRef.current?.present();
-							}}
-						><View style={{flexDirection: 'row'}}>
-							<Image
-								source={require('../assets/images/marker_shelter.png')}
-								style={{width:60, height:60}}
-								fadeDuration={0}
-							/>
-						</View>
-						</Marker>
+					<CustomMarker
+						marker={shelter}
+						idx={idx}
+						onClick={() => {
+							setShelterPressed(true);
+							setSelectedShelter(shelter);
+							bottomSheetModalRef.current?.present();
+						}}>
+						<Image
+							source={require('../assets/images/marker_shelter.png')}
+							style={{width:60, height:60}}
+							fadeDuration={0}
+						/>
+					</CustomMarker>
 					))
 				}
 			</NaverMapView>
