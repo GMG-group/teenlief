@@ -8,7 +8,7 @@ export const CustomMarker = ({children, marker, idx, onClick}) => {
             key={idx}
             width={60}
             height={60}
-            coordinate={{latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude)}}
+            coordinate={{latitude: parseFloat(marker.geometry.coordinates[1]), longitude: parseFloat(marker.geometry.coordinates[0])}}
             onClick={() => {
                onClick();
             }}

@@ -22,7 +22,7 @@ const Map = ({ route, navigation }) => {
 	const bottomSheetModalRef = useRef(null);
 
 	// variables
-	const [cameraCoords, setCameraCoords] = useState({latitude: 37.5828, longitude: 127.0107})
+	const [cameraInfo, setCameraInfo] = useState({latitude: 37.5828, longitude: 127.0107, zoom: 14, contentRegion: [{"latitude": 37.55385286915707, "longitude": 126.96997669210964}, {"latitude": 37.57936534636272, "longitude": 126.96997669210964}, {"latitude": 37.57936534636272, "longitude": 126.98679950788988}, {"latitude": 37.55385286915707, "longitude": 126.98679950788988}, {"latitude": 37.55385286915707, "longitude": 126.96997669210964}]})
 	const [selectedMarkerId, setSelectedMarkerId] = useState();
 	const [markersLoading, markers, getMarkers, setMarkersLoading] = useApi(getMarkerSimple, true);
 	const [sheltersLoading, shelters, getSheltersCallback, setSheltersLoading] = useApi(getShelters, true);
@@ -50,8 +50,8 @@ const Map = ({ route, navigation }) => {
 	},[])
 
 	useEffect(() => {
-		console.log(cameraCoords);
-	},[cameraCoords]);
+		console.log(cameraInfo);
+	},[cameraInfo]);
 
 	useEffect(() => {
 		if(action===ACTION.Upload) {
@@ -62,7 +62,7 @@ const Map = ({ route, navigation }) => {
 
 	const handleBottomSheet = () => {
 		if(action===ACTION.Upload) {
-			return <UploadBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} cameraCoords={cameraCoords} />
+			return <UploadBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} cameraCoords={{latitude:cameraInfo.latitude, longitude: cameraInfo.longitude}} />
 		} else {
 			if(shelterPressed) {
 				return <ShelterDetailBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} shelter={selectedShelter}/>
@@ -100,7 +100,8 @@ const Map = ({ route, navigation }) => {
 			}
 
 			{!markersLoading && <ClusterMap
-				setCameraCoords={setCameraCoords}
+				setCameraInfo={setCameraInfo}
+				cameraInfo={cameraInfo}
 				markersLoading={markersLoading}
 				action={action}
 				markers={markers}
@@ -120,9 +121,9 @@ const Map = ({ route, navigation }) => {
 	);
 };
 
-const ClusterMap = ({setCameraCoords, markersLoading, action, markers, setSelectedMarkerId, setShelterPressed, bottomSheetModalRef, sheltersLoading, shelters, setSelectedShelter}) => {
-	const [zoom, setZoom] = useState(14);
-	const [bounds, setBounds] = useState([126.96785851679073 ,37.55217298991133, 126.98468133257103, 37.5776860423595]);
+const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers, setSelectedMarkerId, setShelterPressed, bottomSheetModalRef, sheltersLoading, shelters, setSelectedShelter}) => {
+	// const [zoom, setZoom] = useState(14);
+	// const [bounds, setBounds] = useState([126.96785851679073 ,37.55217298991133, 126.98468133257103, 37.5776860423595]);
 
 	const { clusters, supercluster } = useSupercluster({
 		points: markers.map((marker) => ({
@@ -136,13 +137,10 @@ const ClusterMap = ({setCameraCoords, markersLoading, action, markers, setSelect
 				]
 			}
 		})),
-		bounds: [126.96785851679073 ,37.55217298991133, 126.98468133257103, 37.5776860423595],
-		zoom: zoom,
-		options: { radius: 75, maxZoom: 20 }
+		bounds: [cameraInfo.contentRegion[1].longitude, cameraInfo.contentRegion[3].latitude, cameraInfo.contentRegion[3].longitude, cameraInfo.contentRegion[1].latitude],
+		zoom: cameraInfo.zoom,
+		options: { radius: 20, maxZoom: 18 }
 	});
-
-	console.log("clusters@@@@@@@@", markers, clusters);
-	console.log("bounds@@",bounds, zoom);
 
 	return (
 		<NaverMapView
@@ -150,12 +148,12 @@ const ClusterMap = ({setCameraCoords, markersLoading, action, markers, setSelect
 			showsMyLocationButton={false}
 			useTextureView={true}
 			onCameraChange={(e) => {
-				setCameraCoords({
-					latitude: e.latitude,
-					longitude: e.longitude
+				// setZoom(e.zoom);
+				// setBounds([e.contentRegion[1].longitude, e.contentRegion[3].latitude, e.contentRegion[3].longitude, e.contentRegion[1].latitude]);
+				setCameraInfo({
+					...e,
 				})
-				setZoom(e.zoom);
-				setBounds([e.contentRegion[1].longitude, e.contentRegion[3].latitude, e.contentRegion[3].longitude, e.contentRegion[1].latitude]);
+				console.log(e.contentRegion)
 			}}
 		>
 			{/*{*/}
@@ -205,29 +203,38 @@ const ClusterMap = ({setCameraCoords, markersLoading, action, markers, setSelect
 						<Marker
 							key={`cluster-${cluster.properties.cluster_id}`}
 						 	coordinate={{latitude: latitude, longitude: longitude}}
+							width={30 + (pointCount / markers.length) * 20}
+							height={30 + (pointCount / markers.length) * 20}
 						>
-							{/*<View*/}
-							{/*	style={{...styles.clusterMarker,*/}
-							{/*		width: 100 + (pointCount / markers.length) * 20,*/}
-							{/*		height: 100 + (pointCount / markers.length) * 20*/}
-							{/*	}}*/}
-							{/*	onClick={() => {}}*/}
-							{/*>*/}
-							{/*	<Text>{pointCount}</Text>*/}
-							{/*</View>*/}
+							<View
+								style={{...styles.clusterMarker,
+									width: 30 + (pointCount / markers.length) * 20,
+									height: 30 + (pointCount / markers.length) * 20
+								}}
+								onClick={() => {}}
+							>
+								<Text style={{fontSize: 8}}>{pointCount}</Text>
+							</View>
 						</Marker>
 					);
 				}
 
 				return (
-					<Marker
-						key={`crime-${cluster.properties.id}`}
-						coordinate={{latitude: latitude, longitude: longitude}}
+					<CustomMarker
+						marker={cluster}
+						idx={cluster.properties.id}
+						onClick={() => {
+							setSelectedMarkerId(marker.id);
+							setShelterPressed(false);
+							bottomSheetModalRef.current?.present();
+						}}
 					>
-						{/*<TouchableOpacity style={styles.crimeMarker}>*/}
-						{/*	<Image style={styles.crimeMarkerImage} source={require("@assets/images/marker_blue.png")}/>*/}
-						{/*</TouchableOpacity>*/}
-					</Marker>
+						<Image
+							source={require('../assets/images/marker_helper.png')}
+							style={{width:60, height:60}}
+							fadeDuration={0}
+						/>
+					</CustomMarker>
 				);
 			})}
 		</NaverMapView>
