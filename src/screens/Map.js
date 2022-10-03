@@ -12,6 +12,7 @@ import {BackButton} from "@components/BackButton";
 import UploadBottomSheet from "@components/UploadBottomSheet";
 import ShelterDetailBottomSheet from "@components/ShelterDetailBottomSheet";
 import {CustomMarker} from "@components/CustomMarker";
+import useSupercluster from "use-supercluster";
 
 const vw = Dimensions.get('window').width;
 const vh = Dimensions.get('window').height;
@@ -27,6 +28,7 @@ const Map = ({ route, navigation }) => {
 	const [sheltersLoading, shelters, getSheltersCallback, setSheltersLoading] = useApi(getShelters, true);
 	const [shelterPressed, setShelterPressed] = useState(false);
 	const [selectedShelter, setSelectedShelter] = useState();
+
 	const action = useRecoilValue(actionState);
 	const snapPoints = useMemo(() => {
 		if(action === ACTION.Main) {
@@ -46,12 +48,6 @@ const Map = ({ route, navigation }) => {
 		getMarkers();
 		getSheltersCallback();
 	},[])
-
-	useEffect(() => {
-		if(!markersLoading) {
-			console.log("markers", markers);
-		}
-	},[markersLoading])
 
 	useEffect(() => {
 		console.log(cameraCoords);
@@ -103,53 +99,18 @@ const Map = ({ route, navigation }) => {
 				) : null
 			}
 
-			<NaverMapView
-				style={{width: '100%', height: '100%'}}
-				showsMyLocationButton={false}
-				useTextureView={true}
-				onCameraChange={(e) => {
-					setCameraCoords({
-						latitude: e.latitude,
-						longitude: e.longitude
-					})
-				}}
-			>
-				{
-					(!markersLoading && action !== ACTION.Upload) && markers.map((marker, idx) => (
-						<CustomMarker
-							marker={marker}
-							idx={idx}
-							onClick={() => {
-								setSelectedMarkerId(marker.id);
-								setShelterPressed(false);
-								bottomSheetModalRef.current?.present();
-							}}
-						>
-							<Image
-								source={require('../assets/images/marker_helper.png')}
-								style={{width:60, height:60}}
-								fadeDuration={0}
-							/>
-						</CustomMarker>
-					))}
-				{(!sheltersLoading && action !== ACTION.Upload) && shelters.map((shelter, idx) => (
-					<CustomMarker
-						marker={shelter}
-						idx={idx}
-						onClick={() => {
-							setShelterPressed(true);
-							setSelectedShelter(shelter);
-							bottomSheetModalRef.current?.present();
-						}}>
-						<Image
-							source={require('../assets/images/marker_shelter.png')}
-							style={{width:60, height:60}}
-							fadeDuration={0}
-						/>
-					</CustomMarker>
-					))
-				}
-			</NaverMapView>
+			{!markersLoading && <ClusterMap
+				setCameraCoords={setCameraCoords}
+				markersLoading={markersLoading}
+				action={action}
+				markers={markers}
+				setSelectedMarkerId={setSelectedMarkerId}
+				setShelterPressed={setShelterPressed}
+				bottomSheetModalRef={bottomSheetModalRef}
+				sheltersLoading={sheltersLoading}
+				shelters={shelters}
+				setSelectedShelter={setSelectedShelter}
+			/>}
 
 			{
 				action==="upload" ? null : <Search displayTag={true}/>
@@ -158,6 +119,120 @@ const Map = ({ route, navigation }) => {
 		</>
 	);
 };
+
+const ClusterMap = ({setCameraCoords, markersLoading, action, markers, setSelectedMarkerId, setShelterPressed, bottomSheetModalRef, sheltersLoading, shelters, setSelectedShelter}) => {
+	const [zoom, setZoom] = useState(14);
+	const [bounds, setBounds] = useState([126.96785851679073 ,37.55217298991133, 126.98468133257103, 37.5776860423595]);
+
+	const { clusters, supercluster } = useSupercluster({
+		points: markers.map((marker) => ({
+			type: "Feature",
+			properties: { cluster: false, id: marker.id, category: 'marker' },
+			geometry: {
+				type: "Point",
+				coordinates: [
+					parseFloat(marker.longitude),
+					parseFloat(marker.latitude)
+				]
+			}
+		})),
+		bounds: [126.96785851679073 ,37.55217298991133, 126.98468133257103, 37.5776860423595],
+		zoom: zoom,
+		options: { radius: 75, maxZoom: 20 }
+	});
+
+	console.log("clusters@@@@@@@@", markers, clusters);
+	console.log("bounds@@",bounds, zoom);
+
+	return (
+		<NaverMapView
+			style={{width: '100%', height: '100%'}}
+			showsMyLocationButton={false}
+			useTextureView={true}
+			onCameraChange={(e) => {
+				setCameraCoords({
+					latitude: e.latitude,
+					longitude: e.longitude
+				})
+				setZoom(e.zoom);
+				setBounds([e.contentRegion[1].longitude, e.contentRegion[3].latitude, e.contentRegion[3].longitude, e.contentRegion[1].latitude]);
+			}}
+		>
+			{/*{*/}
+			{/*	(!markersLoading && action !== ACTION.Upload) && markers.map((marker, idx) => (*/}
+			{/*		<CustomMarker*/}
+			{/*			marker={marker}*/}
+			{/*			idx={idx}*/}
+			{/*			onClick={() => {*/}
+			{/*				setSelectedMarkerId(marker.id);*/}
+			{/*				setShelterPressed(false);*/}
+			{/*				bottomSheetModalRef.current?.present();*/}
+			{/*			}}*/}
+			{/*		>*/}
+			{/*			<Image*/}
+			{/*				source={require('../assets/images/marker_helper.png')}*/}
+			{/*				style={{width:60, height:60}}*/}
+			{/*				fadeDuration={0}*/}
+			{/*			/>*/}
+			{/*		</CustomMarker>*/}
+			{/*	))}*/}
+			{/*{(!sheltersLoading && action !== ACTION.Upload) && shelters.map((shelter, idx) => (*/}
+			{/*	<CustomMarker*/}
+			{/*		marker={shelter}*/}
+			{/*		idx={idx}*/}
+			{/*		onClick={() => {*/}
+			{/*			setShelterPressed(true);*/}
+			{/*			setSelectedShelter(shelter);*/}
+			{/*			bottomSheetModalRef.current?.present();*/}
+			{/*		}}>*/}
+			{/*		<Image*/}
+			{/*			source={require('../assets/images/marker_shelter.png')}*/}
+			{/*			style={{width:60, height:60}}*/}
+			{/*			fadeDuration={0}*/}
+			{/*		/>*/}
+			{/*	</CustomMarker>*/}
+			{/*))*/}
+			{/*}*/}
+			{clusters.map(cluster => {
+				const [longitude, latitude] = cluster.geometry.coordinates;
+				const {
+					cluster: isCluster,
+					point_count: pointCount
+				} = cluster.properties;
+
+				if (isCluster) {
+					return (
+						<Marker
+							key={`cluster-${cluster.properties.cluster_id}`}
+						 	coordinate={{latitude: latitude, longitude: longitude}}
+						>
+							{/*<View*/}
+							{/*	style={{...styles.clusterMarker,*/}
+							{/*		width: 100 + (pointCount / markers.length) * 20,*/}
+							{/*		height: 100 + (pointCount / markers.length) * 20*/}
+							{/*	}}*/}
+							{/*	onClick={() => {}}*/}
+							{/*>*/}
+							{/*	<Text>{pointCount}</Text>*/}
+							{/*</View>*/}
+						</Marker>
+					);
+				}
+
+				return (
+					<Marker
+						key={`crime-${cluster.properties.id}`}
+						coordinate={{latitude: latitude, longitude: longitude}}
+					>
+						{/*<TouchableOpacity style={styles.crimeMarker}>*/}
+						{/*	<Image style={styles.crimeMarkerImage} source={require("@assets/images/marker_blue.png")}/>*/}
+						{/*</TouchableOpacity>*/}
+					</Marker>
+				);
+			})}
+		</NaverMapView>
+	)
+}
 
 const styles = StyleSheet.create({
 	centerMarker: {
@@ -197,6 +272,21 @@ const styles = StyleSheet.create({
 	markerUploadButtonText: {
 		alignSelf: "center",
 		color: "white"
+	},
+	clusterMarker: {
+		color: "white",
+		backgroundColor: "#1978c8",
+		borderRadius: 10,
+		padding: 10,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	crimeMarker: {
+		backgroundColor: "white",
+	},
+	crimeMarkerImage: {
+		width: 25
 	}
 });
 
