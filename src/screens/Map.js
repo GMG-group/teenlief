@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import NaverMapView, { Marker } from "react-native-nmap";
 import {BottomSheetModal} from "@gorhom/bottom-sheet";
 import {Button, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
@@ -99,7 +99,7 @@ const Map = ({ route, navigation }) => {
 				) : null
 			}
 
-			{!markersLoading && <ClusterMap
+			{!sheltersLoading && !markersLoading && <ClusterMap
 				setCameraInfo={setCameraInfo}
 				cameraInfo={cameraInfo}
 				markersLoading={markersLoading}
@@ -124,6 +124,37 @@ const Map = ({ route, navigation }) => {
 const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers, setSelectedMarkerId, setShelterPressed, bottomSheetModalRef, sheltersLoading, shelters, setSelectedShelter}) => {
 	// const [zoom, setZoom] = useState(14);
 	// const [bounds, setBounds] = useState([126.96785851679073 ,37.55217298991133, 126.98468133257103, 37.5776860423595]);
+
+	const generatePoints = useCallback(() => {
+		let markerPoints = [], shelterPoints = [];
+		markerPoints = markers.map((marker) => ({
+			type: "Feature",
+			properties: { cluster: false, id: marker.id, category: 'marker' },
+			geometry: {
+				type: "Point",
+				coordinates: [
+					parseFloat(marker.longitude),
+					parseFloat(marker.latitude)
+				]
+			}
+		}));
+		shelterPoints = shelters.map((shelter) => ({
+			type: "Feature",
+			properties: { cluster: false, id: shelter.id, category: 'shelter' },
+			geometry: {
+				type: "Point",
+				coordinates: [
+					parseFloat(shelter.longitude),
+					parseFloat(shelter.latitude)
+				]
+			}
+		}));
+		return markerPoints + shelterPoints;
+	}, [markers, shelters])
+
+	useEffect(() => {
+		console.log("markes: ", markers, "shelters: ", shelters);
+	})
 
 	const { clusters, supercluster } = useSupercluster({
 		points: markers.map((marker) => ({
