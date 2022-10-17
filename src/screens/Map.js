@@ -156,7 +156,7 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 		console.log("markes: ", markers, "shelters: ", shelters);
 	})
 
-	const { clusters, supercluster } = useSupercluster({
+	const markerCluster = useSupercluster({
 		points: markers.map((marker) => ({
 			type: "Feature",
 			properties: { cluster: false, id: marker.id, category: 'marker' },
@@ -165,6 +165,23 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 				coordinates: [
 					parseFloat(marker.longitude),
 					parseFloat(marker.latitude)
+				]
+			}
+		})),
+		bounds: [cameraInfo.contentRegion[1].longitude, cameraInfo.contentRegion[3].latitude, cameraInfo.contentRegion[3].longitude, cameraInfo.contentRegion[1].latitude],
+		zoom: cameraInfo.zoom,
+		options: { radius: 20, maxZoom: 18 }
+	});
+
+	const shelterCluster = useSupercluster({
+		points: shelters.map((shelter) => ({
+			type: "Feature",
+			properties: { cluster: false, id: shelter.id, category: 'shelter' },
+			geometry: {
+				type: "Point",
+				coordinates: [
+					parseFloat(shelter.longitude),
+					parseFloat(shelter.latitude)
 				]
 			}
 		})),
@@ -187,42 +204,7 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 				console.log(e.contentRegion)
 			}}
 		>
-			{/*{*/}
-			{/*	(!markersLoading && action !== ACTION.Upload) && markers.map((marker, idx) => (*/}
-			{/*		<CustomMarker*/}
-			{/*			marker={marker}*/}
-			{/*			idx={idx}*/}
-			{/*			onClick={() => {*/}
-			{/*				setSelectedMarkerId(marker.id);*/}
-			{/*				setShelterPressed(false);*/}
-			{/*				bottomSheetModalRef.current?.present();*/}
-			{/*			}}*/}
-			{/*		>*/}
-			{/*			<Image*/}
-			{/*				source={require('../assets/images/marker_helper.png')}*/}
-			{/*				style={{width:60, height:60}}*/}
-			{/*				fadeDuration={0}*/}
-			{/*			/>*/}
-			{/*		</CustomMarker>*/}
-			{/*	))}*/}
-			{/*{(!sheltersLoading && action !== ACTION.Upload) && shelters.map((shelter, idx) => (*/}
-			{/*	<CustomMarker*/}
-			{/*		marker={shelter}*/}
-			{/*		idx={idx}*/}
-			{/*		onClick={() => {*/}
-			{/*			setShelterPressed(true);*/}
-			{/*			setSelectedShelter(shelter);*/}
-			{/*			bottomSheetModalRef.current?.present();*/}
-			{/*		}}>*/}
-			{/*		<Image*/}
-			{/*			source={require('../assets/images/marker_shelter.png')}*/}
-			{/*			style={{width:60, height:60}}*/}
-			{/*			fadeDuration={0}*/}
-			{/*		/>*/}
-			{/*	</CustomMarker>*/}
-			{/*))*/}
-			{/*}*/}
-			{clusters.map(cluster => {
+			{markerCluster.clusters.map(cluster => {
 				const [longitude, latitude] = cluster.geometry.coordinates;
 				const {
 					cluster: isCluster,
@@ -252,16 +234,63 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 
 				return (
 					<CustomMarker
-						marker={cluster}
+						coordinate={{latitude: latitude, longitude: longitude}}
 						idx={cluster.properties.id}
 						onClick={() => {
-							setSelectedMarkerId(marker.id);
+							console.log("marker!!!")
+							setSelectedMarkerId(cluster.properties.id);
 							setShelterPressed(false);
 							bottomSheetModalRef.current?.present();
 						}}
 					>
 						<Image
 							source={require('../assets/images/marker_helper.png')}
+							style={{width:60, height:60}}
+							fadeDuration={0}
+						/>
+					</CustomMarker>
+				);
+			})}
+			{shelterCluster.clusters.map(cluster => {
+				const [longitude, latitude] = cluster.geometry.coordinates;
+				const {
+					cluster: isCluster,
+					point_count: pointCount
+				} = cluster.properties;
+
+				if (isCluster) {
+					return (
+						<Marker
+							key={`cluster-${cluster.properties.cluster_id}`}
+							coordinate={{latitude: latitude, longitude: longitude}}
+							width={30 + (pointCount / markers.length) * 20}
+							height={30 + (pointCount / markers.length) * 20}
+						>
+							<View
+								style={{...styles.clusterMarker,
+									width: 30 + (pointCount / markers.length) * 20,
+									height: 30 + (pointCount / markers.length) * 20
+								}}
+								onClick={() => {}}
+							>
+								<Text style={{fontSize: 8}}>{pointCount}</Text>
+							</View>
+						</Marker>
+					);
+				}
+
+				return (
+					<CustomMarker
+						coordinate={{latitude: latitude, longitude: longitude}}
+						idx={cluster.properties.id}
+						onClick={() => {
+							setSelectedMarkerId(cluster.properties.id);
+							setShelterPressed(true);
+							bottomSheetModalRef.current?.present();
+						}}
+					>
+						<Image
+							source={require('../assets/images/marker_shelter.png')}
 							style={{width:60, height:60}}
 							fadeDuration={0}
 						/>

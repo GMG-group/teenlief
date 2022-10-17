@@ -2,13 +2,13 @@ import React from 'react';
 import {Image, View} from "react-native";
 import {Marker} from "react-native-nmap";
 
-export const CustomMarker = ({children, marker, idx, onClick}) => {
+export const CustomMarker = ({children, coordinate, idx, onClick}) => {
     return (
         <Marker
             key={idx}
             width={60}
             height={60}
-            coordinate={{latitude: parseFloat(marker.geometry.coordinates[1]), longitude: parseFloat(marker.geometry.coordinates[0])}}
+            coordinate={coordinate}
             onClick={() => {
                onClick();
             }}
