@@ -2,12 +2,11 @@ import React from 'react';
 import {Image, View} from "react-native";
 import {Marker} from "react-native-nmap";
 
-export const CustomMarker = ({children, coordinate, idx, onClick}) => {
+export const CustomMarker = ({children, coordinate, onClick}) => {
     return (
         <Marker
-            key={idx}
-            width={60}
-            height={60}
+            width={50}
+            height={50}
             coordinate={coordinate}
             onClick={() => {
                onClick();

@@ -183,7 +183,7 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 		})),
 		bounds: [cameraInfo.contentRegion[1].longitude, cameraInfo.contentRegion[3].latitude, cameraInfo.contentRegion[3].longitude, cameraInfo.contentRegion[1].latitude],
 		zoom: cameraInfo.zoom,
-		options: { radius: 20, maxZoom: 18 }
+		options: { radius: 50, maxZoom: 18 }
 	});
 
 	return (
@@ -208,29 +208,24 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 
 				if (isCluster) {
 					return (
-						<Marker
-							key={`cluster-${cluster.properties.cluster_id}`}
-						 	coordinate={{latitude: latitude, longitude: longitude}}
-							width={30 + (pointCount / markers.length)}
-							height={30 + (pointCount / markers.length)}
-						>
-							<View
-								style={{...styles.clusterMarker,
-									width: 30 + (pointCount / markers.length),
-									height: 30 + (pointCount / markers.length)
-								}}
-								onClick={() => {}}
-							>
-								<Text style={{fontSize: 8}}>{pointCount}</Text>
-							</View>
-						</Marker>
+					<CustomMarker
+						key={`cluster-${cluster.properties.cluster_id}`}
+						coordinate={{latitude: latitude, longitude: longitude}}
+						idx={cluster.properties.id}
+					>
+						<Image
+							source={require('../assets/images/cluster_marker.png')}
+							style={{width:50, height:55}}
+							fadeDuration={0}
+						/>
+					</CustomMarker>
 					);
 				}
 
 				return (
 					<CustomMarker
+						key={`marker-${cluster.properties.id}`}
 						coordinate={{latitude: latitude, longitude: longitude}}
-						idx={cluster.properties.id}
 						onClick={() => {
 							console.log("marker!!!")
 							setSelectedMarkerId(cluster.properties.id);
@@ -255,27 +250,23 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 
 				if (isCluster) {
 					return (
-						<Marker
+						<CustomMarker
 							key={`cluster-${cluster.properties.cluster_id}`}
 							coordinate={{latitude: latitude, longitude: longitude}}
-							width={30 + (pointCount / markers.length)}
-							height={30 + (pointCount / markers.length)}
+							idx={cluster.properties.id}
 						>
-							<View
-								style={{...styles.clusterMarker,
-									width: 30 + (pointCount / markers.length),
-									height: 30 + (pointCount / markers.length)
-								}}
-								onClick={() => {}}
-							>
-								<Text style={{fontSize: 8}}>{pointCount}</Text>
-							</View>
-						</Marker>
+							<Image
+								source={require('../assets/images/cluster_marker.png')}
+								style={{width:50, height:55}}
+								fadeDuration={0}
+							/>
+						</CustomMarker>
 					);
 				}
 
 				return (
 					<CustomMarker
+						key={`shelter-${cluster.properties.id}`}
 						coordinate={{latitude: latitude, longitude: longitude}}
 						idx={cluster.properties.id}
 						onClick={() => {
