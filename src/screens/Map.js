@@ -211,13 +211,13 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 						<Marker
 							key={`cluster-${cluster.properties.cluster_id}`}
 						 	coordinate={{latitude: latitude, longitude: longitude}}
-							width={30 + (pointCount / markers.length) * 20}
-							height={30 + (pointCount / markers.length) * 20}
+							width={30 + (pointCount / markers.length)}
+							height={30 + (pointCount / markers.length)}
 						>
 							<View
 								style={{...styles.clusterMarker,
-									width: 30 + (pointCount / markers.length) * 20,
-									height: 30 + (pointCount / markers.length) * 20
+									width: 30 + (pointCount / markers.length),
+									height: 30 + (pointCount / markers.length)
 								}}
 								onClick={() => {}}
 							>
@@ -258,13 +258,13 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 						<Marker
 							key={`cluster-${cluster.properties.cluster_id}`}
 							coordinate={{latitude: latitude, longitude: longitude}}
-							width={30 + (pointCount / markers.length) * 20}
-							height={30 + (pointCount / markers.length) * 20}
+							width={30 + (pointCount / markers.length)}
+							height={30 + (pointCount / markers.length)}
 						>
 							<View
 								style={{...styles.clusterMarker,
-									width: 30 + (pointCount / markers.length) * 20,
-									height: 30 + (pointCount / markers.length) * 20
+									width: 30 + (pointCount / markers.length),
+									height: 30 + (pointCount / markers.length)
 								}}
 								onClick={() => {}}
 							>
