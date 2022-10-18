@@ -1,12 +1,12 @@
 import axios, {AxiosResponse} from "axios";
 import Config from "react-native-config";
 
-const PROTOCOL = "http://";
-// export const DOMAIN = "teenlief.com"
-const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
+const PROTOCOL = "https://";
+export const DOMAIN = "teenlief.com"
+// const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
 const IOS_DEV_URL = PROTOCOL +  "127.0.0.1:8000";
-// const URL = PROTOCOL + DOMAIN;
-const URL = AND_DEV_URL;
+const URL = PROTOCOL + DOMAIN;
+// const URL = AND_DEV_URL;
 
 export const postLogin = (body: any):Promise<AxiosResponse> => {
     return axios.post (
@@ -105,8 +105,20 @@ export const getReverseGeocoding = (cameraCoords: any):Promise<AxiosResponse> =>
         `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${coords}&orders=roadaddr&output=json`,
         {
             headers: {
-                "X-NCP-APIGW-API-KEY-ID": Config.NAVER_MAP_API_KEY, // TODO: env파일에서 가져오기
+                "X-NCP-APIGW-API-KEY-ID": Config.NAVER_MAP_API_KEY,
                 "X-NCP-APIGW-API-KEY": Config.NAVER_MAP_API_SECRET
+            }
+        }
+    )
+}
+
+export const getAdultFilter = (str: string):Promise<AxiosResponse> => {
+    return axios.get(
+        `https://openapi.naver.com/v1/search/adult.json?query=${str}`,
+        {
+            headers: {
+                "X-Naver-Client-Id": Config.NAVER_API_CLIENT_ID,
+                "X-Naver-Client-Secret": Config.NAVER_API_CLIENT_SECRET
             }
         }
     )

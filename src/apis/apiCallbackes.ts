@@ -14,7 +14,8 @@ import RNRestart from 'react-native-restart';
 export const usePostGoogleLoginFinishCallback = () => {
     return useRecoilCallback(({snapshot, set}) =>
             async (body) => {
-                const {data} = await postGooleLoginFinish(body);
+                const {data} = await postGooleLoginFinish(body)
+                    .catch(err => {console.log("err!!",err.message); return err})
                 console.log("postGooleLoginFinish ", data);
                 set(tokenState, {
                     accessToken: data.access_token,
