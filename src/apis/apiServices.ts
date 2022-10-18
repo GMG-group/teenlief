@@ -2,10 +2,11 @@ import axios, {AxiosResponse} from "axios";
 import Config from "react-native-config";
 
 const PROTOCOL = "http://";
-export const DOMAIN = "teenlief.com"
+// export const DOMAIN = "teenlief.com"
 const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
 const IOS_DEV_URL = PROTOCOL +  "127.0.0.1:8000";
-const URL = PROTOCOL + DOMAIN;
+// const URL = PROTOCOL + DOMAIN;
+const URL = AND_DEV_URL;
 
 export const postLogin = (body: any):Promise<AxiosResponse> => {
     return axios.post (
@@ -62,6 +63,16 @@ export const getMarkerDetail = (header: any, id: number):Promise<AxiosResponse> 
          {
              withCredentials: false,
              headers: header
+        }
+    )
+}
+
+export const getShelterDetail = (header: any, id: number):Promise<AxiosResponse> => {
+    return axios.get(
+        `${URL}/api/shelter/${id}`,
+        {
+            withCredentials: false,
+            headers: header
         }
     )
 }

@@ -3,8 +3,22 @@ import {Text, View, StyleSheet, Image} from "react-native";
 import { TouchableWithoutFeedback } from "@gorhom/bottom-sheet";
 import { vw, vh } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
+import useApi from "@apis/useApi";
+import {getMarkerDetail, getShelterDetail} from "@apis/apiServices";
 
-const ShelterDetailBottomSheet = ({ navigation, bottomSheetModalRef, shelter }) => {
+const ShelterDetailBottomSheet = ({ navigation, bottomSheetModalRef, shelterId }) => {
+
+    const [detailLoading, detailResolved, getDetail] = useApi(getShelterDetail, true);
+
+    useEffect(() => {
+        getDetail(shelterId);
+    },[shelterId])
+
+    if(detailLoading) {
+        return (
+            <Text>loading</Text>
+        )
+    }
 
     return (
         <View style={styles.container}>
@@ -14,7 +28,7 @@ const ShelterDetailBottomSheet = ({ navigation, bottomSheetModalRef, shelter }) 
 
                         </View>
                         <View style={styles.helperInfoText}>
-                            <Text style={styles.name}>{shelter.name}</Text>
+                            <Text style={styles.name}>{detailResolved.name}</Text>
                         </View>
                     </View>
 
@@ -28,10 +42,10 @@ const ShelterDetailBottomSheet = ({ navigation, bottomSheetModalRef, shelter }) 
                     <View>
                         <Text style={{fontSize: 24}}>개요</Text>
                         <View style={styles.helperContentItem}>
-                            <Text style={{color: "black"}}>{shelter.explanation}</Text>
+                            <Text style={{color: "black"}}>{detailResolved.explanation}</Text>
                         </View>
                         <View style={styles.helperContentItem}>
-                            <Text style={{color: "black"}}>{shelter.phone_number}</Text>
+                            <Text style={{color: "black"}}>{detailResolved.phone_number}</Text>
                         </View>
                     </View>
                 </ScrollView>

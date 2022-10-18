@@ -27,7 +27,7 @@ const Map = ({ route, navigation }) => {
 	const [markersLoading, markers, getMarkers, setMarkersLoading] = useApi(getMarkerSimple, true);
 	const [sheltersLoading, shelters, getSheltersCallback, setSheltersLoading] = useApi(getShelters, true);
 	const [shelterPressed, setShelterPressed] = useState(false);
-	const [selectedShelter, setSelectedShelter] = useState();
+	const [selectedShelterId, setSelectedShelterId] = useState();
 
 	const action = useRecoilValue(actionState);
 	const snapPoints = useMemo(() => {
@@ -44,7 +44,6 @@ const Map = ({ route, navigation }) => {
 	, [action, shelterPressed]);
 
 	useEffect(() => {
-		console.log("action", action);
 		getMarkers();
 		getSheltersCallback();
 	},[])
@@ -65,7 +64,7 @@ const Map = ({ route, navigation }) => {
 			return <UploadBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} cameraCoords={{latitude:cameraInfo.latitude, longitude: cameraInfo.longitude}} />
 		} else {
 			if(shelterPressed) {
-				return <ShelterDetailBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} shelter={selectedShelter}/>
+				return <ShelterDetailBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} shelterId={selectedShelterId}/>
 			} else {
 				return <MarkerDetailBottomSheet navigation={navigation} bottomSheetModalRef={bottomSheetModalRef} selectedMarkerId={selectedMarkerId}/>
 			}
@@ -110,7 +109,7 @@ const Map = ({ route, navigation }) => {
 				bottomSheetModalRef={bottomSheetModalRef}
 				sheltersLoading={sheltersLoading}
 				shelters={shelters}
-				setSelectedShelter={setSelectedShelter}
+				setSelectedShelterId={setSelectedShelterId}
 			/>}
 
 			{
@@ -121,7 +120,7 @@ const Map = ({ route, navigation }) => {
 	);
 };
 
-const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers, setSelectedMarkerId, setShelterPressed, bottomSheetModalRef, sheltersLoading, shelters, setSelectedShelter}) => {
+const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers, setSelectedMarkerId, setShelterPressed, bottomSheetModalRef, sheltersLoading, shelters, setSelectedShelterId}) => {
 	// const [zoom, setZoom] = useState(14);
 	// const [bounds, setBounds] = useState([126.96785851679073 ,37.55217298991133, 126.98468133257103, 37.5776860423595]);
 
@@ -152,9 +151,6 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 		return markerPoints + shelterPoints;
 	}, [markers, shelters])
 
-	useEffect(() => {
-		console.log("markes: ", markers, "shelters: ", shelters);
-	})
 
 	const markerCluster = useSupercluster({
 		points: markers.map((marker) => ({
@@ -201,7 +197,6 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 				setCameraInfo({
 					...e,
 				})
-				console.log(e.contentRegion)
 			}}
 		>
 			{markerCluster.clusters.map(cluster => {
@@ -284,9 +279,11 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 						coordinate={{latitude: latitude, longitude: longitude}}
 						idx={cluster.properties.id}
 						onClick={() => {
-							setSelectedMarkerId(cluster.properties.id);
+							console.log("shelter clicked")
 							setShelterPressed(true);
+							setSelectedShelterId(cluster.properties.id);
 							bottomSheetModalRef.current?.present();
+
 						}}
 					>
 						<Image
