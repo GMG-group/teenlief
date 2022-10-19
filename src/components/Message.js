@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Text, TextInput, View, StyleSheet, ScrollView, Image, TouchableOpacity} from "react-native";
-import test from "@components/img/test.png";
+import test from "@assets/images/test.png";
 import { vw, vh } from "react-native-css-vh-vw";
 import {useRecoilValue} from "recoil";
 import {userState} from "@apis/atoms";

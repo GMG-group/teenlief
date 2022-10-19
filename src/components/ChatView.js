@@ -3,7 +3,7 @@ import {Text, TextInput, View, StyleSheet, ScrollView, Image, TouchableOpacity} 
 import { vw, vh } from "react-native-css-vh-vw";
 import Icon from "react-native-vector-icons/Ionicons";
 import Star from 'react-native-star-view';
-import test from "@components/img/test.png";
+import test from "@assets/images/test.png";
 import {useRecoilValue} from "recoil";
 import {userState} from "@apis/atoms";
 

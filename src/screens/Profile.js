@@ -16,7 +16,7 @@ const ProfileCard = ({user}) => {
 			<View style={{...profileCardStyles.profileCard, backgroundColor:user.role==="Helper" ? '#AE46FF' : '#00A3FF'}}>
 				<View style={profileCardStyles.userInfoContainer}>
 					<View style={profileCardStyles.userInfo}>
-						<Image style={profileCardStyles.profileImage} source={require('../components/img/test.png')}/>
+						<Image style={profileCardStyles.profileImage} source={require('@assets/images/test.png')}/>
 						<View style={profileCardStyles.helperInfoText}>
 							<Text style={profileCardStyles.name}>{user.first_name}</Text>
 							<View style={profileCardStyles.helperStarContainer}>
