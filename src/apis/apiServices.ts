@@ -184,6 +184,7 @@ export const postChargePoint = (header: any, body: any):Promise<AxiosResponse> =
         `${URL}/api/point/`,
         body, {
             headers: {
+                withCredentials: false,
                 'Content-Type': 'multipart/form-data',
                 ...header
             }

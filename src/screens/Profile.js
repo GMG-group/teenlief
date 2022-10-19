@@ -64,8 +64,8 @@ const Profile = () => {
 
 	const bootpay = useRef(null);
 
-	const [postChargePointLoading, postChargePointResolved, chargePoint] = useApi(postChargePoint);
-	const [getUsersLoading, getUsersResolved, getUserCallback] = useApi(getUser);
+	const [postChargePointLoading, postChargePointResolved, chargePoint] = useApi(postChargePoint, true);
+	const [getUsersLoading, getUsersResolved, getUserCallback] = useApi(getUser, true);
 
 	const handleDeposit = () => {
 		const payload = {
