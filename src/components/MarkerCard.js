@@ -1,6 +1,5 @@
 import React from "react";
 import {StyleSheet, Text, View} from "react-native";
-import {vw} from "react-native-css-vh-vw";
 
 const MarkerCard = () => {
     return (
