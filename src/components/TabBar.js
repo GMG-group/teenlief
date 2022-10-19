@@ -8,7 +8,7 @@ import Chat from "~/screens/Chat";
 import Profile from "@screens/Profile";
 import Map from "@screens/Map";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {ACTION, actionState, userState} from "@apis/atoms";
+import {ACTION, SCREEN, actionState, userState} from "@apis/atoms";
 
 export const TabBar = ({ navigation }) => {
 	const [route, setRoute] = useState("Map");
@@ -59,8 +59,8 @@ export const TabBar = ({ navigation }) => {
 					justifyContent: 'center',
 				}}
 				onPress={() => {
-					setRoute("Map");
-					navigation.navigate("Map")
+					setRoute(SCREEN.Map);
+					navigation.navigate(SCREEN.Map)
 				}}>
 				<EntypoIcon style={{alignSelf: 'center'}} name={'home'} color="white" size={scale(25)} />
 				<Text  style={styles.btnCircleText}>홈 화면</Text>
@@ -77,7 +77,7 @@ export const TabBar = ({ navigation }) => {
 				}}
 				onPress={() => {
 					setAction(ACTION.Upload);
-					navigation.navigate("Map")
+					navigation.navigate(SCREEN.Map)
 				}}>
 				<EntypoIcon style={{alignSelf: 'center'}} name={'flag'} color="white" size={scale(25)} />
 				<Text style={styles.btnCircleText}>깃발 놓기</Text>

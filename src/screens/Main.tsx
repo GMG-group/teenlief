@@ -11,11 +11,12 @@ import Login from "@screens/Login"
 import SignUp from '@screens/SignUp';
 import ChatRoom from '@screens/ChatRoom';
 import Review from "@screens/Review";
-import ReviewList from "@screens/ReviewList";
+import {SCREEN} from "@apis/atoms";
 import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
 import Promise from "@screens/Promise";
 import SplashScreen from '@screens/SplashScreen';
+import MarkerManage from '@screens/profile/MarkerManage';
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
@@ -43,14 +44,14 @@ const Main = () => {
 								token.accessToken === "" ? (
 									<>
 										<Stack.Screen
-											name='Login'
+											name={SCREEN.Login}
 											component={Login}
 											options={{
 												headerShown: false,
 											}}
 										/>
 										<Stack.Screen
-											name='Sign up'
+											name={SCREEN.SignUp}
 											component={SignUp}
 											options
 												={{
@@ -61,29 +62,36 @@ const Main = () => {
 								) : null
 							}
 							<Stack.Screen
-								name='Home'
+								name={SCREEN.Home}
 								component={TabBar}
 								options={{
 									headerShown: false,
 								}}
 							/>
 							<Stack.Screen
-								name='Review'
+								name={SCREEN.Review}
 								component={Review}
 								options={{
 									headerShown: false,
 								}}
 							/>
 							<Stack.Screen
-								name='ChatRoom'
+								name={SCREEN.ChatRoom}
 								component={ChatRoom}
 								options={{
 									headerShown: false,
 								}}
 							/>
 							<Stack.Screen
-								name='Promise'
+								name={SCREEN.Promise}
 								component={Promise}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name={SCREEN.MarkerManage}
+								component={MarkerManage}
 								options={{
 									headerShown: false,
 								}}

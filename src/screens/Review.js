@@ -5,7 +5,7 @@ import { vw, vh } from "react-native-css-vh-vw";
 import { TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useRecoilValue} from "recoil";
-import {userState} from "@apis/atoms";
+import {SCREEN} from "@apis/atoms";
 
 const Review = ({route, navigation}) => {
     const [rating, setRating] = useState(0);
@@ -43,7 +43,7 @@ const Review = ({route, navigation}) => {
 
             <TextInput value={review} onChangeText={setReview} multiline={true} numberOfLines = {20} style={styles.textInput} />
             
-            <TouchableOpacity style={styles.btn} onPress={() => {navigation.navigate("Home")}}>
+            <TouchableOpacity style={styles.btn} onPress={() => {navigation.navigate(SCREEN.Home)}}>
                 <Text style={{color: 'white', fontSize: 17}}>완료</Text>
             </TouchableOpacity>
         </View>

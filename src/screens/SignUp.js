@@ -14,9 +14,8 @@ import SwitchSelector from "react-native-switch-selector";
 import {usePostLoginCallback, usePostRegistrationCallback} from "@apis/apiCallbackes";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import Icon from 'react-native-vector-icons/Entypo';
+import {SCREEN} from '@apis/atoms';
 
-const vw = Dimensions.get('window').width;
-const vh = Dimensions.get('window').height;
 const color = '#1E90FF';
 const options = [
     { label: '청소년', value: 'Teen' },
@@ -190,7 +189,7 @@ const SignUp = ( { navigation } ) => {
 
                 <View style={bottomStyle.signupText}>
                     <Text style={{color: 'black'}}>계정이 있으신가요?</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('Login') }>
+                    <TouchableOpacity onPress={() => navigation.navigate(SCREEN.Login) }>
                         <Text style={{color: color}}> 로그인</Text>
                     </TouchableOpacity>
                 </View>

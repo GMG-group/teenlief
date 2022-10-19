@@ -8,7 +8,7 @@ import { Message, PromiseMessage } from '@components/Message';
 import {DOMAIN, getAdultFilter, getChatLog} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {tokenState, userState} from "@apis/atoms";
+import {tokenState, userState, SCREEN} from "@apis/atoms";
 
 import test from "@assets/images/test.png";
 import Toast from "react-native-toast-message";
@@ -134,7 +134,7 @@ const ChatRoom = ({ navigation, route }) => {
             <View style={styles.chatContainer}>
                 <TouchableOpacity
                     onPress={() => navigation.push(
-                        'Promise',
+                        SCREEN.Promise,
                         {
                             ws: webSocket.current,
                             roomName: route.params.roomName,
