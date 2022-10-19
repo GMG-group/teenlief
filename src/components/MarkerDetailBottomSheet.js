@@ -134,12 +134,6 @@ const MarkerDetailBottomSheet = ({ navigation, bottomSheetModalRef, selectedMark
 		console.log("HelperInfoBottomSheet")
 	},[selectedMarkerId])
 
-	useEffect(() => {
-		if(!detailLoading) {
-			console.log("detailResolved", detailResolved);
-		}
-	},[detailLoading])
-
 	return (
 		<View style={styles.container}>
 			{/*들어가야 할 내용*/}

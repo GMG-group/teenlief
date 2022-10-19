@@ -5,7 +5,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { vw, vh } from "react-native-css-vh-vw";
 import { Message, PromiseMessage } from '@components/Message';
-import {DOMAIN, getChatLog} from "@apis/apiServices";
+import {DOMAIN, getAdultFilter, getChatLog} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {tokenState, userState} from "@apis/atoms";
@@ -24,6 +24,7 @@ const ChatRoom = ({ navigation, route }) => {
     const user = useRecoilValue(userState);
 
     const [loading, resolved, callApi] = useApi(getChatLog, true);
+    const [filterLoading, filterResolved, filterApi] = useApi(getAdultFilter);
 
     useEffect(() => {
         callApi(route.params.id)
@@ -57,20 +58,23 @@ const ChatRoom = ({ navigation, route }) => {
     }, [route.params.id]);
 
     const onText = () => {
+        filterApi(chatInput)
+            .then((response) => {
+                if(response.adult === "1") {
+                    Toast.show({
+                        type: 'error',
+                        text1: '비속어 또는 부적절한 단어가 감지되었습니다.',
+                        text2: '계정이 차단 됩니다.',
+                    })
+                    setTimeout(() => {
+                        logout(setToken);
+                    }, 3000);
+                    webSocket.current.send(JSON.stringify({content: "***"}));
+                } else {
+                    webSocket.current.send(JSON.stringify({content: chatInput}));
+                }
+        })
 
-        if(chatInput.includes('ㅅㅂ') || chatInput.includes('비속어') || chatInput.includes('fuck')) {
-            Toast.show({
-                type: 'error',
-                text1: '비속어 또는 부적절한 단어가 감지되었습니다.',
-                text2: '계정이 차단 됩니다.',
-            })
-            setTimeout(() => {
-                logout(setToken);
-            }, 3000);
-            webSocket.current.send(JSON.stringify({content: "***"}));
-        } else {
-            webSocket.current.send(JSON.stringify({content: chatInput}));
-        }
         setChatInput('');
     }
 
