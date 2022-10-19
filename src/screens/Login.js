@@ -9,7 +9,6 @@ import { View,
 } from "react-native";
 import SwitchSelector from 'react-native-switch-selector';
 import Background from "@components/Background";
-import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import {usePostLoginCallback} from "@apis/apiCallbackes";
 import Icon from 'react-native-vector-icons/Entypo';

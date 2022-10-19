@@ -1,12 +1,11 @@
 import axios, {AxiosResponse} from "axios";
 import Config from "react-native-config";
 
-const PROTOCOL = "https://";
+const PROTOCOL = "http://";
 export const DOMAIN = "teenlief.com"
-// const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
+const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
 const IOS_DEV_URL = PROTOCOL +  "127.0.0.1:8000";
-const URL = PROTOCOL + DOMAIN;
-// const URL = AND_DEV_URL;
+export const URL = AND_DEV_URL;
 
 export const postLogin = (body: any):Promise<AxiosResponse> => {
     return axios.post (
@@ -176,6 +175,18 @@ export const getShelters = (header: any) :Promise<AxiosResponse> => {
         {
             withCredentials: false,
             headers: header
+        }
+    )
+}
+
+export const postChargePoint = (header: any, body: any):Promise<AxiosResponse> => {
+    return axios.post(
+        `${URL}/api/point/`,
+        body, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                ...header
+            }
         }
     )
 }

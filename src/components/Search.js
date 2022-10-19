@@ -4,10 +4,9 @@ import {
 	View,
 	StyleSheet,
 	Text,
-	ScrollView, FlatList, TouchableOpacity, Dimensions
+	FlatList
 } from "react-native";
-import Icon from "react-native-vector-icons/dist/Feather";
-import { vw, vh } from "react-native-css-vh-vw";
+import { vw } from "react-native-css-vh-vw";
 import useApi from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
 

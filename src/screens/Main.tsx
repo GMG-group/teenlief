@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import {
 	NavigationContainer,
 	NavigationContainerRef
@@ -30,7 +30,7 @@ const Main = () => {
 	},[token]);
 
 	return (
-		<SafeAreaView style={{flex: 1}}>
+		<View style={{flex: 1}}>
 			{
 				splash ?
 					<SplashScreen
@@ -91,7 +91,7 @@ const Main = () => {
 						</Stack.Navigator>
 					</NavigationContainer>
 			}
-		</SafeAreaView>
+		</View>
 	);
 };
 

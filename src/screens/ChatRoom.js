@@ -29,7 +29,7 @@ const ChatRoom = ({ navigation, route }) => {
     useEffect(() => {
         callApi(route.params.id)
             .then((res) => {
-                webSocket.current = new WebSocket(`wss://${DOMAIN}/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
+                webSocket.current = new WebSocket(`ws://10.0.2.2:8000/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
 
                 webSocket.current.onopen = () => {
                     console.log('connected');

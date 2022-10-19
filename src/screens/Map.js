@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import NaverMapView, { Marker } from "react-native-nmap";
 import {BottomSheetModal} from "@gorhom/bottom-sheet";
-import {Button, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Dimensions, Image, Platform, StyleSheet, Text, View} from "react-native";
 import Search from "@components/Search";
 import MarkerDetailBottomSheet from "@components/MarkerDetailBottomSheet";
 import useApi from "@apis/useApi";
