@@ -76,7 +76,7 @@ const SocialLogin = ({navigation}) => {
             {/* social login container here */}
             <View style={styles.socialLoginContainer}>
                 <TouchableOpacity style={styles.socialLoginBox} onPress={loginGoogle}>
-                    <Image style={{width: '30%'}} source={require("./img/google.png")} resizeMode='contain' />
+                    <Image style={{width: '30%'}} source={require("@assets/images/google.png")} resizeMode='contain' />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.socialLoginBox}>
                     <View />

@@ -3,7 +3,7 @@ import {Text, TextInput, View, StyleSheet, ScrollView, FlatList} from "react-nat
 import { vw, vh } from "react-native-css-vh-vw";
 import Icon from "react-native-vector-icons/Ionicons";
 import ChatView from '@components/ChatView';
-import test from "@components/img/test.png";
+import test from "@assets/images/test.png";
 import useApi from "@apis/useApi";
 import {getChatRoomList} from "@apis/apiServices";
 import {useRecoilValue} from "recoil";

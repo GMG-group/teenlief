@@ -29,7 +29,7 @@ const Review = ({route, navigation}) => {
                 <Text style={styles.title}><Icon name='left' size={20} />친절한 헬퍼를 위해 리뷰를 작성해 주세요!</Text>
             </TouchableOpacity>
 
-            <Image style={styles.profile} source={require("../components/img/test.png")} />
+            <Image style={styles.profile} source={require("@assets/images/test.png")} />
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>{helper.first_name}</Text>
             <Text style={{fontSize: 15, marginBottom: 5}}>{helper.email}</Text>
             <View>

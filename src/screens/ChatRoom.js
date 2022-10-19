@@ -10,7 +10,7 @@ import useApi from "@apis/useApi";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {tokenState, userState} from "@apis/atoms";
 
-import test from "@components/img/test.png";
+import test from "@assets/images/test.png";
 import Toast from "react-native-toast-message";
 import {logout} from "@utils/Logout";
 
