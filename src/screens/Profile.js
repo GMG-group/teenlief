@@ -165,7 +165,8 @@ const Profile = ({navigation}) => {
 					<>
 						<Text style={{...containerStyles.label, marginTop: 30}}>포인트 관리</Text>
 						<CircularContainer title={`포인트 ${10000}원`}>
-							<CircularButton title={"출금하기"} color={'#AE46FF'}/>
+							<CircularButton title={"입금하기"} color={'#AE46FF'} onPress={handleDeposit} />
+							<CircularButton title={"출금하기"} color={'#AE46FF'} />
 						</CircularContainer>
 						<Text style={{...containerStyles.label, marginTop: 30}}>활동 관리</Text>
 						<CircularContainer title={`현재 등록된 리뷰 ${100}개`}>

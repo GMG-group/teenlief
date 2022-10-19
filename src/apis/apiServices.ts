@@ -140,10 +140,14 @@ export const postTokenRefresh = (body:any):Promise<AxiosResponse> => {
     );
 }
 
-export const getTag = (body: any):Promise<AxiosResponse> => {
+export const getTag = (header: any):Promise<AxiosResponse> => {
     console.log("getTAg1!!")
     return axios.get(
-        `${URL}/api/tag/`
+        `${URL}/api/tag/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
     )
 }
 

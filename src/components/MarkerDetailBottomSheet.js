@@ -17,9 +17,8 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 		<View>
 			<View style={styles.helperInfoContainer}>
 				<View style={styles.helperInfo}>
-					<Image style={styles.profileImage} source={require('@assets/images/test.png')}>
+					<Image style={styles.profileImage} source={require('@assets/images/test.png')} />
 
-					</Image>
 				<View style={styles.helperInfoText}>
 					<Text style={styles.name}>{detail.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
@@ -34,31 +33,46 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 				</View>
 			</View>
 
-				<View style={styles.connectButton}>
-					<TouchableOpacity
-						onPress={() => {
-							if (!postResolved) {
-								const formData = new FormData();
-								formData.append('helper_id', detail.helper.id);
-								formData.append('teen_id', user.user.id);
-								postChatRoomApi(formData)
-									.then((res) => {
-										navigation.navigate(SCREEN.ChatRoom, {
-											id: res.id,
-											roomName: res.room_name,
-											teen: res.teen,
-											helper: res.helper,
-										});
+				{
+					user?.user.role === 'Teen' ? (
+						<View style={styles.connectButton}>
+							<TouchableOpacity
+								onPress={() => {
+									if (!postResolved) {
+										const formData = new FormData();
+										formData.append('helper_id', detail.helper.id);
+										formData.append('teen_id', user.user.id);
+										postChatRoomApi(formData)
+											.then((res) => {
+												navigation.navigate(SCREEN.ChatRoom, {
+													id: res.id,
+													roomName: res.room_name,
+													teen: res.teen,
+													helper: res.helper,
+												});
 
-										bottomSheetModalRef.current?.close();
-									})
-								console.log("연결");
-							}
-						}}
-					>
-						<Text style={{color: "#ffffff"}}>연결</Text>
-					</TouchableOpacity>
-				</View>
+												bottomSheetModalRef.current?.close();
+											})
+										console.log("연결");
+									}
+								}}
+							>
+								<Text style={{color: "#ffffff"}}>연결</Text>
+							</TouchableOpacity>
+						</View>
+					) : (
+						<View style={{...styles.connectButton, backgroundColor: "#AE46FF"}}>
+							<TouchableOpacity
+								onPress={() => {
+									console.log("후원");
+								}}
+							>
+								<Text style={{color: "white"}}>후원</Text>
+							</TouchableOpacity>
+						</View>
+					)
+				}
+
 			</View>
 			<ScrollView>
 				<View style={styles.canHelpInfo}>
