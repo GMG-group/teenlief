@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import Star from 'react-native-star-view';
 import test from "@assets/images/test.png";
 import {useRecoilValue} from "recoil";
-import {userState} from "@apis/atoms";
+import {userState, SCREEN} from "@apis/atoms";
 
 const ChatView = ({ navigation, data }) => {
     const [heart, setHeart] = useState(data.favorite);
@@ -14,7 +14,7 @@ const ChatView = ({ navigation, data }) => {
     return (
         <TouchableOpacity
             style={styles.container}
-            onPress={() => navigation.push('ChatRoom', {
+            onPress={() => navigation.push(SCREEN.ChatRoom, {
                 id: data.id,
                 roomName: data.roomName,
                 profile: data.profile,

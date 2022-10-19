@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import {getMarkerDetail, getTag, postChatRoom} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useRecoilValue} from "recoil";
-import {userState} from "@apis/atoms";
+import {userState, SCREEN} from "@apis/atoms";
 
 const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
@@ -43,7 +43,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 								formData.append('teen_id', user.user.id);
 								postChatRoomApi(formData)
 									.then((res) => {
-										navigation.navigate('ChatRoom', {
+										navigation.navigate(SCREEN.ChatRoom, {
 											id: res.id,
 											roomName: res.room_name,
 											teen: res.teen,
@@ -110,7 +110,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
-									navigation.navigate('Review');
+									navigation.navigate(SCREEN.Review);
 									bottomSheetModalRef.current.close();
 								}}>
 									<Text style={{color: "#2990f6"}}>모든 리뷰 보기</Text>

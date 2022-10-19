@@ -1,13 +1,9 @@
 import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useRecoilState} from "recoil";
-import {Touchable} from "react-native-toast-message/lib/src/components/Touchable";
-import {tokenState, userState} from "@apis/atoms";
-import RNRestart from "react-native-restart";
-import {TouchableWithoutFeedback} from "@gorhom/bottom-sheet";
+import {tokenState, userState, SCREEN} from "@apis/atoms";
 import {vh, vw} from "react-native-css-vh-vw";
 import { Shadow } from 'react-native-shadow-2';
-import {Line} from "react-native-svg";
 import {logout} from "@utils/Logout";
 
 const ProfileCard = ({user}) => {
@@ -59,7 +55,7 @@ const LineButton = ({title, onPress}) => (
 	</TouchableOpacity>
 )
 
-const Profile = () => {
+const Profile = ({navigation}) => {
 	const [user, setUser] = useRecoilState(userState)
 	const [token, setToken] = useRecoilState(tokenState);
 
@@ -83,7 +79,7 @@ const Profile = () => {
 							<CircularButton title={"전체보기"} color={'#AE46FF'}/>
 						</CircularContainer>
 						<CircularContainer title={`현재 등록된 마커 ${3}개`} style={{marginTop: 12}}>
-							<CircularButton title={"전체보기"} color={'#AE46FF'}/>
+							<CircularButton title={"전체보기"} color={'#AE46FF'} onPress={() => {navigation.push(SCREEN.MarkerManage)}}/>
 						</CircularContainer>
 					</>
 				) : (

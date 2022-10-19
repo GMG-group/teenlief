@@ -49,10 +49,6 @@ const Map = ({ route, navigation }) => {
 	},[])
 
 	useEffect(() => {
-		console.log(cameraInfo);
-	},[cameraInfo]);
-
-	useEffect(() => {
 		if(action===ACTION.Upload) {
 			bottomSheetModalRef.current?.present();
 		}
@@ -227,7 +223,6 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 						key={`marker-${cluster.properties.id}`}
 						coordinate={{latitude: latitude, longitude: longitude}}
 						onClick={() => {
-							console.log("marker!!!")
 							setSelectedMarkerId(cluster.properties.id);
 							setShelterPressed(false);
 							bottomSheetModalRef.current?.present();
@@ -270,7 +265,6 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 						coordinate={{latitude: latitude, longitude: longitude}}
 						idx={cluster.properties.id}
 						onClick={() => {
-							console.log("shelter clicked")
 							setShelterPressed(true);
 							setSelectedShelterId(cluster.properties.id);
 							bottomSheetModalRef.current?.present();

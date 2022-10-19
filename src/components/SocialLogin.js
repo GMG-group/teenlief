@@ -36,7 +36,7 @@ const SocialLogin = ({navigation}) => {
                 "code": user.serverAuthCode,
                 "id_token": user.idToken
             }).then(r => {
-                navigation.navigate("Map")
+                navigation.navigate(Screen.Map)
             })
         }
 
