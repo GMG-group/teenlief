@@ -2,17 +2,20 @@ import React from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {vw} from "react-native-css-vh-vw";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
+import {Shadow} from "react-native-shadow-2";
 
 const Header = ({navigation, title}) => {
     return (
-        <View style={styles.container}>
-            <TouchableOpacity
-                onPress={() => navigation.goBack()}
-            >
-                <EvilIcons name="chevron-left" size={45} color={'white'} />
-            </TouchableOpacity>
-            <Text style={styles.title}>{title}</Text>
-        </View>
+        <Shadow>
+            <View style={styles.container}>
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                >
+                    <EvilIcons name="chevron-left" size={45} color={'white'} />
+                </TouchableOpacity>
+                <Text style={styles.title}>{title}</Text>
+            </View>
+        </Shadow>
     )
 }
 
