@@ -1,16 +1,36 @@
-import React from "react";
-import {ScrollView, StyleSheet, View} from "react-native";
+import React, {useEffect} from "react";
+import {ScrollView, StyleSheet, Text, View} from "react-native";
 import MarkerCard from "@components/MarkerCard";
 import Header from "@components/Header";
+import {getMyMarker} from "@apis/apiServices";
+import useApi from "@apis/useApi";
 
 const MarkerManage = ({navigation}) => {
+    const [myMarkerLoading, myMarkerResolved, myMarkerApi] = useApi(getMyMarker, true);
+
+    useEffect(() => {
+       myMarkerApi()
+           .then((response) => {
+               console.log("finish", response);
+           })
+    },[])
+
+    if(myMarkerLoading) {
+        return (
+            <Text>Loading</Text>
+        )
+    }
+
     return (
         <>
             <Header navigation={navigation} title={"마커 관리하기"}/>
             <ScrollView style={styles.container}>
 
-
-                <MarkerCard/>
+                {
+                    myMarkerResolved.map((marker, idx) => (
+                        <MarkerCard key={`MarkerCard-${idx}`} marker={marker}/>
+                    ))
+                }
             </ScrollView>
         </>
 
