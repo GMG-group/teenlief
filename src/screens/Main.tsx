@@ -11,6 +11,7 @@ import Login from "@screens/Login"
 import SignUp from '@screens/SignUp';
 import ChatRoom from '@screens/ChatRoom';
 import Review from "@screens/Review";
+import Donate from "@screens/Donate";
 import {SCREEN} from "@apis/atoms";
 import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
@@ -92,6 +93,13 @@ const Main = () => {
 							<Stack.Screen
 								name={SCREEN.MarkerManage}
 								component={MarkerManage}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name={SCREEN.Donate}
+								component={Donate}
 								options={{
 									headerShown: false,
 								}}

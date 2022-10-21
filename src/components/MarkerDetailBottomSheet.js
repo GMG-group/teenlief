@@ -64,7 +64,8 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 						<View style={{...styles.connectButton, backgroundColor: "#AE46FF"}}>
 							<TouchableOpacity
 								onPress={() => {
-									console.log("후원");
+									navigation.navigate(SCREEN.Donate);
+									bottomSheetModalRef.current?.close();
 								}}
 							>
 								<Text style={{color: "white"}}>후원</Text>
