@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { TextInput, View, StyleSheet, Text, TouchableOpacity, Dimensions, SafeAreaView, Image } from "react-native";
 import {GoogleSignin, statusCodes} from "@react-native-google-signin/google-signin";
 import {useRecoilState} from "recoil";
-import {tokenState} from "@apis/atoms";
+import {SCREEN, tokenState} from "@apis/atoms";
 import {usePostGoogleLoginFinishCallback} from "@apis/apiCallbackes";
 
 const color = '#00AAFF';
@@ -36,7 +36,7 @@ const SocialLogin = ({navigation}) => {
                 "code": user.serverAuthCode,
                 "id_token": user.idToken
             }).then(r => {
-                navigation.navigate(Screen.Map)
+                navigation.navigate(SCREEN.Map)
             })
         }
 
