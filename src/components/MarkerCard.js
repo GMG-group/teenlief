@@ -2,17 +2,22 @@ import React from "react";
 import {Image, StyleSheet, Text, View} from "react-native";
 import useApi from "@apis/useApi";
 import {getMarkerDetail} from "@apis/apiServices";
+import {Tag} from "@components/Tag";
 
-const MarkerCard = ({marker}) => {
+const MarkerCard = ({marker, style}) => {
     return (
-        <View style={styles.container}>
+        <View style={{...styles.container, ...style}}>
             <View style={styles.rowDivider}>
-                <Image style={styles.image} source={require("@assets/images/test.png")}></Image>
+                <Image style={styles.image} source={{uri: marker.image}}></Image>
                 <View style={styles.contentContainer}>
                     <View style={styles.content}>
                         <Text style={styles.contentDetail}>{`장소 : ${marker.address}`}</Text>
-                        <Text style={styles.contentDetail}>{`태그 : ${marker.address}`}</Text>
-                        <Text style={styles.contentDetail}>{`평점 : ${marker.address}`}</Text>
+                        <View style={styles.tagContainer}>
+                            <Text style={styles.contentDetail}>{`태그 :`}</Text>
+                            <Tag tags={marker.tag} size={'s'}/>
+                        </View>
+
+                        <Text style={styles.contentDetail}>{`평점 : ${5}`}</Text>
                     </View>
                 </View>
             </View>
@@ -45,7 +50,12 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     contentDetail: {
-        color: "#fff"
+        color: "#fff",
+        fontSize: 10
+    },
+    tagContainer: {
+        flexDirection: "row",
+        justifyContent: 'flex-start'
     }
 });
 

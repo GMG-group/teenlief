@@ -5,10 +5,14 @@ import {getTag} from "@apis/apiServices";
 import {FlatList, Text, View} from "react-native";
 
 
-export const Tag = ({tags, all=false}) => {
+export const Tag = ({tags, all=false, size='m'}) => {
     const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
     const [filterTag, setFilterTag] = useState([]);
     const tagListRef = useRef(null);
+
+    const height = size === 'm' ? 25 : 12;
+    const width = size === 'm' ? 90 : 40;
+    const fontSize = size === 'm' ? 14 : 9;
 
     useEffect(() => {
         tagApi()
@@ -41,8 +45,8 @@ export const Tag = ({tags, all=false}) => {
                 width: filterTag.length * 110,
             }}
             renderItem={({item}) =>
-                <View style={styles.filterItem} key={item.id}>
-                    <Text style={{color: 'black'}}>{ item }</Text>
+                <View style={{...styles.filterItem, width: width, height: height}} key={item.id}>
+                    <Text style={{color: 'black', fontSize: fontSize}}>{ item }</Text>
                 </View>
             }
             keyExtractor={(item, index) => 'key' + index}
@@ -57,7 +61,6 @@ const styles = StyleSheet.create({
     filter: {
         display: "flex",
         flexDirection: "row",
-        marginTop: 10,
     },
     tagText: {
         color: 'black'
@@ -66,8 +69,6 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: 90,
-        height: 30,
         backgroundColor: "white",
         borderColor: "lightgray",
         borderRadius: 50,

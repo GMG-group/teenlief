@@ -28,7 +28,7 @@ const MarkerManage = ({navigation}) => {
 
                 {
                     myMarkerResolved.map((marker, idx) => (
-                        <MarkerCard key={`MarkerCard-${idx}`} marker={marker}/>
+                        <MarkerCard style={styles.markerCard} key={`MarkerCard-${idx}`} marker={marker}/>
                     ))
                 }
             </ScrollView>
@@ -40,6 +40,9 @@ const MarkerManage = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         padding: 20
+    },
+    markerCard: {
+        marginBottom: 20
     }
 });
 
