@@ -195,3 +195,13 @@ export const postChargePoint = (header: any, body: any):Promise<AxiosResponse> =
         }
     )
 }
+
+export const getMyMarker = (header: any) :Promise<AxiosResponse> => {
+    return axios.get(
+        `${URL}/api/marker/my/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
