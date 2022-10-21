@@ -10,6 +10,7 @@ import Icon from "react-native-vector-icons/dist/Feather";
 import { vw, vh } from "react-native-css-vh-vw";
 import useApi from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
+import {Tag} from "@components/Tag";
 
 const Search = ({displayTag}) => {
 	const [search, setSearch] = useState(null);
@@ -46,26 +47,7 @@ const Search = ({displayTag}) => {
 				</View>
 			</View>
 
-			<FlatList
-				ref={tagListRef}
-				data={filterTag}
-				style={styles.filter}
-				contentContainerStyle={{
-					flexGrow: 1,
-					alignItems: 'center',
-					justifyContent: 'center',
-					width: filterTag.length * 110,
-				}}
-				renderItem={({item}) =>
-					<View style={styles.filterItem} key={item.id}>
-						<Text style={{color: 'black'}}>{ item }</Text>
-					</View>
-				}
-				keyExtractor={(item, index) => 'key' + index}
-				horizontal
-				showsVerticalScrollIndicator={false}
-				showsHorizontalScrollIndicator={false}
-			/>
+			<Tag all={true}/>
 
 		</View>
 	);
