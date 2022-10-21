@@ -96,6 +96,7 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
         let formData = new FormData();
         formData.append("longitude", cameraCoords.longitude);
         formData.append("latitude", cameraCoords.latitude);
+        formData.append("address", address);
         formData.append("image", {
             uri: image.path,
             type: image.mime,
