@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {StyleSheet, Text, TextInput, TouchableHighlight, View} from "react-native";
 import Header from "@components/Header";
 import {vh, vw} from "react-native-css-vh-vw";
@@ -11,6 +11,7 @@ import Toast from "react-native-toast-message";
 const Donate = ({ navigation, route }) => {
     const [postDonateLoading, postDonateResolved, donateApi] = useApi(postPointEvent, true);
     const user = useRecoilValue(userState);
+    const [donatePoint, setDonatePoint] = useState(0);
 
     const donate = () => {
         if (user.user.id === route.params.helper.id) {
@@ -23,7 +24,7 @@ const Donate = ({ navigation, route }) => {
         }
         console.log(route.params);
         const formData = new FormData();
-        formData.append('point', 1000);
+        formData.append('point', donatePoint);
         formData.append('sender', user.user.id);
         formData.append('receiver', route.params.helper.id);
 
@@ -56,8 +57,8 @@ const Donate = ({ navigation, route }) => {
                     <View style={styles.cardLeft} />
                     <View style={styles.cardRight} />
                     <View style={styles.cardTextContainer}>
-                        <Text style={styles.cardText}>김홍길</Text>
-                        <Text style={{ ...styles.cardText, fontSize: 20, marginTop: vh(1) }}>P 20000</Text>
+                        <Text style={styles.cardText}>{user?.user.first_name}</Text>
+                        <Text style={{ ...styles.cardText, fontSize: 20, marginTop: vh(1) }}>P {user?.user.point}</Text>
                         <Text style={{ ...styles.cardText, fontSize: 20, marginTop: vh(1), letterSpacing: 3 }}>
                             •••• •••• •••• 1234
                         </Text>
@@ -76,7 +77,7 @@ const Donate = ({ navigation, route }) => {
                             maxLength={16}
                             editable={false}
                             color="#000"
-                            value="김홍길"
+                            value={route.params.helper.first_name}
                         />
                     </View>
                     <View style={styles.inputItem}>
@@ -87,6 +88,8 @@ const Donate = ({ navigation, route }) => {
                             keyboardType="numeric"
                             maxLength={16}
                             color="#000"
+                            value={donatePoint}
+                            onChangeText={(text) => setDonatePoint(text)}
                         />
                     </View>
 
