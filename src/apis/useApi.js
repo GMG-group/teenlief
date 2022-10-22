@@ -18,8 +18,8 @@ export const useApi = (api, authHeader=false) => {
     }
 
     const errorHandling = (err, refreshToken, ...args) => {
-        if(err.response.status === 403) {
-            console.log("403")
+        if(err.response.status === 403 || err.response.status === 401) {
+            console.log("refresh token")
             return postTokenRefresh({"refresh": refreshToken})
                 .then((status) => {
                     console.log("tokenRefresh finished")

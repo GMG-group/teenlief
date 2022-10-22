@@ -183,7 +183,7 @@ export const getShelters = (header: any) :Promise<AxiosResponse> => {
     )
 }
 
-export const postChargePoint = (header: any, body: any):Promise<AxiosResponse> => {
+export const postPointEvent = (header: any, body: any):Promise<AxiosResponse> => {
     return axios.post(
         `${URL}/api/point/`,
         body, {

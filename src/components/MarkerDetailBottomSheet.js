@@ -65,7 +65,9 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation }) => {
 						<View style={{...styles.connectButton, backgroundColor: "#AE46FF"}}>
 							<TouchableOpacity
 								onPress={() => {
-									navigation.navigate(SCREEN.Donate);
+									navigation.navigate(SCREEN.Donate, {
+										helper: detail.helper,
+									});
 									bottomSheetModalRef.current?.close();
 								}}
 							>

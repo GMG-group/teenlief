@@ -7,7 +7,7 @@ import { Shadow } from 'react-native-shadow-2';
 import {logout} from "@utils/Logout";
 import { BootpayWebView } from 'react-native-bootpay';
 import useApi from "@apis/useApi";
-import {getUser, postChargePoint} from "@apis/apiServices";
+import {getUser, postPointEvent} from "@apis/apiServices";
 
 const ProfileCard = ({user}) => {
 	return (
@@ -64,7 +64,7 @@ const Profile = ({navigation}) => {
 
 	const bootpay = useRef(null);
 
-	const [postChargePointLoading, postChargePointResolved, chargePoint] = useApi(postChargePoint, true);
+	const [postChargePointLoading, postChargePointResolved, chargePoint] = useApi(postPointEvent, true);
 	const [getUsersLoading, getUsersResolved, getUserCallback] = useApi(getUser, true);
 
 	const handleDeposit = () => {
