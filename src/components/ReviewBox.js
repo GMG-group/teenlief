@@ -6,7 +6,7 @@ const ReviewBox = () => {
     return (
         <View style={styles.container}>
             <View>
-                <Image style={styles.profile} source={require("@components/img/test.png")} />
+                <Image style={styles.profile} source={require("@assets/images/test.png")} />
                 <Text>홍길동</Text>
             </View>
             <View>

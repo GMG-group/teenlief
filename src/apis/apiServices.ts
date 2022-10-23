@@ -1,12 +1,12 @@
 import axios, {AxiosResponse} from "axios";
 import Config from "react-native-config";
 
-const PROTOCOL = "https://";
-export const DOMAIN = "teenlief.com"
-// const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
+const PROTOCOL = "http://";
+// export const DOMAIN = "teenlief.com"
+const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
 const IOS_DEV_URL = PROTOCOL +  "127.0.0.1:8000";
-const URL = PROTOCOL + DOMAIN;
-// const URL = AND_DEV_URL;
+// const URL = PROTOCOL + DOMAIN;
+const URL = AND_DEV_URL;
 
 export const postLogin = (body: any):Promise<AxiosResponse> => {
     return axios.post (
@@ -173,6 +173,26 @@ export const postChatRoom = (header: any, body: any):Promise<AxiosResponse> => {
 export const getShelters = (header: any) :Promise<AxiosResponse> => {
     return axios.get(
         `${URL}/api/shelter/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
+
+export const getMyMarker = (header: any) :Promise<AxiosResponse> => {
+    return axios.get(
+        `${URL}/api/marker/my/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
+
+export const deleteMarker = (header: any, id: number) :Promise<AxiosResponse> => {
+    return axios.delete(
+        `${URL}/api/marker/${id}/`,
         {
             withCredentials: false,
             headers: header

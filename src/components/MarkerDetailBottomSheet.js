@@ -6,9 +6,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import {getMarkerDetail, getTag, postChatRoom} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useRecoilValue} from "recoil";
-import {userState} from "@apis/atoms";
+import {userState, SCREEN} from "@apis/atoms";
+import {Tag} from "@components/Tag";
 
-const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
+const MarkerDetail = ({ bottomSheetModalRef, detail, navigation }) => {
 	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
 
 	const user = useRecoilValue(userState);
@@ -17,7 +18,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 		<View>
 			<View style={styles.helperInfoContainer}>
 				<View style={styles.helperInfo}>
-					<Image style={styles.profileImage} source={require('./img/test.png')}>
+					<Image style={styles.profileImage} source={require('@assets/images/test.png')}>
 
 					</Image>
 				<View style={styles.helperInfoText}>
@@ -43,7 +44,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 								formData.append('teen_id', user.user.id);
 								postChatRoomApi(formData)
 									.then((res) => {
-										navigation.navigate('ChatRoom', {
+										navigation.navigate(SCREEN.ChatRoom, {
 											id: res.id,
 											roomName: res.room_name,
 											teen: res.teen,
@@ -67,14 +68,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 						<Text>오전 9:00부터 메세지 가능</Text>
 					</View>
 					<View style={styles.tag}>
-						{
-							detail.tag.map((tagNum) => (
-								<View key={"tag"+tagNum} style={styles.tagItem}>
-									<Text style={{color: 'black'}}>{tags[tagNum-1].tag}</Text>
-								</View>
-							))
-						}
-
+						<Tag tags={detail.tag}/>
 					</View>
 				</View>
 				<View style={styles.activityImages}>
@@ -110,7 +104,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
-									navigation.navigate('Review');
+									navigation.navigate(SCREEN.Review);
 									bottomSheetModalRef.current.close();
 								}}>
 									<Text style={{color: "#2990f6"}}>모든 리뷰 보기</Text>
@@ -126,12 +120,9 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 
 const MarkerDetailBottomSheet = ({ navigation, bottomSheetModalRef, selectedMarkerId }) => {
 	const [detailLoading, detailResolved, getDetail] = useApi(getMarkerDetail, true);
-	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
 
 	useEffect(() => {
 		getDetail(selectedMarkerId);
-		tagApi();
-		console.log("HelperInfoBottomSheet")
 	},[selectedMarkerId])
 
 	return (
@@ -147,7 +138,7 @@ const MarkerDetailBottomSheet = ({ navigation, bottomSheetModalRef, selectedMark
 			{/*8. 헬퍼의 활동 사진(이건 헬퍼가 직접 올리는건가?)*/}
 			{/*9. 북마크 버튼*/}
 			{
-				(tagLoading || detailLoading) ? (
+				(detailLoading) ? (
 					<View>
 						<Text>Loading</Text>
 					</View>
@@ -155,7 +146,6 @@ const MarkerDetailBottomSheet = ({ navigation, bottomSheetModalRef, selectedMark
 					<MarkerDetail
 						bottomSheetModalRef={bottomSheetModalRef}
 						detail={detailResolved}
-						tags={tagResolved}
 						navigation={navigation}
 					/>
 				)
@@ -239,29 +229,9 @@ const styles = StyleSheet.create({
 		width: "100%",
 	},
 	tag: {
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "flex-start",
-		alignItems: "center",
-		marginTop: 10
-	},
-	tagItem: {
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-		width: 90,
-		height: 30,
-		backgroundColor: "white",
-		borderColor: "lightgray",
-		borderRadius: 50,
-		marginRight: 10,
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.25,
-		elevation: 3,
+		display: 'flex',
+		flexDirection: 'row',
+		width: vw(100)
 	},
 	activityImages: {
 		display: "flex",
