@@ -205,3 +205,13 @@ export const getMyMarker = (header: any) :Promise<AxiosResponse> => {
         }
     )
 }
+
+export const deleteMarker = (header: any, id: number) :Promise<AxiosResponse> => {
+    return axios.delete(
+        `${URL}/api/marker/${id}/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}

@@ -1,17 +1,17 @@
 import React from "react";
-import {Image, StyleSheet, Text, View} from "react-native";
-import useApi from "@apis/useApi";
-import {getMarkerDetail} from "@apis/apiServices";
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import Icon from "react-native-vector-icons/AntDesign"
 import {Tag} from "@components/Tag";
 
-const MarkerCard = ({marker, style}) => {
+
+const MarkerCard = ({marker, style, deleteApi}) => {
     return (
         <View style={{...styles.container, ...style}}>
             <View style={styles.rowDivider}>
                 <Image style={styles.image} source={{uri: marker.image}}></Image>
                 <View style={styles.contentContainer}>
                     <View style={styles.content}>
-                        <Text style={styles.contentDetail}>{`장소 : ${marker.address}`}</Text>
+                        <Text style={styles.contentDetail}>{`주소 : ${marker.address}`}</Text>
                         <View style={styles.tagContainer}>
                             <Text style={styles.contentDetail}>{`태그 :`}</Text>
                             <Tag tags={marker.tag} size={'s'}/>
@@ -20,6 +20,10 @@ const MarkerCard = ({marker, style}) => {
                         <Text style={styles.contentDetail}>{`평점 : ${5}`}</Text>
                     </View>
                 </View>
+                <TouchableOpacity onPress={() => {deleteApi(marker.id)}}>
+                    <Icon style={styles.deleteIcon} size={15} name={"delete"} color={"white"} />
+                </TouchableOpacity>
+
             </View>
         </View>
     )
@@ -56,6 +60,11 @@ const styles = StyleSheet.create({
     tagContainer: {
         flexDirection: "row",
         justifyContent: 'flex-start'
+    },
+    deleteIcon: {
+        position: "absolute",
+        top: 0,
+        right: 0
     }
 });
 
