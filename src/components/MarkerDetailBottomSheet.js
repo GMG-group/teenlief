@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {Text, View, StyleSheet, Image} from "react-native";
 import {TouchableOpacity, TouchableWithoutFeedback} from "@gorhom/bottom-sheet";
-import { vw, vh } from "react-native-css-vh-vw";
+import { vw } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
-import {getMarkerDetail, getTag, postChatRoom} from "@apis/apiServices";
+import {getMarkerDetail, postChatRoom} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useRecoilValue} from "recoil";
 import {userState, SCREEN} from "@apis/atoms";
@@ -46,7 +46,6 @@ const SkeletonLayout = [
 
 const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }) => {
 	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
-
 	const user = useRecoilValue(userState);
 
 	return (

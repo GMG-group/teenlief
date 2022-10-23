@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Alert, Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { useState } from 'react';
+import { Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { CurvedBottomBar } from 'react-native-curved-bottom-bar';
 import { scale } from 'react-native-utils-scale';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
@@ -7,8 +7,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Chat from "~/screens/Chat";
 import Profile from "@screens/Profile";
 import Map from "@screens/Map";
-import {useRecoilState, useRecoilValue} from "recoil";
-import {ACTION, SCREEN, actionState, userState} from "@apis/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { ACTION, SCREEN, actionState, userState } from "@apis/atoms";
 
 export const TabBar = ({ navigation }) => {
 	const [route, setRoute] = useState("Map");

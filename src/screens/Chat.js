@@ -1,7 +1,6 @@
-import React, {useRef, useEffect, useState} from 'react';
-import {Text, TextInput, View, StyleSheet, ScrollView, FlatList} from "react-native";
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, FlatList} from "react-native";
 import { vw, vh } from "react-native-css-vh-vw";
-import Icon from "react-native-vector-icons/Ionicons";
 import ChatView from '@components/ChatView';
 import test from "@assets/images/test.png";
 import useApi from "@apis/useApi";

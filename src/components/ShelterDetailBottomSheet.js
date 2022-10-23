@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
-import {Text, View, StyleSheet, Image} from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { TouchableWithoutFeedback } from "@gorhom/bottom-sheet";
-import { vw, vh } from "react-native-css-vh-vw";
+import { vw } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
 import useApi from "@apis/useApi";
-import {getMarkerDetail, getShelterDetail} from "@apis/apiServices";
+import { getShelterDetail } from "@apis/apiServices";
 import SkeletonContent from "react-native-skeleton-content-nonexpo";
 
 const SkeletonLayout = [
@@ -60,7 +60,6 @@ const SkeletonLayout = [
 ];
 
 const ShelterDetailBottomSheet = ({ navigation, bottomSheetModalRef, shelterId }) => {
-
     const [detailLoading, detailResolved, getDetail] = useApi(getShelterDetail, true);
 
     useEffect(() => {

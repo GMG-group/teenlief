@@ -1,11 +1,11 @@
-import React, {useRef, useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableHighlight, View} from "react-native";
+import React, { useState } from 'react';
+import { StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
 import Header from "@components/Header";
-import {vh, vw} from "react-native-css-vh-vw";
+import { vh, vw } from "react-native-css-vh-vw";
 import useApi from "@apis/useApi";
-import {postPointEvent} from "@apis/apiServices";
-import {useRecoilValue} from "recoil";
-import {userState} from "@apis/atoms";
+import { postPointEvent } from "@apis/apiServices";
+import { useRecoilValue } from "recoil";
+import { userState } from "@apis/atoms";
 import Toast from "react-native-toast-message";
 
 const Donate = ({ navigation, route }) => {

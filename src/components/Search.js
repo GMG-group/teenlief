@@ -1,11 +1,5 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {
-	TextInput,
-	View,
-	StyleSheet,
-	Text,
-	FlatList
-} from "react-native";
+import React, { useState, useEffect } from 'react';
+import { TextInput, View, StyleSheet } from "react-native";
 import { vw } from "react-native-css-vh-vw";
 import useApi from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
@@ -30,8 +24,6 @@ const Search = ({ displayTag }) => {
 	useEffect(() => {
 		displayTag && tagApi()
 	},[]);
-
-	const tagListRef = useRef(null);
 
 	return (
 		<View style={styles.container}>

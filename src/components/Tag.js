@@ -4,7 +4,6 @@ import {useApi} from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
 import {FlatList, Text, View} from "react-native";
 
-
 export const Tag = ({tags, all=false, size='m'}) => {
     const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
     const [filterTag, setFilterTag] = useState([]);
