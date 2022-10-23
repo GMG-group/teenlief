@@ -5,6 +5,59 @@ import { vw, vh } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
 import useApi from "@apis/useApi";
 import {getMarkerDetail, getShelterDetail} from "@apis/apiServices";
+import SkeletonContent from "react-native-skeleton-content-nonexpo";
+
+const SkeletonLayout = [
+    {
+        marginLeft: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        children: [
+            {
+                width: 75,
+                height: 75,
+                borderRadius: 50,
+            },
+            {
+                marginLeft: 20,
+                flexDirection: 'column',
+                children: [
+                    {
+                        width: 200,
+                        height: 20,
+                        marginBottom: 6,
+                    },
+                    {
+                        width: 100,
+                        height: 20,
+                        marginBottom: 6,
+                    },
+                ],
+            },
+        ]
+    },
+    {
+        marginLeft: 20,
+        marginTop: 20,
+        children: [
+            {
+                width: 80,
+                height: 30,
+                marginBottom: 10,
+            },
+            {
+                width: 220,
+                height: 20,
+                marginBottom: 10,
+            },
+            {
+                width: 150,
+                height: 20,
+                marginBottom: 10,
+            },
+        ],
+    }
+];
 
 const ShelterDetailBottomSheet = ({ navigation, bottomSheetModalRef, shelterId }) => {
 
@@ -14,21 +67,20 @@ const ShelterDetailBottomSheet = ({ navigation, bottomSheetModalRef, shelterId }
         getDetail(shelterId);
     },[shelterId])
 
-    if(detailLoading) {
-        return (
-            <Text>loading</Text>
-        )
-    }
-
     return (
-        <View style={styles.container}>
+        <SkeletonContent
+            isLoading={detailLoading}
+            containerStyle={{}}
+            layout={SkeletonLayout}
+        >
+            <View style={styles.container}>
                 <View style={styles.helperInfoContainer}>
                     <View style={styles.helperInfo}>
                         <View style={styles.profileImage}>
 
                         </View>
                         <View style={styles.helperInfoText}>
-                            <Text style={styles.name}>{detailResolved.name}</Text>
+                            <Text style={styles.name}>{detailResolved?.name}</Text>
                         </View>
                     </View>
 
@@ -42,14 +94,15 @@ const ShelterDetailBottomSheet = ({ navigation, bottomSheetModalRef, shelterId }
                     <View>
                         <Text style={{fontSize: 24}}>개요</Text>
                         <View style={styles.helperContentItem}>
-                            <Text style={{color: "black"}}>{detailResolved.explanation}</Text>
+                            <Text style={{color: "black"}}>{detailResolved?.explanation}</Text>
                         </View>
                         <View style={styles.helperContentItem}>
-                            <Text style={{color: "black"}}>{detailResolved.phone_number}</Text>
+                            <Text style={{color: "black"}}>{detailResolved?.phone_number}</Text>
                         </View>
                     </View>
                 </ScrollView>
-        </View>
+            </View>
+        </SkeletonContent>
     );
 };
 
