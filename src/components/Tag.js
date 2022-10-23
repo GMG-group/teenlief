@@ -42,7 +42,7 @@ export const Tag = ({tags, all=false, size='m'}) => {
                 flexGrow: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: filterTag.length * 110,
+                width: filterTag.length * 115,
             }}
             renderItem={({item}) =>
                 <View style={{...styles.filterItem, width: width, height: height}} key={item.id}>

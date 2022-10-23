@@ -11,7 +11,7 @@ import useApi from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
 import {Tag} from "@components/Tag";
 
-const Search = ({displayTag}) => {
+const Search = ({ displayTag }) => {
 	const [search, setSearch] = useState(null);
 	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
 	const [filterTag, setFilterTag] = useState([]);
@@ -46,8 +46,7 @@ const Search = ({displayTag}) => {
 				</View>
 			</View>
 
-			<Tag all={true}/>
-
+			{ displayTag && <Tag all={true}/> }
 		</View>
 	);
 };
@@ -79,7 +78,8 @@ const styles = StyleSheet.create({
 		},
 		shadowOpacity: 0.25,
 		elevation: 10,
-		color: '#000'
+		color: '#000',
+		marginBottom: 15,
 	},
 	innerSearch: {
 		display: 'flex',
