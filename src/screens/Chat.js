@@ -16,7 +16,7 @@ const Chat = ({navigation}) => {
 
 	useEffect(() => {
 		console.log("user", user);
-		callApi(user.user.pk)
+		callApi(user.pk)
 			.then((res) => {
 				setChatroom(res);
 			})

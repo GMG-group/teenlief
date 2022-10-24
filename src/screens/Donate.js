@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
 import Header from "@components/Header";
 import { vh, vw } from "react-native-css-vh-vw";
 import useApi from "@apis/useApi";
-import { postPointEvent } from "@apis/apiServices";
-import { useRecoilValue } from "recoil";
+import {getUser, postPointEvent} from "@apis/apiServices";
+import {useRecoilState, useRecoilValue} from "recoil";
 import { userState } from "@apis/atoms";
 import Toast from "react-native-toast-message";
 
 const Donate = ({ navigation, route }) => {
     const [postDonateLoading, postDonateResolved, donateApi] = useApi(postPointEvent, true);
-    const user = useRecoilValue(userState);
+    const [getUserLoading, getUserResolved, getUserApi] = useApi(getUser, true);
+
+    const [user, setUser] = useRecoilState(userState);
     const [donatePoint, setDonatePoint] = useState(0);
 
+    useEffect(() => {
+        getUserApi()
+            .then((res) => {
+                setUser(res);
+            })
+    }, []);
+
     const donate = () => {
-        if (user.user.id === route.params.helper.id) {
+        if (user.id === route.params.helper.id) {
             Toast.show({
                 type: 'error',
                 text1: '후원 실패',
@@ -25,7 +34,7 @@ const Donate = ({ navigation, route }) => {
         console.log(route.params);
         const formData = new FormData();
         formData.append('point', donatePoint);
-        formData.append('sender', user.user.id);
+        formData.append('sender', user.id);
         formData.append('receiver', route.params.helper.id);
 
         donateApi(formData)
@@ -46,6 +55,10 @@ const Donate = ({ navigation, route }) => {
                     navigation.goBack();
                 }
             })
+        getUserApi()
+            .then((res) => {
+                setUser(res);
+            })
     }
 
     return (
@@ -57,8 +70,8 @@ const Donate = ({ navigation, route }) => {
                     <View style={styles.cardLeft} />
                     <View style={styles.cardRight} />
                     <View style={styles.cardTextContainer}>
-                        <Text style={styles.cardText}>{user?.user.first_name}</Text>
-                        <Text style={{ ...styles.cardText, fontSize: 20, marginTop: vh(1) }}>P {user?.user.point}</Text>
+                        <Text style={styles.cardText}>{user?.first_name}</Text>
+                        <Text style={{ ...styles.cardText, fontSize: 20, marginTop: vh(1) }}>P {user?.point}</Text>
                         <Text style={{ ...styles.cardText, fontSize: 20, marginTop: vh(1), letterSpacing: 3 }}>
                             •••• •••• •••• 1234
                         </Text>
