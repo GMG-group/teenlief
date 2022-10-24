@@ -40,9 +40,7 @@ export const usePostLoginCallback = () => {
                     refreshToken: data.refresh_token
                 });
 
-                set(userState, {
-                    user: data.user
-                });
+                set(userState, data.user);
             },
         [],
     );

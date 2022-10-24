@@ -83,7 +83,7 @@ const Map = ({ route, navigation }) => {
 				
 			</BottomSheetModal>
 			{
-				action==="upload" ? (
+				action===ACTION.Upload ? (
 					<>
 						<BackButton/>
 						<View style={styles.centerMarker}>
@@ -109,7 +109,7 @@ const Map = ({ route, navigation }) => {
 			/>}
 
 			{
-				action==="upload" ? null : <Search displayTag={true}/>
+				action===ACTION.Upload ? null : <Search displayTag={true}/>
 			}
 
 		</>
@@ -204,17 +204,14 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 
 				if (isCluster) {
 					return (
-					<CustomMarker
-						key={`cluster-${cluster.properties.cluster_id}`}
-						coordinate={{latitude: latitude, longitude: longitude}}
-						idx={cluster.properties.id}
-					>
-						<Image
-							source={require('../assets/images/cluster_marker.png')}
-							style={{width:50, height:55}}
-							fadeDuration={0}
+						<CustomMarker
+							key={`cluster-${cluster.properties.cluster_id}`}
+							coordinate={{latitude: latitude, longitude: longitude}}
+							idx={cluster.properties.id}
+							width={50}
+							height={55}
+							image={require('../assets/images/cluster_marker.png')}
 						/>
-					</CustomMarker>
 					);
 				}
 
@@ -227,13 +224,10 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 							setShelterPressed(false);
 							bottomSheetModalRef.current?.present();
 						}}
-					>
-						<Image
-							source={require('../assets/images/marker_helper.png')}
-							style={{width:60, height:60}}
-							fadeDuration={0}
-						/>
-					</CustomMarker>
+						width={60}
+						height={60}
+						image={require('../assets/images/marker_helper.png')}
+					/>
 				);
 			})}
 			{shelterCluster.clusters.map(cluster => {
@@ -249,13 +243,10 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 							key={`cluster-${cluster.properties.cluster_id}`}
 							coordinate={{latitude: latitude, longitude: longitude}}
 							idx={cluster.properties.id}
-						>
-							<Image
-								source={require('../assets/images/cluster_marker.png')}
-								style={{width:50, height:55}}
-								fadeDuration={0}
-							/>
-						</CustomMarker>
+							width={50}
+							height={55}
+							image={require('../assets/images/cluster_marker.png')}
+						/>
 					);
 				}
 
@@ -268,15 +259,11 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 							setShelterPressed(true);
 							setSelectedShelterId(cluster.properties.id);
 							bottomSheetModalRef.current?.present();
-
 						}}
-					>
-						<Image
-							source={require('../assets/images/marker_shelter.png')}
-							style={{width:60, height:60}}
-							fadeDuration={0}
-						/>
-					</CustomMarker>
+						width={60}
+						height={60}
+						image={require('../assets/images/marker_shelter.png')}
+					/>
 				);
 			})}
 		</NaverMapView>

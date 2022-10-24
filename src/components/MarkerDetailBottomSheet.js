@@ -73,14 +73,14 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 			</View>
 
 				{
-					user?.user.role === 'Teen' ? (
+					user?.role === 'Teen' ? (
 						<View style={styles.connectButton}>
 							<TouchableOpacity
 								onPress={() => {
 									if (!postResolved) {
 										const formData = new FormData();
 										formData.append('helper_id', detail.helper.id);
-										formData.append('teen_id', user.user.id);
+										formData.append('teen_id', user.id);
 										postChatRoomApi(formData)
 											.then((res) => {
 												navigation.navigate(SCREEN.ChatRoom, {

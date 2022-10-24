@@ -91,7 +91,7 @@ const ChatRoom = ({ navigation, route }) => {
                     <Image style={styles.profile} source={test} />
                     <Text style={{fontSize: 16, color: 'black'}}>
                         {
-                            user.user.id === route.params.teen.id
+                            user.id === route.params.teen.id
                                 ? route.params.helper.first_name
                                 : route.params.teen.first_name
                         }

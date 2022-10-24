@@ -88,8 +88,8 @@ const Profile = ({navigation}) => {
 
 		//구매자 정보로 결제창이 미리 적용될 수 있으며, 통계에도 사용되는 정보
 		const userInfo = {
-			id: user?.user.id, //개발사에서 관리하는 회원고유번호
-			username: user?.user.first_name, //구매자명
+			id: user?.id, //개발사에서 관리하는 회원고유번호
+			username: user?.first_name, //구매자명
 			phone: '01012345678', //전화번호, 페이앱 필수
 		}
 
@@ -128,8 +128,8 @@ const Profile = ({navigation}) => {
 		console.log('done', data);
 
 		const formData = new FormData();
-		formData.append('sender', user?.user.id);
-		formData.append('receiver', user?.user.id);
+		formData.append('sender', user?.id);
+		formData.append('receiver', user?.id);
 		formData.append('point', 1000);
 		formData.append('data', JSON.stringify(data));
 		chargePoint(formData)
@@ -157,14 +157,14 @@ const Profile = ({navigation}) => {
 			/>
 
 			<View style={containerStyles.container}>
-				<ProfileCard user={user.user}/>
+				<ProfileCard user={user}/>
 
 
 			{
-				user.user.role==="Helper" ? (
+				user.role==="Helper" ? (
 					<>
 						<Text style={{...containerStyles.label, marginTop: 30}}>포인트 관리</Text>
-						<CircularContainer title={`포인트 ${10000}원`}>
+						<CircularContainer title={`포인트 ${user.point}원`}>
 							<CircularButton title={"입금하기"} color={'#AE46FF'} onPress={handleDeposit} />
 							<CircularButton title={"출금하기"} color={'#AE46FF'} />
 						</CircularContainer>
@@ -192,7 +192,7 @@ const Profile = ({navigation}) => {
 				<Text style={{...containerStyles.label, marginTop: 40}}>개인정보 관리</Text>
 				<LineButton title={"비밀번호 변경"}/>
 				{
-					user.user.role === "Helper" ? (<LineButton title={"계좌 관리"}/>) : null
+					user.role === "Helper" ? (<LineButton title={"계좌 관리"}/>) : null
 				}
 				<LineButton title={"로그아웃"} onPress={() => {logout(setToken)}}/>
 			</View>
