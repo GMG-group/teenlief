@@ -8,6 +8,28 @@ import ImagePicker from 'react-native-image-crop-picker';
 import ImageModal from "react-native-image-modal";
 import Toast from "react-native-toast-message";
 import {vh} from "react-native-css-vh-vw";
+import SkeletonContent from "react-native-skeleton-content-nonexpo";
+
+const SkeletonLayout = [
+    {
+        flexDirection: 'row',
+        children: [
+            {
+                margin: 10,
+                flexDirection: 'row',
+                children: Array.apply(null, Array(4)).map(() => (
+                    {
+                        width: 80,
+                        height: 20,
+                        marginBottom: 6,
+                        marginRight: 10,
+                        borderRadius: 5
+                    }
+                ))
+            },
+        ]
+    },
+];
 
 const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) => {
 
@@ -21,7 +43,7 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
     const [prevCoords, setPrevCoords] = useState(true);
     const [image, setImage] = useState(null);
 
-    const [tags, setTags] = useState();
+    const [tags, setTags] = useState(false);
 
     useEffect(() => {
         console.log("get Tag")
@@ -152,16 +174,8 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
     }
 
     return (
+
         <View style={styles.container}>
-            {
-                tagLoading ? (
-                    <View>
-                        <Text>
-                            loading
-                        </Text>
-                    </View>
-                ) : (
-                    <>
                         <TextInput
                             style={styles.input}
                             editable={false}
@@ -176,8 +190,13 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
                         >
                             <Text>{addressDetail}</Text>
                         </TextInput>
-
+                        <SkeletonContent
+                            containerStyle = {{}} // 없으면 오류
+                            layout={SkeletonLayout}
+                            isLoading = { tagLoading }
+                        >
                         <View style={styles.tag}>
+
                             {
                                 tags && tags.map((tag, idx) => (
                                     <TouchableOpacity
@@ -190,7 +209,9 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
                                     </TouchableOpacity>
                                 ))
                             }
+
                         </View>
+                        </SkeletonContent>
                         <TouchableOpacity onPress={imagePicker} style={styles.imagePickerButton}>
                             {
                                 image ? (
@@ -213,9 +234,6 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                    </>
-                )
-            }
         </View>
     );
 };
