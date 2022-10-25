@@ -2,6 +2,7 @@ import React from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Icon from "react-native-vector-icons/AntDesign"
 import {Tag} from "@components/Tag";
+import TextTicker from "react-native-text-ticker";
 
 
 const MarkerCard = ({marker, style, deleteApi}) => {
@@ -11,7 +12,19 @@ const MarkerCard = ({marker, style, deleteApi}) => {
                 <Image style={styles.image} source={{uri: marker.image}}></Image>
                 <View style={styles.contentContainer}>
                     <View style={styles.content}>
-                        <Text style={styles.contentDetail}>{`주소 : ${marker.address}`}</Text>
+                        <View style={styles.addressContainer}>
+                            <Text style={styles.contentDetail}>주소: </Text>
+                            <TextTicker
+                                style={styles.contentDetail}
+                                duration={5000}
+                                loop
+                                repeatSpacer={50}
+                                marqueeDelay={500}
+                            >
+                                {marker.address}
+                            </TextTicker>
+                        </View>
+
                         <View style={styles.tagContainer}>
                             <Text style={styles.contentDetail}>{`태그 :`}</Text>
                             <Tag tags={marker.tag} size={'s'}/>
@@ -65,6 +78,9 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 0,
         right: 0
+    },
+    addressContainer: {
+        flexDirection: "row"
     }
 });
 
