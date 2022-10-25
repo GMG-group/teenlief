@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import {useApi} from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
 import {FlatList, Text, View} from "react-native";
 
-export const Tag = ({tags, all=false, size='m'}) => {
+export const Tag = ({tags, all=false, size='m', onSelected, select=false}) => { // 표시할 태그(숫자), 모두 표시할지, 사이즈
     const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
     const [filterTag, setFilterTag] = useState([]);
     const tagListRef = useRef(null);
@@ -21,16 +21,27 @@ export const Tag = ({tags, all=false, size='m'}) => {
         if(!tagLoading && filterTag.length===0) {
             let newTag = []
             if(all) {
-                newTag = tagResolved.map((tag) => (tag.tag));
+                newTag = tagResolved.map((tag) => ({...tag}));
             } else {
                 tags.forEach((tag) => {
-                    newTag.push(tagResolved[tag-1].tag);
+                    newTag.push({...tagResolved[tag-1], selected: false});
                 });
             }
 
             setFilterTag(newTag);
         }
     },[tagLoading])
+
+    const handleChange = (idx) => {
+        let items = [...filterTag];
+        items[idx] = {
+            ...items[idx],
+            selected: !items[idx].selected
+        };
+        setFilterTag(items);
+        onSelected && onSelected(items);
+        console.log("filtertag!!!", items);
+    }
 
     return (
         <FlatList
@@ -43,10 +54,27 @@ export const Tag = ({tags, all=false, size='m'}) => {
                 justifyContent: 'center',
                 width: filterTag.length * 115,
             }}
-            renderItem={({item}) =>
-                <View style={{...styles.filterItem, width: width, height: height}} key={item.id}>
-                    <Text style={{color: 'black', fontSize: fontSize}}>{ item }</Text>
-                </View>
+            renderItem={({item, index}) =>
+                <TouchableOpacity
+                    onPress={() => {
+                        handleChange(index);
+                    }}
+                    key={`filterTag-${index}`}
+                    disabled={!select}
+                >
+                    <View style={{...styles.filterItem, width: width, height: height, backgroundColor: item.selected ? 'black' : 'white'}}>
+                        <Text style={{color: item.selected ? 'white' : 'black', fontSize: fontSize}}>{ item.tag }</Text>
+                    </View>
+                </TouchableOpacity>
+
+                // <TouchableOpacity
+                // onPress={() => {handleChange(idx)}}
+                // key={idx}
+                // >
+                // <View style={{...styles.tagItem, backgroundColor: tags[idx].selected ? 'black' : 'white'}}>
+                // <Text style={{...styles.tagItemText, color: tags[idx].selected ? 'white' : 'black'}}>{tag.tag}</Text>
+                // </View>
+                // </TouchableOpacity>
             }
             keyExtractor={(item, index) => 'key' + index}
             horizontal

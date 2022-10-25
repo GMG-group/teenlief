@@ -28,6 +28,7 @@ const Map = ({ route, navigation }) => {
 	const [sheltersLoading, shelters, getSheltersCallback, setSheltersLoading] = useApi(getShelters, true);
 	const [shelterPressed, setShelterPressed] = useState(false);
 	const [selectedShelterId, setSelectedShelterId] = useState();
+	const [filteredMarker, setFilteredMarker] = useState([]);
 
 	const action = useRecoilValue(actionState);
 	const snapPoints = useMemo(() => {
@@ -44,9 +45,16 @@ const Map = ({ route, navigation }) => {
 	, [action, shelterPressed]);
 
 	useEffect(() => {
-		getMarkers();
+		getMarkers()
+			.then((res) => {
+				setFilteredMarker(res.map((marker) => ({...marker, filtered: false})));
+			});
 		getSheltersCallback();
 	},[])
+
+	useEffect(() => {
+		console.log("filteredMarker", filteredMarker);
+	},[filteredMarker])
 
 	useEffect(() => {
 		if(action===ACTION.Upload) {
@@ -99,7 +107,7 @@ const Map = ({ route, navigation }) => {
 				cameraInfo={cameraInfo}
 				markersLoading={markersLoading}
 				action={action}
-				markers={markers}
+				markers={filteredMarker}
 				setSelectedMarkerId={setSelectedMarkerId}
 				setShelterPressed={setShelterPressed}
 				bottomSheetModalRef={bottomSheetModalRef}
@@ -109,7 +117,7 @@ const Map = ({ route, navigation }) => {
 			/>}
 
 			{
-				action===ACTION.Upload ? null : <Search displayTag={true}/>
+				action===ACTION.Upload ? null : <Search filteredMarker={filteredMarker} setFilterdMarker={setFilteredMarker} displayTag={true}/>
 			}
 
 		</>
