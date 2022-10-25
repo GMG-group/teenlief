@@ -7,7 +7,7 @@ import {getMarkerDetail, getTag, postChatRoom} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useRecoilValue} from "recoil";
 import {userState} from "@apis/atoms";
-
+import * as Progress from 'react-native-progress';
 const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
 
@@ -104,9 +104,11 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 						</View>
 						<View style={styles.reviewHeaderRight}>
 							<View>
-								<Text style={{borderBottomColor: '#D3D3D3', borderBottomWidth: 1}}>헬퍼분이 너무 친절하세요!</Text>
-								<Text style={{borderBottomColor: '#D3D3D3', borderBottomWidth: 1}}>제 은인이십니다</Text>
-								<Text style={{borderBottomColor: '#D3D3D3', borderBottomWidth: 1}}>감사합니다.. 나중에 꼭 보답할게요</Text>
+								<Progress.Bar progress={0.3} width={200} />
+								<Progress.Bar progress={0.3} width={200} />
+								<Progress.Bar progress={0.3} width={200} />
+								<Progress.Bar progress={0.3} width={200} />
+								<Progress.Bar progress={0.3} width={200} />
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
