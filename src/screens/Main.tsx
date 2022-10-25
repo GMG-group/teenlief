@@ -16,6 +16,7 @@ import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
 import Promise from "@screens/Promise";
 import SplashScreen from '@screens/SplashScreen';
+import Profile from '@screens/Profile';
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
@@ -84,6 +85,20 @@ const Main = () => {
 							<Stack.Screen
 								name='Promise'
 								component={Promise}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name='Profile'
+								component={Profile}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen 
+								name='ReviewList'
+								component={ReviewList}
 								options={{
 									headerShown: false,
 								}}
