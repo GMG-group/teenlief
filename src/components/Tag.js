@@ -14,7 +14,7 @@ export const Tag = ({tags, all=false, size='m', onSelected, select=false}) => { 
     const fontSize = size === 'm' ? 14 : 9;
 
     useEffect(() => {
-        tagApi()
+        tagApi();
     },[])
 
     useEffect(() => {
@@ -110,3 +110,5 @@ const styles = StyleSheet.create({
         margin: 3
     },
 })
+
+//https://www.npmjs.com/package/react-native-text-ticker

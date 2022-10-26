@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         padding: 20
     },
     markerCard: {
-        marginBottom: 20
+        marginBottom: 10
     }
 });
 
