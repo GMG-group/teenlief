@@ -55,6 +55,7 @@
     "react-native-utils-scale": "^2.6.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-vector-image": "^0.3.3",
+    "react-swipeable-list": "^1.6.0",
     "recoil": "^0.7.4",
     "supercluster": "^7.1.5",
     "use-supercluster": "^0.4.0"

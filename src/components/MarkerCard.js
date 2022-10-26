@@ -12,8 +12,6 @@ const MarkerCard = ({marker, style, deleteApi}) => {
                 <Image style={styles.image} source={{uri: marker.image}}></Image>
                 <View style={styles.contentContainer}>
                     <View style={styles.content}>
-                        <View style={styles.detailContainer}>
-                            <Text style={styles.contentDetail}>{"주소 : "}</Text>
                             <TextTicker
                                 style={styles.contentDetail}
                                 duration={5000}
@@ -23,22 +21,11 @@ const MarkerCard = ({marker, style, deleteApi}) => {
                             >
                                 {marker.address}
                             </TextTicker>
-                        </View>
 
-                        <View style={styles.detailContainer}>
-                            <Text style={styles.contentDetail}>{`태그 : `}</Text>
                             <Tag tags={marker.tag} size={'s'}/>
-                        </View>
-                        <View style={styles.detailContainer}>
-                            <Text style={styles.contentDetail}>{`평점 : `}</Text>
                             <StarRating rating={5} onChange={()=> {}} starSize={15} starStyle={{marginHorizontal: 0}}/>
-                        </View>
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => {deleteApi(marker.id)}}>
-                    <Icon style={styles.deleteIcon} size={15} name={"delete"} color={"#AE46FF"} />
-                </TouchableOpacity>
-
             </View>
         </View>
     )
@@ -46,24 +33,24 @@ const MarkerCard = ({marker, style, deleteApi}) => {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 10,
-        paddingHorizontal: 15,
-        height: 100,
+        height: 120,
         backgroundColor: "#fff",
-        borderRadius: 20,
+        borderRadius: 10,
         justifyContent: "center",
-        elevation: 5
+        elevation: 3
     },
     rowDivider: {
         flexDirection: "row"
     },
     image: {
         flex: 2,
-        height: 80, // image는 % 로 하면 안보임
-        borderRadius: 10
+        height: 120, // image는 % 로 하면 안보임
+        borderBottomLeftRadius: 10,
+        borderTopLeftRadius: 10
     },
     contentContainer: {
         flex: 3,
+        padding: 10
     },
     content: {
         flex: 1,
@@ -72,16 +59,11 @@ const styles = StyleSheet.create({
     },
     contentDetail: {
         color: "#AE46FF",
-        fontSize: 10
+        fontSize: 12
     },
     detailContainer: {
         flexDirection: "row",
         justifyContent: 'flex-start'
-    },
-    deleteIcon: {
-        position: "absolute",
-        top: 0,
-        right: 0
     }
 });
 
