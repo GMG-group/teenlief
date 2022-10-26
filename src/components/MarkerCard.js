@@ -4,6 +4,7 @@ import Icon from "react-native-vector-icons/AntDesign"
 import {Tag} from "@components/Tag";
 import TextTicker from "react-native-text-ticker";
 import StarRating from "react-native-star-rating-widget";
+import Moment from "react-moment";
 
 const MarkerCard = ({marker, style, deleteApi}) => {
     return (
@@ -12,21 +13,24 @@ const MarkerCard = ({marker, style, deleteApi}) => {
                 <Image style={styles.image} source={{uri: marker.image}}></Image>
                 <View style={styles.contentContainer}>
                     <View style={styles.content}>
-                            <TextTicker
-                                style={styles.contentDetail}
-                                duration={5000}
-                                loop
-                                repeatSpacer={50}
-                                marqueeDelay={500}
-                            >
-                                {marker.address}
-                            </TextTicker>
+                        <TextTicker
+                            style={styles.contentDetail}
+                            duration={5000}
+                            loop
+                            repeatSpacer={50}
+                            marqueeDelay={500}
+                        >
+                            {marker.address}
+                        </TextTicker>
 
-                            <Tag tags={marker.tag} size={'s'}/>
-                            <StarRating rating={5} onChange={()=> {}} starSize={15} starStyle={{marginHorizontal: 0}}/>
+                        <Tag tags={marker.tag} size={'s'}/>
+                        <StarRating rating={5} onChange={()=> {}} starSize={15} starStyle={{marginHorizontal: 0}}/>
+                        <Moment style={styles.dateText} format="YYYY/MM/DD" element={Text}>{marker.created_at}</Moment>
+
                     </View>
                 </View>
             </View>
+
         </View>
     )
 }
@@ -37,7 +41,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         borderRadius: 10,
         justifyContent: "center",
-        elevation: 3
+        elevation: 3,
+        margin: 10
     },
     rowDivider: {
         flexDirection: "row"
@@ -50,7 +55,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flex: 3,
-        padding: 10
+        padding: 5
     },
     content: {
         flex: 1,
@@ -64,6 +69,12 @@ const styles = StyleSheet.create({
     detailContainer: {
         flexDirection: "row",
         justifyContent: 'flex-start'
+    },
+    dateText: {
+        position: "absolute",
+        bottom: 5,
+        right: 5,
+        fontSize: 8
     }
 });
 

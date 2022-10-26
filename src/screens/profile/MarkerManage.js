@@ -1,10 +1,11 @@
 import React, {useEffect} from "react";
-import {ScrollView, StyleSheet, Text, View} from "react-native";
+import {Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
 import MarkerCard from "@components/MarkerCard";
 import Header from "@components/Header";
 import {deleteMarker, getMyMarker} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import SkeletonContent from "react-native-skeleton-content-nonexpo";
+import SwipeableFlatList from "react-native-swipeable-list";
 
 const SkeletonLayout = Array.apply(null, Array(4)).map(() => (
     {
@@ -32,6 +33,18 @@ const MarkerManage = ({navigation}) => {
         myMarkerApi()
     },[])
 
+    const QuickActions = (index, marker) => {
+        return (
+            <View style={styles.qaContainer}>
+                <View style={[styles.button]}>
+                    <Pressable onPress={() => deleteApi(marker.id)}>
+                        <Text style={styles.buttonText}>삭제</Text>
+                    </Pressable>
+                </View>
+            </View>
+        );
+    };
+
     if(myMarkerLoading) {
         return (
             <Text>Loading</Text>
@@ -50,11 +63,22 @@ const MarkerManage = ({navigation}) => {
                     isLoading={false}
                 >
 
-                {
-                    myMarkerResolved.map((marker, idx) => (
-                        <MarkerCard style={styles.markerCard} key={`MarkerCard-${idx}`} marker={marker} deleteApi={deleteApi}/>
-                    ))
-                }
+                {/*{*/}
+                {/*    myMarkerResolved.map((marker, idx) => (*/}
+                {/*        <MarkerCard style={styles.markerCard} key={`MarkerCard-${idx}`} marker={marker} deleteApi={deleteApi}/>*/}
+                {/*    ))*/}
+                {/*}*/}
+                    <SwipeableFlatList
+                        keyExtractor={(item) => `markerCard-${item.id}`}
+                        data={myMarkerResolved}
+                        renderItem={({item}) => (
+                            <MarkerCard style={styles.markerCard} marker={item} deleteApi={deleteApi} />
+                        )}
+                        maxSwipeDistance={240}
+                        // contentContainerStyle={styles.contentContainerStyle}
+                        renderQuickActions={({index, item}) => QuickActions(index, item)}
+                        shouldBounceOnMount={true}
+                    />
                 </SkeletonContent>
             </ScrollView>
         </>
@@ -69,6 +93,25 @@ const styles = StyleSheet.create({
     },
     markerCard: {
         marginBottom: 10
+    },
+    qaContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    button: {
+        margin: 10,
+        alignSelf: "center",
+        height: 120,
+        width: 80,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: "#AE46FF"
+    },
+    buttonText: {
+        fontWeight: 'bold',
+        color: 'white'
     }
 });
 

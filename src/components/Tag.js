@@ -9,9 +9,9 @@ export const Tag = ({tags, all=false, size='m', onSelected, select=false}) => { 
     const [filterTag, setFilterTag] = useState([]);
     const tagListRef = useRef(null);
 
-    const height = size === 'm' ? 25 : 12;
-    const width = size === 'm' ? 90 : 40;
-    const fontSize = size === 'm' ? 14 : 9;
+    const height = size === 'm' ? 25 : 15;
+    const width = size === 'm' ? 90 : 50;
+    const fontSize = size === 'm' ? 14 : 10;
 
     useEffect(() => {
         tagApi();
