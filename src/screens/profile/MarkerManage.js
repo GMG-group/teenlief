@@ -5,7 +5,6 @@ import Header from "@components/Header";
 import {deleteMarker, getMyMarker} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import SkeletonContent from "react-native-skeleton-content-nonexpo";
-import {LeadingActions, SwipeableList, SwipeableListItem, SwipeAction, TrailingActions} from "react-swipeable-list";
 
 const SkeletonLayout = Array.apply(null, Array(4)).map(() => (
     {
@@ -30,24 +29,18 @@ const MarkerManage = ({navigation}) => {
     },[deleteLoading])
 
     useEffect(() => {
-       myMarkerApi()
+        myMarkerApi()
     },[])
 
-    const TrailingActions = (marker) => (
-        <TrailingActions>
-            <SwipeAction
-                destructive={true}
-                onClick={() => console.info('swipe action triggered')}
-            >
-                Delete
-            </SwipeAction>
-        </TrailingActions>
-    );
+    if(myMarkerLoading) {
+        return (
+            <Text>Loading</Text>
+        )
+    }
 
     return (
         <>
             <Header navigation={navigation} title={"마커 관리하기"}/>
-
             <ScrollView style={styles.container}>
                 <SkeletonContent
                     containerStyle = {{
@@ -56,28 +49,14 @@ const MarkerManage = ({navigation}) => {
                     layout={SkeletonLayout}
                     isLoading={false}
                 >
-                    {
-                        !myMarkerLoading ? (
-                            <SwipeableList>
 
-
-                                {
-                                    myMarkerResolved.map((marker, idx) => (
-                                        <SwipeableListItem
-                                            trailingActions={TrailingActions(marker)}
-                                            fullSwipe={false}
-                                        >
-                                            <MarkerCard style={styles.markerCard} key={`MarkerCard-${idx}`} marker={marker} deleteApi={deleteApi}/>
-                                        </SwipeableListItem>
-
-                                    ))
-                                }
-                            </SwipeableList>
-                        ) : null
-                    }
+                {
+                    myMarkerResolved.map((marker, idx) => (
+                        <MarkerCard style={styles.markerCard} key={`MarkerCard-${idx}`} marker={marker} deleteApi={deleteApi}/>
+                    ))
+                }
                 </SkeletonContent>
             </ScrollView>
-
         </>
 
     )
