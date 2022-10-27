@@ -57,6 +57,10 @@ const ChatRoom = ({ navigation, route }) => {
             })
     }, [route.params.id]);
 
+    useEffect(() => {
+        console.log(user);
+    }, []);
+
     const onText = () => {
         filterApi(chatInput)
             .then((response) => {
@@ -132,19 +136,24 @@ const ChatRoom = ({ navigation, route }) => {
             />
 
             <View style={styles.chatContainer}>
-                <TouchableOpacity
-                    onPress={() => navigation.push(
-                        SCREEN.Promise,
-                        {
-                            ws: webSocket.current,
-                            roomName: route.params.roomName,
-                            helper: route.params.helper,
-                            teen: route.params.teen,
-                        }
-                    )}
-                >
-                    <Ionicons name="add-outline" size={25} color={'black'} />
-                </TouchableOpacity>
+                {
+                    user.role === 'Helper' ? (
+                        <TouchableOpacity
+                            onPress={() => navigation.push(
+                                SCREEN.Promise,
+                                {
+                                    ws: webSocket.current,
+                                    roomName: route.params.roomName,
+                                    helper: route.params.helper,
+                                    teen: route.params.teen,
+                                }
+                            )}
+                        >
+                            <Ionicons name="add-outline" size={25} color={'black'} />
+                        </TouchableOpacity>
+                    ) : null
+                }
+
                 <TextInput style={styles.input} value={chatInput} onChangeText={text => setChatInput(text)} />
                 <TouchableOpacity onPress={() => onText()}>
                     <Ionicons name="paper-plane-outline" size={25} color={'black'} />
