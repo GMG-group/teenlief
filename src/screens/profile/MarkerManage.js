@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import MarkerCard from "@components/MarkerCard";
 import Header from "@components/Header";
 import {deleteMarker, getMyMarker} from "@apis/apiServices";
@@ -8,15 +8,14 @@ import SkeletonContent from "react-native-skeleton-content-nonexpo";
 import SwipeableFlatList from "react-native-swipeable-list";
 import {TouchableOpacity} from "@gorhom/bottom-sheet";
 
-const SkeletonLayout = Array.apply(null, Array(4)).map(() => (
+const SkeletonLayout = Array.apply(null, Array(5)).map(() => (
     {
         width: "100%",
         paddingHorizontal: 15,
-        height: 100,
-        borderRadius: 20,
+        height: 120,
+        borderRadius: 10,
         justifyContent: "center",
-        elevation: 5,
-        marginBottom: 10
+        marginBottom: 20
     }));
 
 const MarkerManage = ({navigation}) => {
@@ -37,20 +36,14 @@ const MarkerManage = ({navigation}) => {
     const QuickActions = (index, marker) => {
         return (
             <View style={styles.qaContainer}>
-                <View style={[styles.button]}>
-                    <TouchableOpacity onPress={() => {deleteApi(marker.id)}}> {/* TODO: 삭제 애니메이션 추가 필요할듯 */}
+                <TouchableOpacity onPress={() => {deleteApi(marker.id)}}>
+                    <View style={[styles.button]}>
                         <Text style={styles.buttonText}>삭제</Text>
-                    </TouchableOpacity>
-                </View>
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     };
-
-    if(myMarkerLoading) {
-        return (
-            <Text>Loading</Text>
-        )
-    }
 
     return (
         <>
@@ -61,14 +54,8 @@ const MarkerManage = ({navigation}) => {
                         margin: 10
                     }} // 없으면 오류
                     layout={SkeletonLayout}
-                    isLoading={false}
+                    isLoading={myMarkerLoading}
                 >
-
-                {/*{*/}
-                {/*    myMarkerResolved.map((marker, idx) => (*/}
-                {/*        <MarkerCard style={styles.markerCard} key={`MarkerCard-${idx}`} marker={marker} deleteApi={deleteApi}/>*/}
-                {/*    ))*/}
-                {/*}*/}
                     <SwipeableFlatList
                         keyExtractor={(item) => `markerCard-${item.id}`}
                         data={myMarkerResolved}
@@ -76,7 +63,6 @@ const MarkerManage = ({navigation}) => {
                             <MarkerCard style={styles.markerCard} marker={item} deleteApi={deleteApi} />
                         )}
                         maxSwipeDistance={110}
-                        // contentContainerStyle={styles.contentContainerStyle}
                         renderQuickActions={({index, item}) => QuickActions(index, item)}
                         shouldBounceOnMount={true}
 
@@ -91,30 +77,10 @@ const MarkerManage = ({navigation}) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
-        flex: 1
+        padding: 20
     },
     markerCard: {
-        marginBottom: 10
-    },
-    qaContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-    },
-    button: {
-        margin: 10,
-        alignSelf: "center",
-        height: 120,
-        width: 100,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: "#AE46FF"
-    },
-    buttonText: {
-        fontWeight: 'bold',
-        color: 'white'
+        marginBottom: 20
     }
 });
 
