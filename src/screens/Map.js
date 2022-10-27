@@ -6,8 +6,8 @@ import Search from "@components/Search";
 import MarkerDetailBottomSheet from "@components/MarkerDetailBottomSheet";
 import useApi from "@apis/useApi";
 import {getMarkerSimple, getShelters, getUser, postMarker} from "@apis/apiServices";
-import {useRecoilValue} from "recoil";
-import {ACTION, actionState} from "@apis/atoms";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {ACTION, actionState, userState} from "@apis/atoms";
 import {BackButton} from "@components/BackButton";
 import UploadBottomSheet from "@components/UploadBottomSheet";
 import ShelterDetailBottomSheet from "@components/ShelterDetailBottomSheet";
@@ -29,6 +29,16 @@ const Map = ({ route, navigation }) => {
 	const [shelterPressed, setShelterPressed] = useState(false);
 	const [selectedShelterId, setSelectedShelterId] = useState();
 	const [filteredMarker, setFilteredMarker] = useState([]);
+
+	const [user, setUser] = useRecoilState(userState);
+
+	const [getUserLoading, userResolved, getUserApi] = useApi(getUser, true);
+	useEffect(() => {
+		getUserApi()
+			.then((res) => {
+				setUser(res);
+			})
+	}, []);
 
 	const action = useRecoilValue(actionState);
 	const snapPoints = useMemo(() => {

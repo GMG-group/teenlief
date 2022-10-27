@@ -68,22 +68,44 @@ export const TabBar = ({ navigation }) => {
 		</Animated.View>
 	)
 
-	const AddMarkerCircle = () => (
-		<Animated.View style={{...styles.btnCircle, backgroundColor: user?.role==='Helper' ? '#AE46FF' : '#00A3FF'}}>
-			<TouchableOpacity
-				style={{
-					flex: 1,
-					justifyContent: 'center'
-				}}
-				onPress={() => {
-					setAction(ACTION.Upload);
-					navigation.navigate(SCREEN.Map)
-				}}>
-				<EntypoIcon style={{alignSelf: 'center'}} name={'flag'} color="white" size={scale(25)} />
-				<Text style={styles.btnCircleText}>깃발 놓기</Text>
-			</TouchableOpacity>
-		</Animated.View>
-	)
+	const AddMarkerCircle = () => {
+		if (user.certificated) {
+			return (
+				<Animated.View
+					style={{...styles.btnCircle, backgroundColor: user?.role === 'Helper' ? '#AE46FF' : '#00A3FF'}}>
+					<TouchableOpacity
+						style={{
+							flex: 1,
+							justifyContent: 'center'
+						}}
+						onPress={() => {
+							setAction(ACTION.Upload);
+							navigation.navigate(SCREEN.Map)
+						}}>
+						<EntypoIcon style={{alignSelf: 'center'}} name={'flag'} color="white" size={scale(25)}/>
+						<Text style={styles.btnCircleText}>깃발 놓기</Text>
+					</TouchableOpacity>
+				</Animated.View>
+			);
+		} else {
+			return (
+				<Animated.View
+					style={{...styles.btnCircle, backgroundColor: user?.role === 'Helper' ? '#AE46FF' : '#00A3FF'}}>
+					<TouchableOpacity
+						style={{
+							flex: 1,
+							justifyContent: 'center'
+						}}
+						onPress={() => {
+							navigation.navigate(SCREEN.Certification);
+						}}>
+						<EntypoIcon style={{alignSelf: 'center'}} name={'flag'} color="white" size={scale(25)}/>
+						<Text style={styles.btnCircleText}>본인 인증</Text>
+					</TouchableOpacity>
+				</Animated.View>
+			);
+		}
+	}
 
 	if(action === "upload") {
 		return <Map/>
