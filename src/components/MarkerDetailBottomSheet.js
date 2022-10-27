@@ -45,14 +45,14 @@ const SkeletonLayout = [
 	},
 ];
 
-const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
+const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }) => {
 	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
 	const [markerReviewLoading, markerReviewResolved, markerReviewApi] = useApi(getMarkerReview, true);
 
 	const user = useRecoilValue(userState);
 
 	useEffect(() => {
-		markerReviewApi(detail.helper.id)
+		markerReviewApi(detail?.helper.id)
 		.then(res => {
 			console.log(res, 'here');
 			console.log(detail.helper.id, 'helper id')
@@ -167,11 +167,11 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 						</View>
 						<View style={styles.reviewHeaderRight}>
 							<View>
-								<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>
-								<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>
-								<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>
-								<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>
-								<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>
+								{/*<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>*/}
+								{/*<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>*/}
+								{/*<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>*/}
+								{/*<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>*/}
+								{/*<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>*/}
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {

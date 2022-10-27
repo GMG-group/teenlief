@@ -12,7 +12,7 @@ const MarkerReviewList = ({navigation, route}) => {
     const [user, setUser] = useRecoilState(userState);
     const [color, setColor] = useState('black');
     useEffect(() => {
-        user.user.role==="Helper" ? setColor('#AE46FF') : setColor('#00A3FF');
+        user.role==="Helper" ? setColor('#AE46FF') : setColor('#00A3FF');
     }, []);
 
     return (

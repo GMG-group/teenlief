@@ -30,7 +30,7 @@ const ReviewList = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        if (routeState.user.user.role === 'Teen') {
+        if (routeState.user.role === 'Teen') {
             setColor('#00A3FF');
             reviewAPI();
             if (route.params.todo) {
@@ -43,7 +43,7 @@ const ReviewList = ({ navigation, route }) => {
             if (routeState.outgoing === true) {
                 reviewAPI();
             } else {
-                markerReviewApi(routeState.user.user.id).then((r) => {
+                markerReviewApi(routeState.user.id).then((r) => {
                     console.log(r, 'here');
                 })
                 .catch(error => {
