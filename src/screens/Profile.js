@@ -134,7 +134,10 @@ const Profile = ({navigation}) => {
 		formData.append('data', JSON.stringify(data));
 		chargePoint(formData)
 			.then((res) => {
-				getUserCallback();
+				getUserCallback()
+					.then((userdata) => {
+						setUser(userdata);
+					})
 			})
 	}
 
