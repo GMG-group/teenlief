@@ -8,7 +8,7 @@ import SkeletonContent from "react-native-skeleton-content-nonexpo";
 import SwipeableFlatList from "react-native-swipeable-list";
 import {TouchableOpacity} from "@gorhom/bottom-sheet";
 
-const SkeletonLayout = Array.apply(null, Array(4)).map(() => (
+const SkeletonLayout = Array.apply(null, Array(5)).map(() => (
     {
         width: "100%",
         paddingHorizontal: 15,
@@ -77,7 +77,6 @@ const MarkerManage = ({navigation}) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
         flex: 1
     },
     markerCard: {
