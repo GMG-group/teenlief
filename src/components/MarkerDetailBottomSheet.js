@@ -175,11 +175,11 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
-									navigation.navigate(SCREEN.Review);
-									// navigation.navigate('MarkerRiviewList', {
-									// 	markerReviewResolved: markerReviewResolved,
-									// 	name: detail.helper.first_name,
-									// });
+									// navigation.navigate(SCREEN.Review);
+									navigation.navigate(SCREEN.MarkerRiviewList, {
+										markerReviewResolved: markerReviewResolved,
+										name: detail.helper.first_name,
+									});
 									bottomSheetModalRef.current.close();
 								}}>
 									<Text style={{color: "#2990f6"}}>모든 리뷰 보기</Text>

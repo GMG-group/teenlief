@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import ReactNativeRecoilPersist from "react-native-recoil-persist";
+import MarkerRiviewList from "@screens/MarkerReviewList";
 
 export interface Token {
     accessToken: string;
@@ -23,6 +24,8 @@ export const SCREEN = {
     Profile: 'Profile',
     Donate: 'Donate',
     Certification: 'Certification',
+    ReviewList: 'ReviewList',
+    MarkerRiviewList: 'MarkerRiviewList',
 } as const;
 type SCREEN = typeof SCREEN[keyof typeof SCREEN];
 

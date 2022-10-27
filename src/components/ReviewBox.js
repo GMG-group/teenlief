@@ -22,7 +22,7 @@ const ReviewBox = ({name, star, date, content, author, id, reviewAPI}) => {
     return (
         <Shadow style={styles.container} distance={3} offset={[3,3]}>
             <View style={styles.profileContainer}>
-                <Image style={styles.profileImage} source={require("@components/img/test.png")} />
+                <Image style={styles.profileImage} source={require("@assets/images/test.png")} />
                 <View>
                     <Text style={{color: color}}>이름 : {name}</Text>
                     <View style={{display: 'flex', flexDirection: 'row'}}>

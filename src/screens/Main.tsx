@@ -21,6 +21,7 @@ import SplashScreen from '@screens/SplashScreen';
 import MarkerManage from '@screens/profile/MarkerManage';
 import Profile from '@screens/Profile';
 import MarkerRiviewList from '@screens/MarkerReviewList';
+import ReviewList from "@screens/ReviewList";
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
@@ -115,14 +116,14 @@ const Main = () => {
 								}}
 							/>
 							<Stack.Screen
-								name='ReviewList'
+								name={SCREEN.ReviewList}
 								component={ReviewList}
 								options={{
 									headerShown: false,
 								}}
 							/>
 							<Stack.Screen
-								name='MarkerRiviewList'
+								name={SCREEN.MarkerRiviewList}
 								component={MarkerRiviewList}
 								options={{
 									headerShown: false,
