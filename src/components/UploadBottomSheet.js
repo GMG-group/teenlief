@@ -46,7 +46,6 @@ const UploadBottomSheet = ({ navigation, bottomSheetModalRef, cameraCoords }) =>
     const [tags, setTags] = useState(false);
 
     useEffect(() => {
-        console.log("get Tag")
         tagApi()
             .then((resolved) => {
                 console.log("tag resolved", resolved);

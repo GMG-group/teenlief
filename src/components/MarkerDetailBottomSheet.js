@@ -174,9 +174,10 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 }
 
 const MarkerDetailBottomSheet = ({ navigation, bottomSheetModalRef, selectedMarkerId }) => {
-	const [detailLoading, detailResolved, getDetail] = useApi(getMarkerDetail, true);
+	const [detailLoading, detailResolved, getDetail, setDetailLoading] = useApi(getMarkerDetail, true);
 
 	useEffect(() => {
+		setDetailLoading(true);
 		getDetail(selectedMarkerId);
 	},[selectedMarkerId])
 

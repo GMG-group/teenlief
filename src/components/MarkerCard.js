@@ -2,7 +2,9 @@ import React from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Icon from "react-native-vector-icons/AntDesign"
 import {Tag} from "@components/Tag";
-
+import TextTicker from "react-native-text-ticker";
+import StarRating from "react-native-star-rating-widget";
+import Moment from "react-moment";
 
 const MarkerCard = ({marker, style, deleteApi}) => {
     return (
@@ -11,42 +13,49 @@ const MarkerCard = ({marker, style, deleteApi}) => {
                 <Image style={styles.image} source={{uri: marker.image}}></Image>
                 <View style={styles.contentContainer}>
                     <View style={styles.content}>
-                        <Text style={styles.contentDetail}>{`주소 : ${marker.address}`}</Text>
-                        <View style={styles.tagContainer}>
-                            <Text style={styles.contentDetail}>{`태그 :`}</Text>
-                            <Tag tags={marker.tag} size={'s'}/>
-                        </View>
+                        <TextTicker
+                            style={styles.contentDetail}
+                            duration={5000}
+                            loop
+                            repeatSpacer={50}
+                            marqueeDelay={500}
+                        >
+                            {marker.address}
+                        </TextTicker>
 
-                        <Text style={styles.contentDetail}>{`평점 : ${5}`}</Text>
+                        <Tag tags={marker.tag} size={'s'}/>
+                        <StarRating rating={5} onChange={()=> {}} starSize={15} starStyle={{marginHorizontal: 0}}/>
+                        <Moment style={styles.dateText} format="YYYY/MM/DD" element={Text}>{marker.created_at}</Moment>
+
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => {deleteApi(marker.id)}}>
-                    <Icon style={styles.deleteIcon} size={15} name={"delete"} color={"white"} />
-                </TouchableOpacity>
-
             </View>
+
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 15,
-        height: 100,
-        backgroundColor: "#AE46FF",
-        borderRadius: 20,
-        justifyContent: "center"
+        height: 120,
+        backgroundColor: "#fff",
+        borderRadius: 10,
+        justifyContent: "center",
+        elevation: 3,
+        margin: 10
     },
     rowDivider: {
         flexDirection: "row"
     },
     image: {
         flex: 2,
-        height: 80, // image는 % 로 하면 안보임
-        borderRadius: 10
+        height: 120, // image는 % 로 하면 안보임
+        borderBottomLeftRadius: 10,
+        borderTopLeftRadius: 10
     },
     contentContainer: {
         flex: 3,
+        padding: 5
     },
     content: {
         flex: 1,
@@ -54,17 +63,18 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     contentDetail: {
-        color: "#fff",
-        fontSize: 10
+        color: "#AE46FF",
+        fontSize: 12
     },
-    tagContainer: {
+    detailContainer: {
         flexDirection: "row",
         justifyContent: 'flex-start'
     },
-    deleteIcon: {
+    dateText: {
         position: "absolute",
-        top: 0,
-        right: 0
+        bottom: 5,
+        right: 5,
+        fontSize: 8
     }
 });
 

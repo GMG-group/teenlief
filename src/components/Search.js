@@ -5,7 +5,7 @@ import useApi from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
 import {Tag} from "@components/Tag";
 
-const Search = ({ displayTag }) => {
+const Search = ({ displayTag, filteredMarker, setFilterdMarker }) => {
 	const [search, setSearch] = useState(null);
 	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
 	const [filterTag, setFilterTag] = useState([]);
@@ -38,7 +38,27 @@ const Search = ({ displayTag }) => {
 				</View>
 			</View>
 
-			{ displayTag && <Tag all={true}/> }
+			{ displayTag && <Tag select all={true} onSelected={(selected) => {
+				setFilterdMarker(prev => (
+					prev.map((marker) => {
+						console.log("selected", selected);
+						for(let el of selected) {
+							console.log("el", el.id);
+							console.log("marker", marker.tag);
+							if(el.selected && marker.tag.includes(el.id)) {
+								return {
+									...marker,
+									filtered: false
+								}
+							}
+						}
+						return {
+							...marker,
+							filtered: true
+						}
+					})
+				))
+			}}/> }
 		</View>
 	);
 };

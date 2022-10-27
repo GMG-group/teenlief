@@ -169,10 +169,10 @@ const Profile = ({navigation}) => {
 							<CircularButton title={"출금하기"} color={'#AE46FF'} />
 						</CircularContainer>
 						<Text style={{...containerStyles.label, marginTop: 30}}>활동 관리</Text>
-						<CircularContainer title={`현재 등록된 리뷰 ${100}개`}>
+						<CircularContainer title={`현재 등록된 리뷰`}>
 							<CircularButton title={"전체보기"} color={'#AE46FF'}/>
 						</CircularContainer>
-						<CircularContainer title={`현재 등록된 마커 ${3}개`} style={{marginTop: 12}}>
+						<CircularContainer title={`현재 등록된 마커`} style={{marginTop: 12}}>
 							<CircularButton title={"전체보기"} color={'#AE46FF'} onPress={() => {navigation.push(SCREEN.MarkerManage)}}/>
 						</CircularContainer>
 					</>

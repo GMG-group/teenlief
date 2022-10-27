@@ -28,6 +28,7 @@ const Map = ({ route, navigation }) => {
 	const [sheltersLoading, shelters, getSheltersCallback, setSheltersLoading] = useApi(getShelters, true);
 	const [shelterPressed, setShelterPressed] = useState(false);
 	const [selectedShelterId, setSelectedShelterId] = useState();
+	const [filteredMarker, setFilteredMarker] = useState([]);
 
 	const action = useRecoilValue(actionState);
 	const snapPoints = useMemo(() => {
@@ -44,7 +45,10 @@ const Map = ({ route, navigation }) => {
 	, [action, shelterPressed]);
 
 	useEffect(() => {
-		getMarkers();
+		getMarkers()
+			.then((res) => {
+				setFilteredMarker(res.map((marker) => ({...marker, filtered: false})));
+			});
 		getSheltersCallback();
 	},[])
 
@@ -99,7 +103,7 @@ const Map = ({ route, navigation }) => {
 				cameraInfo={cameraInfo}
 				markersLoading={markersLoading}
 				action={action}
-				markers={markers}
+				markers={filteredMarker}
 				setSelectedMarkerId={setSelectedMarkerId}
 				setShelterPressed={setShelterPressed}
 				bottomSheetModalRef={bottomSheetModalRef}
@@ -109,7 +113,7 @@ const Map = ({ route, navigation }) => {
 			/>}
 
 			{
-				action===ACTION.Upload ? null : <Search displayTag={true}/>
+				action===ACTION.Upload ? null : <Search filteredMarker={filteredMarker} setFilterdMarker={setFilteredMarker} displayTag={true}/>
 			}
 
 		</>
@@ -117,49 +121,31 @@ const Map = ({ route, navigation }) => {
 };
 
 const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers, setSelectedMarkerId, setShelterPressed, bottomSheetModalRef, sheltersLoading, shelters, setSelectedShelterId}) => {
-	// const [zoom, setZoom] = useState(14);
-	// const [bounds, setBounds] = useState([126.96785851679073 ,37.55217298991133, 126.98468133257103, 37.5776860423595]);
 
-	const generatePoints = useCallback(() => {
-		let markerPoints = [], shelterPoints = [];
-		markerPoints = markers.map((marker) => ({
-			type: "Feature",
-			properties: { cluster: false, id: marker.id, category: 'marker' },
-			geometry: {
-				type: "Point",
-				coordinates: [
-					parseFloat(marker.longitude),
-					parseFloat(marker.latitude)
-				]
+	const generateMarkerPoints = () => {
+		const points = [];
+		markers.forEach((marker) => {
+			if(!marker.filtered) {
+				points.push(
+					{
+						type: "Feature",
+						properties: { cluster: false, id: marker.id, category: 'marker' },
+						geometry: {
+							type: "Point",
+							coordinates: [
+								parseFloat(marker.longitude),
+								parseFloat(marker.latitude)
+							]
+						}
+					}
+				)
 			}
-		}));
-		shelterPoints = shelters.map((shelter) => ({
-			type: "Feature",
-			properties: { cluster: false, id: shelter.id, category: 'shelter' },
-			geometry: {
-				type: "Point",
-				coordinates: [
-					parseFloat(shelter.longitude),
-					parseFloat(shelter.latitude)
-				]
-			}
-		}));
-		return markerPoints + shelterPoints;
-	}, [markers, shelters])
-
+		})
+		return points;
+	}
 
 	const markerCluster = useSupercluster({
-		points: markers.map((marker) => ({
-			type: "Feature",
-			properties: { cluster: false, id: marker.id, category: 'marker' },
-			geometry: {
-				type: "Point",
-				coordinates: [
-					parseFloat(marker.longitude),
-					parseFloat(marker.latitude)
-				]
-			}
-		})),
+		points: generateMarkerPoints(),
 		bounds: [cameraInfo.contentRegion[1].longitude, cameraInfo.contentRegion[3].latitude, cameraInfo.contentRegion[3].longitude, cameraInfo.contentRegion[1].latitude],
 		zoom: cameraInfo.zoom,
 		options: { radius: 20, maxZoom: 18 }
@@ -277,7 +263,7 @@ const styles = StyleSheet.create({
 		height: 30,
 		backgroundColor: "black",
 		left: vw/2-30,
-		top: vh/2-80,
+		top: vh/2-100,
 		zIndex: 2,
 		justifyContent: "center",
 		borderRadius: 5
@@ -288,7 +274,7 @@ const styles = StyleSheet.create({
 		height: 20,
 		backgroundColor: "black",
 		left: vw/2-1,
-		top: vh/2-50,
+		top: vh/2-70,
 		zIndex: 2
 	},
 	centerMarkerText: {
