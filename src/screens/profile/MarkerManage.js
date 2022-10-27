@@ -77,10 +77,29 @@ const MarkerManage = ({navigation}) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20
+        flex: 1
     },
     markerCard: {
-        marginBottom: 20
+        marginBottom: 10
+    },
+    qaContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    button: {
+        margin: 10,
+        alignSelf: "center",
+        height: 120,
+        width: 100,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: "#AE46FF"
+    },
+    buttonText: {
+        fontWeight: 'bold',
+        color: 'white'
     }
 });
 
