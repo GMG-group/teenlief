@@ -36,11 +36,11 @@ const MarkerManage = ({navigation}) => {
     const QuickActions = (index, marker) => {
         return (
             <View style={styles.qaContainer}>
-                <View style={[styles.button]}>
-                    <TouchableOpacity onPress={() => {deleteApi(marker.id)}}>
+                <TouchableOpacity onPress={() => {deleteApi(marker.id)}}>
+                    <View style={[styles.button]}>
                         <Text style={styles.buttonText}>삭제</Text>
-                    </TouchableOpacity>
-                </View>
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     };
@@ -77,29 +77,10 @@ const MarkerManage = ({navigation}) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        padding: 20
     },
     markerCard: {
-        marginBottom: 10
-    },
-    qaContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-    },
-    button: {
-        margin: 10,
-        alignSelf: "center",
-        height: 120,
-        width: 100,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: "#AE46FF"
-    },
-    buttonText: {
-        fontWeight: 'bold',
-        color: 'white'
+        marginBottom: 20
     }
 });
 

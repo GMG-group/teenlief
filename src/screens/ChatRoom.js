@@ -65,6 +65,7 @@ const ChatRoom = ({ navigation, route }) => {
                         type: 'error',
                         text1: '비속어 또는 부적절한 단어가 감지되었습니다.',
                         text2: '계정이 차단 됩니다.',
+                        position: 'bottom'
                     })
                     setTimeout(() => {
                         logout(setToken);
