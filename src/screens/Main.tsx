@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import {
 	NavigationContainer,
 	NavigationContainerRef
@@ -11,11 +11,14 @@ import Login from "@screens/Login"
 import SignUp from '@screens/SignUp';
 import ChatRoom from '@screens/ChatRoom';
 import Review from "@screens/Review";
-import ReviewList from "@screens/ReviewList";
+import Donate from "@screens/Donate";
+import Certification from "@screens/Certification";
+import {SCREEN} from "@apis/atoms";
 import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
 import Promise from "@screens/Promise";
 import SplashScreen from '@screens/SplashScreen';
+import MarkerManage from '@screens/profile/MarkerManage';
 import Profile from '@screens/Profile';
 import MarkerRiviewList from '@screens/MarkerReviewList';
 
@@ -32,7 +35,7 @@ const Main = () => {
 	},[token]);
 
 	return (
-		<SafeAreaView style={{flex: 1}}>
+		<View style={{flex: 1}}>
 			{
 				splash ?
 					<SplashScreen
@@ -45,14 +48,14 @@ const Main = () => {
 								token.accessToken === "" ? (
 									<>
 										<Stack.Screen
-											name='Login'
+											name={SCREEN.Login}
 											component={Login}
 											options={{
 												headerShown: false,
 											}}
 										/>
 										<Stack.Screen
-											name='Sign up'
+											name={SCREEN.SignUp}
 											component={SignUp}
 											options
 												={{
@@ -63,48 +66,62 @@ const Main = () => {
 								) : null
 							}
 							<Stack.Screen
-								name='Home'
+								name={SCREEN.Home}
 								component={TabBar}
 								options={{
 									headerShown: false,
 								}}
 							/>
 							<Stack.Screen
-								name='Review'
+								name={SCREEN.Review}
 								component={Review}
 								options={{
 									headerShown: false,
 								}}
 							/>
 							<Stack.Screen
-								name='ChatRoom'
+								name={SCREEN.ChatRoom}
 								component={ChatRoom}
 								options={{
 									headerShown: false,
 								}}
 							/>
 							<Stack.Screen
-								name='Promise'
+								name={SCREEN.Promise}
 								component={Promise}
 								options={{
 									headerShown: false,
 								}}
 							/>
 							<Stack.Screen
-								name='Profile'
-								component={Profile}
+								name={SCREEN.MarkerManage}
+								component={MarkerManage}
 								options={{
 									headerShown: false,
 								}}
 							/>
-							<Stack.Screen 
+							<Stack.Screen
+								name={SCREEN.Donate}
+								component={Donate}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name={SCREEN.Certification}
+								component={Certification}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
 								name='ReviewList'
 								component={ReviewList}
 								options={{
 									headerShown: false,
 								}}
 							/>
-							<Stack.Screen 
+							<Stack.Screen
 								name='MarkerRiviewList'
 								component={MarkerRiviewList}
 								options={{
@@ -114,7 +131,7 @@ const Main = () => {
 						</Stack.Navigator>
 					</NavigationContainer>
 			}
-		</SafeAreaView>
+		</View>
 	);
 };
 

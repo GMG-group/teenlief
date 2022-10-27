@@ -1,15 +1,50 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, Image} from "react-native";
 import {TouchableOpacity, TouchableWithoutFeedback} from "@gorhom/bottom-sheet";
-import { vw, vh } from "react-native-css-vh-vw";
+import { vw } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
-import {getMarkerDetail, getTag, postChatRoom} from "@apis/apiServices";
+import {getMarkerDetail, postChatRoom, getMarkerReview} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useRecoilValue} from "recoil";
-import {userState} from "@apis/atoms";
-import * as Progress from 'react-native-progress';
-import {getMarkerReview} from "@apis/apiServices";
-// http://127.0.0.1:8000/api/helper-info/35/
+import {userState, SCREEN} from "@apis/atoms";
+import {Tag} from "@components/Tag";
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import Progress from 'react-native-progress';
+
+const SkeletonLayout = [
+	{
+		flexDirection: 'row',
+		children: [
+			{
+				width: 75,
+				height: 75,
+				borderRadius: 50,
+			},
+			{
+				marginLeft: 20,
+				flexDirection: 'column',
+				children: [
+					{
+						width: 100,
+						height: 20,
+						marginBottom: 6,
+					},
+					{
+						width: 200,
+						height: 20,
+						marginBottom: 6,
+					},
+					{
+						width: 100,
+						height: 20,
+						marginBottom: 6,
+					},
+				],
+			},
+		]
+	},
+];
+
 const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
 	const [markerReviewLoading, markerReviewResolved, markerReviewApi] = useApi(getMarkerReview, true);
@@ -28,14 +63,17 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 	}, []);
 
 	return (
-		<View>
+		<SkeletonContent
+			containerStyle = {{}} // 없으면 오류
+			layout={SkeletonLayout}
+			isLoading = { detailLoading }
+		>
 			<View style={styles.helperInfoContainer}>
 				<View style={styles.helperInfo}>
-					<Image style={styles.profileImage} source={require('./img/test.png')}>
+					<Image style={styles.profileImage} source={require('@assets/images/test.png')} />
 
-					</Image>
 				<View style={styles.helperInfoText}>
-					<Text style={styles.name}>{detail.helper.first_name}</Text>
+					<Text style={styles.name}>{detail?.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
 						<Text>{}</Text>
 						<Text style={styles.helperStar}>
@@ -48,31 +86,49 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 				</View>
 			</View>
 
-				<View style={styles.connectButton}>
-					<TouchableOpacity
-						onPress={() => {
-							if (!postResolved) {
-								const formData = new FormData();
-								formData.append('helper_id', detail.helper.id);
-								formData.append('teen_id', user.user.id);
-								postChatRoomApi(formData)
-									.then((res) => {
-										navigation.navigate('ChatRoom', {
-											id: res.id,
-											roomName: res.room_name,
-											teen: res.teen,
-											helper: res.helper,
-										});
+				{
+					user?.role === 'Teen' ? (
+						<View style={styles.connectButton}>
+							<TouchableOpacity
+								onPress={() => {
+									if (!postResolved) {
+										const formData = new FormData();
+										formData.append('helper_id', detail.helper.id);
+										formData.append('teen_id', user.id);
+										postChatRoomApi(formData)
+											.then((res) => {
+												navigation.navigate(SCREEN.ChatRoom, {
+													id: res.id,
+													roomName: res.room_name,
+													teen: res.teen,
+													helper: res.helper,
+												});
 
-										bottomSheetModalRef.current?.close();
-									})
-								console.log("연결");
-							}
-						}}
-					>
-						<Text style={{color: "#ffffff"}}>연결</Text>
-					</TouchableOpacity>
-				</View>
+												bottomSheetModalRef.current?.close();
+											})
+										console.log("연결");
+									}
+								}}
+							>
+								<Text style={{color: "#ffffff"}}>연결</Text>
+							</TouchableOpacity>
+						</View>
+					) : (
+						<View style={{...styles.connectButton, backgroundColor: "#AE46FF"}}>
+							<TouchableOpacity
+								onPress={() => {
+									navigation.navigate(SCREEN.Donate, {
+										helper: detail?.helper,
+									});
+									bottomSheetModalRef.current?.close();
+								}}
+							>
+								<Text style={{color: "white"}}>후원</Text>
+							</TouchableOpacity>
+						</View>
+					)
+				}
+
 			</View>
 			<ScrollView>
 				<View style={styles.canHelpInfo}>
@@ -81,18 +137,11 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 						<Text>오전 9:00부터 메세지 가능</Text>
 					</View>
 					<View style={styles.tag}>
-						{
-							detail.tag.map((tagNum) => (
-								<View key={"tag"+tagNum} style={styles.tagItem}>
-									<Text style={{color: 'black'}}>{tags[tagNum-1].tag}</Text>
-								</View>
-							))
-						}
-
+						<Tag tags={detail?.tag}/>
 					</View>
 				</View>
 				<View style={styles.activityImages}>
-					<Image source={{uri: detail.image}} style={styles.activityImage1} />
+					<Image source={{uri: detail?.image}} style={styles.activityImage1} />
 					{/*<View style={styles.activityImageContainer}>*/}
 					{/*	<Image source={require("../../imageTest1.png")} style={styles.activityImage2} />*/}
 					{/*	<Image source={require("../../imageTest1.png")} style={styles.activityImage2} />*/}
@@ -101,10 +150,10 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 				<View>
 					<Text style={{fontSize: 24}}>개요</Text>
 					<View style={styles.helperContentItem}>
-						<Text style={{color: "black"}}>저는 헬퍼 {detail.helper.first_name}입니다.</Text>
+						<Text style={{color: "black"}}>저는 헬퍼 {detail?.helper.first_name}입니다.</Text>
 					</View>
 					<View style={styles.helperContentItem}>
-						<Text style={{color: "black"}}>{detail.explanation}</Text>
+						<Text style={{color: "black"}}>{detail?.explanation}</Text>
 					</View>
 				</View>
 				<View style={styles.review}>
@@ -126,10 +175,11 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
-									navigation.navigate('MarkerRiviewList', {
-										markerReviewResolved: markerReviewResolved,
-										name: detail.helper.first_name,
-									});
+									navigation.navigate(SCREEN.Review);
+									// navigation.navigate('MarkerRiviewList', {
+									// 	markerReviewResolved: markerReviewResolved,
+									// 	name: detail.helper.first_name,
+									// });
 									bottomSheetModalRef.current.close();
 								}}>
 									<Text style={{color: "#2990f6"}}>모든 리뷰 보기</Text>
@@ -139,54 +189,26 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 					</View>
 				</View>
 			</ScrollView>
-		</View>
+		</SkeletonContent>
 	)
 }
 
 const MarkerDetailBottomSheet = ({ navigation, bottomSheetModalRef, selectedMarkerId }) => {
-	const [detailLoading, detailResolved, getDetail] = useApi(getMarkerDetail, true);
-	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
+	const [detailLoading, detailResolved, getDetail, setDetailLoading] = useApi(getMarkerDetail, true);
 
 	useEffect(() => {
+		setDetailLoading(true);
 		getDetail(selectedMarkerId);
-		tagApi();
-		console.log("HelperInfoBottomSheet", selectedMarkerId)
 	},[selectedMarkerId])
-
-	useEffect(() => {
-		if(!detailLoading) {
-			console.log("detailResolved", detailResolved);
-		}
-	},[detailLoading])
 
 	return (
 		<View style={styles.container}>
-			{/*들어가야 할 내용*/}
-			{/*1. 프로필 사진*/}
-			{/*2. 이름*/}
-			{/*3. 별점*/}
-			{/*4. 무엇을 지원해줄 수 있는 헬퍼인지*/}
-			{/*5. 메세지 가능 여부*/}
-			{/*6. 메세지 가능 시간*/}
-			{/*7. 태그*/}
-			{/*8. 헬퍼의 활동 사진(이건 헬퍼가 직접 올리는건가?)*/}
-			{/*9. 북마크 버튼*/}
-			{
-				(tagLoading || detailLoading) ? (
-					<View>
-						<Text>Loading</Text>
-					</View>
-				) : (
-					<MarkerDetail
-						bottomSheetModalRef={bottomSheetModalRef}
-						detail={detailResolved}
-						tags={tagResolved}
-						navigation={navigation}
-					/>
-				)
-			}
-
-
+			<MarkerDetail
+				bottomSheetModalRef={bottomSheetModalRef}
+				detailLoading={detailLoading}
+				detail={detailResolved}
+				navigation={navigation}
+			/>
 		</View>
 	);
 };
@@ -264,29 +286,9 @@ const styles = StyleSheet.create({
 		width: "100%",
 	},
 	tag: {
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "flex-start",
-		alignItems: "center",
-		marginTop: 10
-	},
-	tagItem: {
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-		width: 90,
-		height: 30,
-		backgroundColor: "white",
-		borderColor: "lightgray",
-		borderRadius: 50,
-		marginRight: 10,
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.25,
-		elevation: 3,
+		display: 'flex',
+		flexDirection: 'row',
+		width: vw(100)
 	},
 	activityImages: {
 		display: "flex",

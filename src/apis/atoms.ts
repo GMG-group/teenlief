@@ -10,6 +10,22 @@ export interface User {
     user: any
 }
 
+export const SCREEN = {
+    Login: 'Login',
+    SignUp: 'SignUp',
+    Home: 'Home',
+    Review: 'Review',
+    ChatRoom: 'ChatRoom',
+    Promise: 'Promise',
+    MarkerManage: 'MarkerManage',
+    Map: 'Map',
+    Chat: 'Chat',
+    Profile: 'Profile',
+    Donate: 'Donate',
+    Certification: 'Certification',
+} as const;
+type SCREEN = typeof SCREEN[keyof typeof SCREEN];
+
 export const ACTION = {
     Main: 'main',
     Upload: 'upload'

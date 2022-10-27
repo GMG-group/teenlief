@@ -9,13 +9,12 @@ import { View,
 } from "react-native";
 import SwitchSelector from 'react-native-switch-selector';
 import Background from "@components/Background";
-import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import {usePostLoginCallback} from "@apis/apiCallbackes";
 import Icon from 'react-native-vector-icons/Entypo';
 import { FloatingLabelInput } from 'react-native-floating-label-input';
-const vw = Dimensions.get('window').width;
-const vh = Dimensions.get('window').height;
+import { SCREEN } from '@apis/atoms';
+
 const color = '#1E90FF';
 const options = [
     { label: '청소년', value: 'Teen' },
@@ -149,7 +148,7 @@ const Login = ({ navigation }) => {
 
                 <View style={bottomStyle.signupText}>
                     <Text style={{color: 'black'}}>계정이 없으신가요?</Text>
-                    <TouchableOpacity onPress={() => navigation.push('Sign up')}>
+                    <TouchableOpacity onPress={() => navigation.push(SCREEN.SignUp)}>
                         <Text style={{color: color}}> 회원가입</Text>
                     </TouchableOpacity>
                 </View>

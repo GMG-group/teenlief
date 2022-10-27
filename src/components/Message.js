@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Text, TextInput, View, StyleSheet, ScrollView, Image, TouchableOpacity} from "react-native";
-import test from "@components/img/test.png";
+import test from "@assets/images/test.png";
 import { vw, vh } from "react-native-css-vh-vw";
 import {useRecoilValue} from "recoil";
-import {userState} from "@apis/atoms";
+import {SCREEN, userState} from "@apis/atoms";
 
 export const PromiseMessage = ({ navigation, item, displayProfile }) => {
     const user = useRecoilValue(userState);
@@ -20,9 +20,9 @@ export const PromiseMessage = ({ navigation, item, displayProfile }) => {
     }, [item]);
 
     return (
-        <View style={[styles.container, user.user.id == item.user.id ? {flexDirection: 'row-reverse'} : {flexDirection: 'row'}, {marginBottom: 5}]}>
+        <View style={[styles.container, user.id == item.user.id ? {flexDirection: 'row-reverse'} : {flexDirection: 'row'}, {marginBottom: 5}]}>
             {
-                user.user.id != item.user.id ?
+                user.id != item.user.id ?
                     (
                         displayProfile ?
                             <View style={styles.border}>
@@ -34,7 +34,7 @@ export const PromiseMessage = ({ navigation, item, displayProfile }) => {
                     ) : null
             }
 
-            <View style={user.user.id == item.user.id ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
+            <View style={user.id == item.user.id ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
                 <View style={styles.promise}>
                     <Text style={styles.promiseHeaderText}>약속</Text>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -45,7 +45,7 @@ export const PromiseMessage = ({ navigation, item, displayProfile }) => {
                         <Text style={{fontSize: 18, color: 'black'}}>알림</Text>
                         <Text style={styles.promiseTimeText}>30 분 전</Text>
                     </View>
-                    <TouchableOpacity onPress={() => {navigation.navigate("Review", {helper: item.user})}} style={[styles.promiseFinButton, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
+                    <TouchableOpacity onPress={() => {navigation.navigate(SCREEN.Review, {helper: item.user})}} style={[styles.promiseFinButton, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
                         <Text style={{color: 'white'}}>완료</Text>
                     </TouchableOpacity>
                 </View>
@@ -59,9 +59,9 @@ export const Message = ({ item, displayProfile }) => {
     const user = useRecoilValue(userState);
 
     return (
-        <View style={[styles.container, user.user.id == item.user.id ? {flexDirection: 'row-reverse'} : {flexDirection: 'row'}]}>
+        <View style={[styles.container, user.id == item.user.id ? {flexDirection: 'row-reverse'} : {flexDirection: 'row'}]}>
             {
-                user.user.id != item.user.id ?
+                user.id != item.user.id ?
                     (
                         displayProfile ?
                             <View style={styles.border}>
@@ -73,7 +73,7 @@ export const Message = ({ item, displayProfile }) => {
                     ) : null
             }
             
-            <View style={user.user.id == item.user.id ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
+            <View style={user.id == item.user.id ? {alignItems: 'flex-start'} : {alignItems: 'flex-end'}}>
                 <View style={[styles.speech, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
                     <Text style={styles.text}>{item.content}</Text>
                 </View>
