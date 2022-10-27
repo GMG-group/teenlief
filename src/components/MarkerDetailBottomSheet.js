@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, Image} from "react-native";
 import {TouchableOpacity, TouchableWithoutFeedback} from "@gorhom/bottom-sheet";
 import { vw, vh } from "react-native-css-vh-vw";
@@ -8,10 +8,24 @@ import useApi from "@apis/useApi";
 import {useRecoilValue} from "recoil";
 import {userState} from "@apis/atoms";
 import * as Progress from 'react-native-progress';
+import {getMarkerReview} from "@apis/apiServices";
+// http://127.0.0.1:8000/api/helper-info/35/
 const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
+	const [markerReviewLoading, markerReviewResolved, markerReviewApi] = useApi(getMarkerReview, true);
 
 	const user = useRecoilValue(userState);
+
+	useEffect(() => {
+		markerReviewApi(detail.helper.id)
+		.then(res => {
+			console.log(res, 'here');
+			console.log(detail.helper.id, 'helper id')
+		})
+		.catch(error => {
+            console.log(error);
+        })
+	}, []);
 
 	return (
 		<View>
@@ -23,12 +37,12 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 				<View style={styles.helperInfoText}>
 					<Text style={styles.name}>{detail.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
-						<Text>5.0</Text>
+						<Text>{}</Text>
 						<Text style={styles.helperStar}>
 							★★★★★
 						</Text>
 						<Text>
-							(119개)
+							({markerReviewResolved ? markerReviewResolved.length : 0}개)
 						</Text>
 					</View>
 				</View>
@@ -100,19 +114,22 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 							<Text style={{color: "#ffc107", fontSize: 20}}>
 								★★★★★
 							</Text>
-							<Text>(119개)</Text>
+							<Text>({markerReviewResolved ? markerReviewResolved.length : 0}개)</Text>
 						</View>
 						<View style={styles.reviewHeaderRight}>
 							<View>
-								<Progress.Bar progress={0.3} width={200} />
-								<Progress.Bar progress={0.3} width={200} />
-								<Progress.Bar progress={0.3} width={200} />
-								<Progress.Bar progress={0.3} width={200} />
-								<Progress.Bar progress={0.3} width={200} />
+								<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>
+								<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>
+								<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>
+								<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>
+								<Progress.Bar progress={0.3} width={200} color="#ffc107" borderWidth={1} style={{marginBottom: 5}}/>
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
-									navigation.navigate('Review');
+									navigation.navigate('MarkerRiviewList', {
+										markerReviewResolved: markerReviewResolved,
+										name: detail.helper.first_name,
+									});
 									bottomSheetModalRef.current.close();
 								}}>
 									<Text style={{color: "#2990f6"}}>모든 리뷰 보기</Text>

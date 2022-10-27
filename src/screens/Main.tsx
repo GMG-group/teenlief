@@ -17,6 +17,7 @@ import {tokenState} from "@apis/atoms";
 import Promise from "@screens/Promise";
 import SplashScreen from '@screens/SplashScreen';
 import Profile from '@screens/Profile';
+import MarkerRiviewList from '@screens/MarkerReviewList';
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
@@ -99,6 +100,13 @@ const Main = () => {
 							<Stack.Screen 
 								name='ReviewList'
 								component={ReviewList}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen 
+								name='MarkerRiviewList'
+								component={MarkerRiviewList}
 								options={{
 									headerShown: false,
 								}}

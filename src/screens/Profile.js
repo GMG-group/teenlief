@@ -62,7 +62,7 @@ const LineButton = ({title, onPress}) => (
 const Profile = ({ navigation }) => {
 	const [user, setUser] = useRecoilState(userState)
 	const [token, setToken] = useRecoilState(tokenState);
-	
+	console.log(user.user.id, 'user id');
 	return (
 		<ScrollView>
 		<View style={containerStyles.container}>

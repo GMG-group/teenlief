@@ -14,11 +14,10 @@ const ReviewList = ({ navigation, route }) => {
     const [color, setColor] = useState('white');
     const [reviewCounter, setReviewCounter] = useState(0);
     const [text, setText] = useState('');
-    const [rerender, setRerender] = useState(true);
 
     // api
     const [reviewLoading, reviewResolved, reviewApi] = useApi(getReview, true);
-    const [a, b, c] = useApi(getMarkerReview, true);
+    const [markerReviewLoading, markerReviewResolved, markerReviewApi] = useApi(getMarkerReview, true);
 
     const reviewAPI = () => {
         reviewApi()
@@ -44,7 +43,7 @@ const ReviewList = ({ navigation, route }) => {
             if (routeState.outgoing === true) {
                 reviewAPI();
             } else {
-                c(routeState.user.user.id).then((r) => {
+                markerReviewApi(routeState.user.user.id).then((r) => {
                     console.log(r, 'here');
                 })
                 .catch(error => {
@@ -54,9 +53,6 @@ const ReviewList = ({ navigation, route }) => {
         }
     }, []);
 
-    useEffect(() => {
-        reviewAPI();
-    }, [rerender]);
 
     useEffect(() => {
         if (reviewResolved) {
