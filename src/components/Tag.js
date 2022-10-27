@@ -51,7 +51,7 @@ export const Tag = ({tags, all=false, size='m', onSelected, select=false}) => { 
                 flexGrow: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: filterTag.length * width,
+                width: filterTag.length * (width * 1.3),
             }}
             renderItem={({item, index}) =>
                 <TouchableOpacity
