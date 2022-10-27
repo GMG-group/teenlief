@@ -215,3 +215,13 @@ export const deleteMarker = (header: any, id: number) :Promise<AxiosResponse> =>
         }
     )
 }
+
+export const postCertificate = (header: any, body: any) :Promise<AxiosResponse> => {
+    return axios.post(
+        `${URL}/api/certificate/`,
+        body, {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}

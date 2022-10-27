@@ -22,6 +22,7 @@ export const SCREEN = {
     Chat: 'Chat',
     Profile: 'Profile',
     Donate: 'Donate',
+    Certification: 'Certification',
 } as const;
 type SCREEN = typeof SCREEN[keyof typeof SCREEN];
 

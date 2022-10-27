@@ -8,10 +8,9 @@ import { View,
     SafeAreaView
 } from "react-native";
 import Background from "@components/Background";
-import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import SwitchSelector from "react-native-switch-selector";
-import {usePostLoginCallback, usePostRegistrationCallback} from "@apis/apiCallbackes";
+import { usePostRegistrationCallback } from "@apis/apiCallbackes";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import Icon from 'react-native-vector-icons/Entypo';
 import {SCREEN} from '@apis/atoms';
@@ -57,14 +56,14 @@ const SignUp = ( { navigation } ) => {
             gender: "M",
             role: role
         }).then(r => {navigation.replace("Home")})
-     }
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <Background
                 backgroundAnimation={backgroundAnimation}
                 blobChangeAnimation={blobChangeAnimation}
-                changeColor={changeColor} 
+                changeColor={changeColor}
                 blobColor={blobChangeAnimation.interpolate({
                     inputRange: [0, 1],
                     outputRange: ['#16A9FC', '#B355FC']
@@ -73,7 +72,7 @@ const SignUp = ( { navigation } ) => {
                     inputRange: [0, 1],
                     outputRange: ['#00A3FF', '#AE46FF'],
                 })}
-                />
+            />
 
             <View style={middleStyle.middleContainer}>
                 <AnimationSwitchSelector
@@ -104,7 +103,7 @@ const SignUp = ( { navigation } ) => {
                         borderColor: 'white',
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
+                    customLabelStyles={{
                         color: 'white',
                         colorFocused: 'white',
                         colorBlurred: 'white',
@@ -123,7 +122,7 @@ const SignUp = ( { navigation } ) => {
                         borderColor: 'white',
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
+                    customLabelStyles={{
                         color: 'white',
                         colorFocused: 'white',
                         colorBlurred: 'white',
@@ -145,14 +144,14 @@ const SignUp = ( { navigation } ) => {
                         borderColor: 'white',
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
+                    customLabelStyles={{
                         color: 'white',
                         colorFocused: 'white',
                         colorBlurred: 'white',
                         fontSizeFocused: 15,
                         fontSizeBlurred: 17,
                     }}
-                    />
+                />
                 <FloatingLabelInput
                     label={'confirm'}
                     value={confirm}
@@ -167,7 +166,7 @@ const SignUp = ( { navigation } ) => {
                         borderColor: 'white',
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
+                    customLabelStyles={{
                         color: 'white',
                         colorFocused: 'white',
                         colorBlurred: 'white',
@@ -177,9 +176,9 @@ const SignUp = ( { navigation } ) => {
                 />
 
             </View>
-            
+
             <View style={bottomStyle.container}>
-                <TouchableOpacity style={bottomStyle.login} onPress={() => signUpSubmit()}>
+                <TouchableOpacity style={bottomStyle.login} onPress={() => role === "Teen" ? signUpSubmit() : bootPayAuth()}>
                     <View>
                         <Text style={bottomStyle.loginText}>회원가입</Text>
                     </View>
@@ -194,7 +193,7 @@ const SignUp = ( { navigation } ) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            
+
         </SafeAreaView>
     );
 }
