@@ -6,6 +6,7 @@ import {deleteMarker, getMyMarker} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import SkeletonContent from "react-native-skeleton-content-nonexpo";
 import SwipeableFlatList from "react-native-swipeable-list";
+import {TouchableOpacity} from "@gorhom/bottom-sheet";
 
 const SkeletonLayout = Array.apply(null, Array(4)).map(() => (
     {
@@ -37,9 +38,9 @@ const MarkerManage = ({navigation}) => {
         return (
             <View style={styles.qaContainer}>
                 <View style={[styles.button]}>
-                    <Pressable onPress={() => deleteApi(marker.id)}>
+                    <TouchableOpacity onPress={() => {deleteApi(marker.id)}}> {/* TODO: 삭제 애니메이션 추가 필요할듯 */}
                         <Text style={styles.buttonText}>삭제</Text>
-                    </Pressable>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -54,7 +55,7 @@ const MarkerManage = ({navigation}) => {
     return (
         <>
             <Header navigation={navigation} title={"마커 관리하기"}/>
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
                 <SkeletonContent
                     containerStyle = {{
                         margin: 10
@@ -74,13 +75,15 @@ const MarkerManage = ({navigation}) => {
                         renderItem={({item}) => (
                             <MarkerCard style={styles.markerCard} marker={item} deleteApi={deleteApi} />
                         )}
-                        maxSwipeDistance={240}
+                        maxSwipeDistance={110}
                         // contentContainerStyle={styles.contentContainerStyle}
                         renderQuickActions={({index, item}) => QuickActions(index, item)}
                         shouldBounceOnMount={true}
+
+
                     />
                 </SkeletonContent>
-            </ScrollView>
+            </View>
         </>
 
     )
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
         margin: 10,
         alignSelf: "center",
         height: 120,
-        width: 80,
+        width: 100,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
