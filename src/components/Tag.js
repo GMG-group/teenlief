@@ -21,10 +21,10 @@ export const Tag = ({tags, all=false, size='m', onSelected, select=false}) => { 
         if(!tagLoading && filterTag.length===0) {
             let newTag = []
             if(all) {
-                newTag = tagResolved.map((tag) => ({...tag}));
+                newTag = tagResolved.map((tag) => ({...tag, selected: select}));
             } else {
                 tags.forEach((tag) => {
-                    newTag.push({...tagResolved[tag-1], selected: false});
+                    newTag.push({...tagResolved[tag-1], selected: select});
                 });
             }
 
@@ -40,7 +40,6 @@ export const Tag = ({tags, all=false, size='m', onSelected, select=false}) => { 
         };
         setFilterTag(items);
         onSelected && onSelected(items);
-        console.log("filtertag!!!", items);
     }
 
     return (
