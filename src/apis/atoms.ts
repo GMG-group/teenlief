@@ -20,7 +20,9 @@ export const SCREEN = {
     MarkerManage: 'MarkerManage',
     Map: 'Map',
     Chat: 'Chat',
-    Profile: 'Profile'
+    Profile: 'Profile',
+    Donate: 'Donate',
+    Certification: 'Certification',
 } as const;
 type SCREEN = typeof SCREEN[keyof typeof SCREEN];
 

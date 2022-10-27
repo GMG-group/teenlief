@@ -1,9 +1,22 @@
 import React, {useEffect} from "react";
-import {ScrollView, StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import MarkerCard from "@components/MarkerCard";
 import Header from "@components/Header";
 import {deleteMarker, getMyMarker} from "@apis/apiServices";
 import useApi from "@apis/useApi";
+import SkeletonContent from "react-native-skeleton-content-nonexpo";
+import SwipeableFlatList from "react-native-swipeable-list";
+import {TouchableOpacity} from "@gorhom/bottom-sheet";
+
+const SkeletonLayout = Array.apply(null, Array(5)).map(() => (
+    {
+        width: "100%",
+        paddingHorizontal: 15,
+        height: 120,
+        borderRadius: 10,
+        justifyContent: "center",
+        marginBottom: 20
+    }));
 
 const MarkerManage = ({navigation}) => {
     const [myMarkerLoading, myMarkerResolved, myMarkerApi] = useApi(getMyMarker, true);
@@ -17,26 +30,46 @@ const MarkerManage = ({navigation}) => {
     },[deleteLoading])
 
     useEffect(() => {
-       myMarkerApi()
+        myMarkerApi()
     },[])
 
-    if(myMarkerLoading) {
+    const QuickActions = (index, marker) => {
         return (
-            <Text>Loading</Text>
-        )
-    }
+            <View style={styles.qaContainer}>
+                <TouchableOpacity onPress={() => {deleteApi(marker.id)}}>
+                    <View style={[styles.button]}>
+                        <Text style={styles.buttonText}>삭제</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        );
+    };
 
     return (
         <>
             <Header navigation={navigation} title={"마커 관리하기"}/>
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
+                <SkeletonContent
+                    containerStyle = {{
+                        margin: 10
+                    }} // 없으면 오류
+                    layout={SkeletonLayout}
+                    isLoading={myMarkerLoading}
+                >
+                    <SwipeableFlatList
+                        keyExtractor={(item) => `markerCard-${item.id}`}
+                        data={myMarkerResolved}
+                        renderItem={({item}) => (
+                            <MarkerCard style={styles.markerCard} marker={item} deleteApi={deleteApi} />
+                        )}
+                        maxSwipeDistance={110}
+                        renderQuickActions={({index, item}) => QuickActions(index, item)}
+                        shouldBounceOnMount={true}
 
-                {
-                    myMarkerResolved.map((marker, idx) => (
-                        <MarkerCard style={styles.markerCard} key={`MarkerCard-${idx}`} marker={marker} deleteApi={deleteApi}/>
-                    ))
-                }
-            </ScrollView>
+
+                    />
+                </SkeletonContent>
+            </View>
         </>
 
     )
@@ -44,10 +77,29 @@ const MarkerManage = ({navigation}) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20
+        flex: 1
     },
     markerCard: {
-        marginBottom: 20
+        marginBottom: 10
+    },
+    qaContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    button: {
+        margin: 10,
+        alignSelf: "center",
+        height: 120,
+        width: 100,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: "#AE46FF"
+    },
+    buttonText: {
+        fontWeight: 'bold',
+        color: 'white'
     }
 });
 

@@ -29,7 +29,7 @@ const ChatRoom = ({ navigation, route }) => {
     useEffect(() => {
         callApi(route.params.id)
             .then((res) => {
-                webSocket.current = new WebSocket(`wss://${DOMAIN}/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
+                webSocket.current = new WebSocket(`ws://10.0.2.2:8000/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
 
                 webSocket.current.onopen = () => {
                     console.log('connected');
@@ -57,6 +57,10 @@ const ChatRoom = ({ navigation, route }) => {
             })
     }, [route.params.id]);
 
+    useEffect(() => {
+        console.log(user);
+    }, []);
+
     const onText = () => {
         filterApi(chatInput)
             .then((response) => {
@@ -65,6 +69,7 @@ const ChatRoom = ({ navigation, route }) => {
                         type: 'error',
                         text1: '비속어 또는 부적절한 단어가 감지되었습니다.',
                         text2: '계정이 차단 됩니다.',
+                        position: 'bottom'
                     })
                     setTimeout(() => {
                         logout(setToken);
@@ -91,7 +96,7 @@ const ChatRoom = ({ navigation, route }) => {
                     <Image style={styles.profile} source={test} />
                     <Text style={{fontSize: 16, color: 'black'}}>
                         {
-                            user.user.id === route.params.teen.id
+                            user.id === route.params.teen.id
                                 ? route.params.helper.first_name
                                 : route.params.teen.first_name
                         }
@@ -132,19 +137,24 @@ const ChatRoom = ({ navigation, route }) => {
             />
 
             <View style={styles.chatContainer}>
-                <TouchableOpacity
-                    onPress={() => navigation.push(
-                        SCREEN.Promise,
-                        {
-                            ws: webSocket.current,
-                            roomName: route.params.roomName,
-                            helper: route.params.helper,
-                            teen: route.params.teen,
-                        }
-                    )}
-                >
-                    <Ionicons name="add-outline" size={25} color={'black'} />
-                </TouchableOpacity>
+                {
+                    user.role === 'Helper' ? (
+                        <TouchableOpacity
+                            onPress={() => navigation.push(
+                                SCREEN.Promise,
+                                {
+                                    ws: webSocket.current,
+                                    roomName: route.params.roomName,
+                                    helper: route.params.helper,
+                                    teen: route.params.teen,
+                                }
+                            )}
+                        >
+                            <Ionicons name="add-outline" size={25} color={'black'} />
+                        </TouchableOpacity>
+                    ) : null
+                }
+
                 <TextInput style={styles.input} value={chatInput} onChangeText={text => setChatInput(text)} />
                 <TouchableOpacity onPress={() => onText()}>
                     <Ionicons name="paper-plane-outline" size={25} color={'black'} />
