@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import MarkerCard from "@components/MarkerCard";
 import Header from "@components/Header";
 import {deleteMarker, getMyMarker} from "@apis/apiServices";
@@ -12,11 +12,10 @@ const SkeletonLayout = Array.apply(null, Array(4)).map(() => (
     {
         width: "100%",
         paddingHorizontal: 15,
-        height: 100,
-        borderRadius: 20,
+        height: 120,
+        borderRadius: 10,
         justifyContent: "center",
-        elevation: 5,
-        marginBottom: 10
+        marginBottom: 20
     }));
 
 const MarkerManage = ({navigation}) => {
@@ -38,19 +37,13 @@ const MarkerManage = ({navigation}) => {
         return (
             <View style={styles.qaContainer}>
                 <View style={[styles.button]}>
-                    <TouchableOpacity onPress={() => {deleteApi(marker.id)}}> {/* TODO: 삭제 애니메이션 추가 필요할듯 */}
+                    <TouchableOpacity onPress={() => {deleteApi(marker.id)}}>
                         <Text style={styles.buttonText}>삭제</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         );
     };
-
-    if(myMarkerLoading) {
-        return (
-            <Text>Loading</Text>
-        )
-    }
 
     return (
         <>
@@ -61,14 +54,8 @@ const MarkerManage = ({navigation}) => {
                         margin: 10
                     }} // 없으면 오류
                     layout={SkeletonLayout}
-                    isLoading={false}
+                    isLoading={myMarkerLoading}
                 >
-
-                {/*{*/}
-                {/*    myMarkerResolved.map((marker, idx) => (*/}
-                {/*        <MarkerCard style={styles.markerCard} key={`MarkerCard-${idx}`} marker={marker} deleteApi={deleteApi}/>*/}
-                {/*    ))*/}
-                {/*}*/}
                     <SwipeableFlatList
                         keyExtractor={(item) => `markerCard-${item.id}`}
                         data={myMarkerResolved}
@@ -76,7 +63,6 @@ const MarkerManage = ({navigation}) => {
                             <MarkerCard style={styles.markerCard} marker={item} deleteApi={deleteApi} />
                         )}
                         maxSwipeDistance={110}
-                        // contentContainerStyle={styles.contentContainerStyle}
                         renderQuickActions={({index, item}) => QuickActions(index, item)}
                         shouldBounceOnMount={true}
 
