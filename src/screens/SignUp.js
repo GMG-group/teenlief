@@ -8,13 +8,14 @@ import { View,
     SafeAreaView
 } from "react-native";
 import Background from "@components/Background";
-import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import SwitchSelector from "react-native-switch-selector";
-import {usePostLoginCallback, usePostRegistrationCallback} from "@apis/apiCallbackes";
+import { usePostRegistrationCallback } from "@apis/apiCallbackes";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import Icon from 'react-native-vector-icons/Entypo';
 import {SCREEN} from '@apis/atoms';
+import { Bootpay } from 'react-native-bootpay-api';
+
 
 const color = '#1E90FF';
 const options = [
@@ -57,14 +58,73 @@ const SignUp = ( { navigation } ) => {
             gender: "M",
             role: role
         }).then(r => {navigation.replace("Home")})
-     }
+    }
+
+    const bootpay = useRef(null);
+
+    const bootPayAuth = () => {
+        const payload = {
+            pg: '다날',
+            method: '본인인증',
+            order_name: '본인인증',
+            authentication_id: '12345_21345', //개발사에 관리하는 주문번호 (본인인증용)
+        }
+        //기타 설정
+        const extra = {
+            app_scheme: "bootpayrnapi", //ios의 경우 카드사 앱 호출 후 되돌아오기 위한 앱 스키마명
+            show_close_button: true, // x 닫기 버튼 삽입 (닫기버튼이 없는 PG사를 위한 옵션)
+        }
+
+        // const extra = new Extra();
+        if(bootpay != null && bootpay.current != null) bootpay.current.requestAuthentication(payload, [], {}, extra);
+    }
+
+    const onCancel = (data) => {
+        console.log('-- cancel', data);
+    }
+
+    const onError = (data) => {
+        console.log('-- error', data);
+    }
+
+    const onIssued = (data) => {
+        console.log('-- issued', data);
+    }
+
+    const onConfirm = (data) => {
+        console.log('-- confirm', data);
+        if (bootpay != null && bootpay.current != null) bootpay.current.transactionConfirm(data);
+    }
+
+    const onDone = (data) => {
+        console.log('-- done', data);
+        signUpSubmit();
+    }
+
+    const onClose = () => {
+        console.log('-- closed');
+    }
 
     return (
         <SafeAreaView style={styles.container}>
+            <Bootpay
+                ref={bootpay}
+                ios_application_id={'5b8f6a4d396fa665fdc2b5e9'}
+                android_application_id={'5b8f6a4d396fa665fdc2b5e8'}
+                // ios_application_id={'5b9f51264457636ab9a07cdd'}
+                // android_application_id={'5b9f51264457636ab9a07cdc'}
+                onCancel={onCancel}
+                onError={onError}
+                onIssued={onIssued}
+                onConfirm={onConfirm}
+                onDone={onDone}
+                onClose={onClose}
+            />
+
             <Background
                 backgroundAnimation={backgroundAnimation}
                 blobChangeAnimation={blobChangeAnimation}
-                changeColor={changeColor} 
+                changeColor={changeColor}
                 blobColor={blobChangeAnimation.interpolate({
                     inputRange: [0, 1],
                     outputRange: ['#16A9FC', '#B355FC']
@@ -73,7 +133,7 @@ const SignUp = ( { navigation } ) => {
                     inputRange: [0, 1],
                     outputRange: ['#00A3FF', '#AE46FF'],
                 })}
-                />
+            />
 
             <View style={middleStyle.middleContainer}>
                 <AnimationSwitchSelector
@@ -104,7 +164,7 @@ const SignUp = ( { navigation } ) => {
                         borderColor: 'white',
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
+                    customLabelStyles={{
                         color: 'white',
                         colorFocused: 'white',
                         colorBlurred: 'white',
@@ -123,7 +183,7 @@ const SignUp = ( { navigation } ) => {
                         borderColor: 'white',
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
+                    customLabelStyles={{
                         color: 'white',
                         colorFocused: 'white',
                         colorBlurred: 'white',
@@ -145,14 +205,14 @@ const SignUp = ( { navigation } ) => {
                         borderColor: 'white',
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
+                    customLabelStyles={{
                         color: 'white',
                         colorFocused: 'white',
                         colorBlurred: 'white',
                         fontSizeFocused: 15,
                         fontSizeBlurred: 17,
                     }}
-                    />
+                />
                 <FloatingLabelInput
                     label={'confirm'}
                     value={confirm}
@@ -167,7 +227,7 @@ const SignUp = ( { navigation } ) => {
                         borderColor: 'white',
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
+                    customLabelStyles={{
                         color: 'white',
                         colorFocused: 'white',
                         colorBlurred: 'white',
@@ -177,9 +237,9 @@ const SignUp = ( { navigation } ) => {
                 />
 
             </View>
-            
+
             <View style={bottomStyle.container}>
-                <TouchableOpacity style={bottomStyle.login} onPress={() => signUpSubmit()}>
+                <TouchableOpacity style={bottomStyle.login} onPress={() => bootPayAuth()}>
                     <View>
                         <Text style={bottomStyle.loginText}>회원가입</Text>
                     </View>
@@ -194,7 +254,7 @@ const SignUp = ( { navigation } ) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            
+
         </SafeAreaView>
     );
 }
