@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
 		height: 30,
 		backgroundColor: "black",
 		left: vw/2-30,
-		top: vh/2-80,
+		top: vh/2-100,
 		zIndex: 2,
 		justifyContent: "center",
 		borderRadius: 5
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
 		height: 20,
 		backgroundColor: "black",
 		left: vw/2-1,
-		top: vh/2-50,
+		top: vh/2-70,
 		zIndex: 2
 	},
 	centerMarkerText: {
