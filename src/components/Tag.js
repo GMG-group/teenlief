@@ -4,7 +4,6 @@ import {useApi} from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
 import {FlatList, Text, View} from "react-native";
 
-
 export const Tag = ({tags, all=false, size='m'}) => {
     const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
     const [filterTag, setFilterTag] = useState([]);
@@ -42,7 +41,7 @@ export const Tag = ({tags, all=false, size='m'}) => {
                 flexGrow: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: filterTag.length * 110,
+                width: filterTag.length * 115,
             }}
             renderItem={({item}) =>
                 <View style={{...styles.filterItem, width: width, height: height}} key={item.id}>

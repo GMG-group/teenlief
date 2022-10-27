@@ -31,7 +31,7 @@ const ChatView = ({ navigation, data }) => {
                 <View>
                     <Text style={styles.name}>
                         {
-                            user.user.id === data.teen.id ? data.helper.first_name : data.teen.first_name
+                            user.id === data.teen.id ? data.helper.first_name : data.teen.first_name
                         }
                     </Text>
                     <View style={styles.starContainer}>

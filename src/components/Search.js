@@ -1,18 +1,11 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {
-	TextInput,
-	View,
-	StyleSheet,
-	Text,
-	ScrollView, FlatList, TouchableOpacity, Dimensions
-} from "react-native";
-import Icon from "react-native-vector-icons/dist/Feather";
-import { vw, vh } from "react-native-css-vh-vw";
+import React, { useState, useEffect } from 'react';
+import { TextInput, View, StyleSheet } from "react-native";
+import { vw } from "react-native-css-vh-vw";
 import useApi from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
 import {Tag} from "@components/Tag";
 
-const Search = ({displayTag}) => {
+const Search = ({ displayTag }) => {
 	const [search, setSearch] = useState(null);
 	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
 	const [filterTag, setFilterTag] = useState([]);
@@ -32,8 +25,6 @@ const Search = ({displayTag}) => {
 		displayTag && tagApi()
 	},[]);
 
-	const tagListRef = useRef(null);
-
 	return (
 		<View style={styles.container}>
 			<View style={styles.search}>
@@ -47,8 +38,7 @@ const Search = ({displayTag}) => {
 				</View>
 			</View>
 
-			<Tag all={true}/>
-
+			{ displayTag && <Tag all={true}/> }
 		</View>
 	);
 };
@@ -80,7 +70,8 @@ const styles = StyleSheet.create({
 		},
 		shadowOpacity: 0.25,
 		elevation: 10,
-		color: '#000'
+		color: '#000',
+		marginBottom: 15,
 	},
 	innerSearch: {
 		display: 'flex',

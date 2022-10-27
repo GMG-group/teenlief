@@ -2,11 +2,10 @@ import axios, {AxiosResponse} from "axios";
 import Config from "react-native-config";
 
 const PROTOCOL = "http://";
-// export const DOMAIN = "teenlief.com"
+export const DOMAIN = "teenlief.com"
 const AND_DEV_URL = PROTOCOL + "10.0.2.2:8000";
 const IOS_DEV_URL = PROTOCOL +  "127.0.0.1:8000";
-// const URL = PROTOCOL + DOMAIN;
-const URL = AND_DEV_URL;
+export const URL = AND_DEV_URL;
 
 export const postLogin = (body: any):Promise<AxiosResponse> => {
     return axios.post (
@@ -141,10 +140,14 @@ export const postTokenRefresh = (body:any):Promise<AxiosResponse> => {
     );
 }
 
-export const getTag = (body: any):Promise<AxiosResponse> => {
+export const getTag = (header: any):Promise<AxiosResponse> => {
     console.log("getTAg1!!")
     return axios.get(
-        `${URL}/api/tag/`
+        `${URL}/api/tag/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
     )
 }
 
@@ -176,6 +179,19 @@ export const getShelters = (header: any) :Promise<AxiosResponse> => {
         {
             withCredentials: false,
             headers: header
+        }
+    )
+}
+
+export const postPointEvent = (header: any, body: any):Promise<AxiosResponse> => {
+    return axios.post(
+        `${URL}/api/point/`,
+        body, {
+            headers: {
+                withCredentials: false,
+                'Content-Type': 'multipart/form-data',
+                ...header
+            }
         }
     )
 }

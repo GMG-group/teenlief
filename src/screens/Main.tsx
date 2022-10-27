@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import {
 	NavigationContainer,
 	NavigationContainerRef
@@ -11,6 +11,7 @@ import Login from "@screens/Login"
 import SignUp from '@screens/SignUp';
 import ChatRoom from '@screens/ChatRoom';
 import Review from "@screens/Review";
+import Donate from "@screens/Donate";
 import {SCREEN} from "@apis/atoms";
 import {useRecoilValue} from "recoil";
 import {tokenState} from "@apis/atoms";
@@ -31,7 +32,7 @@ const Main = () => {
 	},[token]);
 
 	return (
-		<SafeAreaView style={{flex: 1}}>
+		<View style={{flex: 1}}>
 			{
 				splash ?
 					<SplashScreen
@@ -96,10 +97,17 @@ const Main = () => {
 									headerShown: false,
 								}}
 							/>
+							<Stack.Screen
+								name={SCREEN.Donate}
+								component={Donate}
+								options={{
+									headerShown: false,
+								}}
+							/>
 						</Stack.Navigator>
 					</NavigationContainer>
 			}
-		</SafeAreaView>
+		</View>
 	);
 };
 
