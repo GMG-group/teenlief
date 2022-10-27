@@ -5,7 +5,7 @@ import {tokenState, userState, SCREEN} from "@apis/atoms";
 import {vh, vw} from "react-native-css-vh-vw";
 import { Shadow } from 'react-native-shadow-2';
 import {logout} from "@utils/Logout";
-// import { BootpayWebView } from 'react-native-bootpay';
+import { BootpayWebView } from 'react-native-bootpay';
 import useApi from "@apis/useApi";
 import {getUser, postPointEvent} from "@apis/apiServices";
 
@@ -144,17 +144,17 @@ const Profile = ({navigation}) => {
 
 	return (
 		<ScrollView>
-			{/*<BootpayWebView*/}
-			{/*	ref={bootpay}*/}
-			{/*	ios_application_id={'6326ebe2d01c7e001cf5ee1a'}*/}
-			{/*	android_application_id={'6326ebe2d01c7e001cf5ee19'}*/}
-			{/*	onCancel={onCancel}*/}
-			{/*	onError={onError}*/}
-			{/*	onReady={onReady}*/}
-			{/*	onConfirm={onConfirm}*/}
-			{/*	onDone={onDone}*/}
-			{/*	onClose={onClose}*/}
-			{/*/>*/}
+			<BootpayWebView
+				ref={bootpay}
+				ios_application_id={'6326ebe2d01c7e001cf5ee1a'}
+				android_application_id={'6326ebe2d01c7e001cf5ee19'}
+				onCancel={onCancel}
+				onError={onError}
+				onReady={onReady}
+				onConfirm={onConfirm}
+				onDone={onDone}
+				onClose={onClose}
+			/>
 
 			<View style={containerStyles.container}>
 				<ProfileCard user={user}/>
