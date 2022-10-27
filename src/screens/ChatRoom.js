@@ -29,7 +29,7 @@ const ChatRoom = ({ navigation, route }) => {
     useEffect(() => {
         callApi(route.params.id)
             .then((res) => {
-                webSocket.current = new WebSocket(`wss://${DOMAIN}/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
+                webSocket.current = new WebSocket(`ws://10.0.2.2:8000/ws/chat/${route.params.roomName}?token=${token.accessToken}`);
 
                 webSocket.current.onopen = () => {
                     console.log('connected');
@@ -91,7 +91,7 @@ const ChatRoom = ({ navigation, route }) => {
                     <Image style={styles.profile} source={test} />
                     <Text style={{fontSize: 16, color: 'black'}}>
                         {
-                            user.user.id === route.params.teen.id
+                            user.id === route.params.teen.id
                                 ? route.params.helper.first_name
                                 : route.params.teen.first_name
                         }

@@ -17,7 +17,7 @@ GoogleSignin.configure({
     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
     // hostedDomain: '', // specifies a hosted domain restriction
     forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-    //iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+    iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
 });
 
 const SocialLogin = ({navigation}) => {

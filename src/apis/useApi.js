@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect, useCallback, useMemo } from 'react';
-import {useRecoilCallback} from "recoil";
-import {tokenState} from "@apis/atoms";
-import {usePostTokenRefreshCallback} from "@apis/apiCallbackes";
+import React, { useState } from 'react';
+import { useRecoilCallback } from "recoil";
+import { tokenState } from "@apis/atoms";
+import { usePostTokenRefreshCallback } from "@apis/apiCallbackes";
 
 export const useApi = (api, authHeader=false) => {
     const [loading, setLoading] = useState(true);
@@ -10,16 +10,14 @@ export const useApi = (api, authHeader=false) => {
 
     const makeHeaders = (token) => {
         const headers = {
-            'Authorization': 'Bearer ' + token,
-            // 'Content-Type': 'application/json'
-            // 'Content-Type': 'application/json'
+            'Authorization': 'Bearer ' + token
         }
         return headers
     }
 
     const errorHandling = (err, refreshToken, ...args) => {
-        if(err.response.status === 403) {
-            console.log("403")
+        if (err.response.status === 401 || err.response.status === 403) {
+            console.log("refresh token")
             return postTokenRefresh({"refresh": refreshToken})
                 .then((status) => {
                     console.log("tokenRefresh finished")
@@ -28,10 +26,7 @@ export const useApi = (api, authHeader=false) => {
                 })
         } else {
             console.log("unhandled error", err.response.status, err.response)
-            // setTimeout(() => {
-            //     callback(...args);
-            // }, 3000)
-            return {status:false};
+            return { status: false };
         }
     }
 
@@ -56,7 +51,7 @@ export const useApi = (api, authHeader=false) => {
                 if(!status) return;
                 setResolved(data);
                 setLoading(false);
-                // console.log("final data",data);
+
                 return data
             },
         [],

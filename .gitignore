@@ -257,5 +257,6 @@ google-services.json
 # End of https://www.toptal.com/developers/gitignore/api/reactnative
 
 yarn.lock
-ios/Pods
-ios/Podfile.lock
+Pods
+Teenlief.xcworkspace
+Podfile.lock

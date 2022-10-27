@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import NaverMapView, { Marker } from "react-native-nmap";
 import {BottomSheetModal} from "@gorhom/bottom-sheet";
-import {Button, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Dimensions, Image, Platform, StyleSheet, Text, View} from "react-native";
 import Search from "@components/Search";
 import MarkerDetailBottomSheet from "@components/MarkerDetailBottomSheet";
 import useApi from "@apis/useApi";
@@ -28,6 +28,7 @@ const Map = ({ route, navigation }) => {
 	const [sheltersLoading, shelters, getSheltersCallback, setSheltersLoading] = useApi(getShelters, true);
 	const [shelterPressed, setShelterPressed] = useState(false);
 	const [selectedShelterId, setSelectedShelterId] = useState();
+	const [filteredMarker, setFilteredMarker] = useState([]);
 
 	const action = useRecoilValue(actionState);
 	const snapPoints = useMemo(() => {
@@ -44,9 +45,16 @@ const Map = ({ route, navigation }) => {
 	, [action, shelterPressed]);
 
 	useEffect(() => {
-		getMarkers();
+		getMarkers()
+			.then((res) => {
+				setFilteredMarker(res.map((marker) => ({...marker, filtered: false})));
+			});
 		getSheltersCallback();
 	},[])
+
+	useEffect(() => {
+		console.log("filteredMarker", filteredMarker);
+	},[filteredMarker])
 
 	useEffect(() => {
 		if(action===ACTION.Upload) {
@@ -83,7 +91,7 @@ const Map = ({ route, navigation }) => {
 				
 			</BottomSheetModal>
 			{
-				action==="upload" ? (
+				action===ACTION.Upload ? (
 					<>
 						<BackButton/>
 						<View style={styles.centerMarker}>
@@ -99,7 +107,7 @@ const Map = ({ route, navigation }) => {
 				cameraInfo={cameraInfo}
 				markersLoading={markersLoading}
 				action={action}
-				markers={markers}
+				markers={filteredMarker}
 				setSelectedMarkerId={setSelectedMarkerId}
 				setShelterPressed={setShelterPressed}
 				bottomSheetModalRef={bottomSheetModalRef}
@@ -109,7 +117,7 @@ const Map = ({ route, navigation }) => {
 			/>}
 
 			{
-				action==="upload" ? null : <Search displayTag={true}/>
+				action===ACTION.Upload ? null : <Search filteredMarker={filteredMarker} setFilterdMarker={setFilteredMarker} displayTag={true}/>
 			}
 
 		</>
@@ -204,17 +212,14 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 
 				if (isCluster) {
 					return (
-					<CustomMarker
-						key={`cluster-${cluster.properties.cluster_id}`}
-						coordinate={{latitude: latitude, longitude: longitude}}
-						idx={cluster.properties.id}
-					>
-						<Image
-							source={require('../assets/images/cluster_marker.png')}
-							style={{width:50, height:55}}
-							fadeDuration={0}
+						<CustomMarker
+							key={`cluster-${cluster.properties.cluster_id}`}
+							coordinate={{latitude: latitude, longitude: longitude}}
+							idx={cluster.properties.id}
+							width={50}
+							height={55}
+							image={require('../assets/images/cluster_marker.png')}
 						/>
-					</CustomMarker>
 					);
 				}
 
@@ -227,13 +232,10 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 							setShelterPressed(false);
 							bottomSheetModalRef.current?.present();
 						}}
-					>
-						<Image
-							source={require('../assets/images/marker_helper.png')}
-							style={{width:60, height:60}}
-							fadeDuration={0}
-						/>
-					</CustomMarker>
+						width={60}
+						height={60}
+						image={require('../assets/images/marker_helper.png')}
+					/>
 				);
 			})}
 			{shelterCluster.clusters.map(cluster => {
@@ -249,13 +251,10 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 							key={`cluster-${cluster.properties.cluster_id}`}
 							coordinate={{latitude: latitude, longitude: longitude}}
 							idx={cluster.properties.id}
-						>
-							<Image
-								source={require('../assets/images/cluster_marker.png')}
-								style={{width:50, height:55}}
-								fadeDuration={0}
-							/>
-						</CustomMarker>
+							width={50}
+							height={55}
+							image={require('../assets/images/cluster_marker.png')}
+						/>
 					);
 				}
 
@@ -268,15 +267,11 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 							setShelterPressed(true);
 							setSelectedShelterId(cluster.properties.id);
 							bottomSheetModalRef.current?.present();
-
 						}}
-					>
-						<Image
-							source={require('../assets/images/marker_shelter.png')}
-							style={{width:60, height:60}}
-							fadeDuration={0}
-						/>
-					</CustomMarker>
+						width={60}
+						height={60}
+						image={require('../assets/images/marker_shelter.png')}
+					/>
 				);
 			})}
 		</NaverMapView>
