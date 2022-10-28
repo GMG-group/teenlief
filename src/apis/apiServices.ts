@@ -236,3 +236,24 @@ export const getMyReview = (header: any) :Promise<AxiosResponse> => {
         }
     )
 }
+
+export const getMyUnReview = (header: any) :Promise<AxiosResponse> => {
+    console.log("getUnReview", header);
+    return axios.get(
+        `${URL}/api/promise/unreviwed/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
+
+export const getMarkerInfo = (header: any, id: number) :Promise<AxiosResponse> => {
+    return axios.get(
+        `${URL}/api/helper-info/${id}/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}

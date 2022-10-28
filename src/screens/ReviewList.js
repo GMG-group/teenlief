@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, FlatList} from "react-native";
 import ReviewBox from "@components/ReviewBox";
-import {getMyReview, getMarkerReview} from "@apis/apiServices";
+import {getMyReview, getMyUnReview} from "@apis/apiServices";
 import  {useApi} from "@apis/useApi";
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { vw, vh } from "react-native-css-vh-vw";
 
 const ReviewList = ({navigation, route}) => {
     const [reviewLoading, reviewResolved, reviewApi] = useApi(getMyReview, true);
+    const [unReviewLoading, unReviewResolved, unReviewApi] = useApi(getMyUnReview, true);
     const [color, setColor] = useState('black');
     const [text, setText] = useState('');
 

@@ -3,12 +3,13 @@ import {Text, View, StyleSheet, Image} from "react-native";
 import {TouchableOpacity, TouchableWithoutFeedback} from "@gorhom/bottom-sheet";
 import { vw } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
-import {getMarkerDetail, postChatRoom} from "@apis/apiServices";
+import {getMarkerDetail, postChatRoom, getMarkerInfo} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useRecoilValue} from "recoil";
 import {userState, SCREEN} from "@apis/atoms";
 import {Tag} from "@components/Tag";
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import Star from 'react-native-star-view';
 
 const SkeletonLayout = [
 	{
@@ -46,8 +47,18 @@ const SkeletonLayout = [
 
 const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }) => {
 	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
+	const [markerinfoLoading, markerInfoSolved, markerInfoApi] = useApi(getMarkerInfo, true);
 	const user = useRecoilValue(userState);
-
+	
+	useEffect(() => {
+		markerInfoApi(35)
+		.then(res => {
+			console.log(res, 'get marker info');
+		})
+		.catch(error => {
+			console.log(error);
+		})
+	}, [])
 	return (
 		<SkeletonContent
 			containerStyle = {{}} // 없으면 오류
@@ -61,12 +72,10 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 				<View style={styles.helperInfoText}>
 					<Text style={styles.name}>{detail?.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
-						<Text>5.0</Text>
-						<Text style={styles.helperStar}>
-							★★★★★
-						</Text>
+						<Text>{markerInfoSolved ? markerInfoSolved.score : 0}</Text>
+						<Star score={markerInfoSolved ? markerInfoSolved.score : 0} style={styles.helperStar} />
 						<Text>
-							(119개)
+							({markerInfoSolved ? markerInfoSolved.review_count : 0}개)
 						</Text>
 					</View>
 				</View>
@@ -145,11 +154,9 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 				<View style={styles.review}>
 					<View style={styles.reviewHeader}>
 						<View style={styles.reviewHeaderLeft}>
-							<Text style={{color: "#ffc107", fontSize: 30}}>5.0</Text>
-							<Text style={{color: "#ffc107", fontSize: 20}}>
-								★★★★★
-							</Text>
-							<Text>(119개)</Text>
+							<Text style={{color: "#ffc107", fontSize: 30}}>{markerInfoSolved ? markerInfoSolved.score : 0.0}</Text>
+							<Star score={markerInfoSolved ? markerInfoSolved.score : 0} style={styles.helperStar} />
+							<Text>({markerInfoSolved ? markerInfoSolved.review_count : 0}개)</Text>
 						</View>
 						<View style={styles.reviewHeaderRight}>
 							<View>
@@ -238,7 +245,8 @@ const styles = StyleSheet.create({
 		marginTop: 5
 	},
 	helperStar: {
-		color: "#ffc107",
+		width: 100,
+		height: 20,
 		marginLeft: 5,
 		marginRight: 5
 	},
