@@ -288,3 +288,15 @@ export const getMarkerReview = (header: any, id: any):Promise<AxiosResponse> => 
         }
     )
 }
+
+export const postMarkerReview = (header: any, body: any):Promise<AxiosResponse> => {
+    return axios.post(
+        `${URL}/api/review/`,
+        body, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                ...header
+            }
+        }
+    )
+}

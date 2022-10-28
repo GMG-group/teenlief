@@ -21,7 +21,7 @@ const ReviewBox = ({name, star, date, content, author, id, reviewAPI}) => {
                 <View>
                     <Text style={{color: color}}>이름 : {name}</Text>
                     <View style={{display: 'flex', flexDirection: 'row'}}>
-                        <Text style={{color: color}}>평점 : </Text><Star score={star} style={styles.starStyle} />
+                        <Text style={{color: color}}>평점 : </Text><Star score={parseInt(star)} style={styles.starStyle} />
                     </View>
                     <Text style={{color: color}}>날짜 : {date}</Text>
                 </View>

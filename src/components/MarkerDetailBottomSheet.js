@@ -87,7 +87,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 					<Text style={styles.name}>{detail?.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
 						<Text>{markerInfoSolved ? markerInfoSolved.score : 0}</Text>
-						<Star score={markerInfoSolved ? markerInfoSolved.score : 0} style={styles.helperStar} />
+						<Star score={markerInfoSolved ? parseInt(markerInfoSolved.score) : 0} style={styles.helperStar} />
 						<Text>
 							({markerInfoSolved ? markerInfoSolved.review_count : 0}개)
 						</Text>
@@ -169,7 +169,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 					<View style={styles.reviewHeader}>
 						<View style={styles.reviewHeaderLeft}>
 							<Text style={{color: "#ffc107", fontSize: 30}}>{markerInfoSolved ? markerInfoSolved.score : 0.0}</Text>
-							<Star score={markerInfoSolved ? markerInfoSolved.score : 0} style={styles.helperStar} />
+							<Star score={markerInfoSolved ? parseInt(markerInfoSolved.score) : 0} style={styles.helperStar} />
 							<Text>({markerInfoSolved ? markerInfoSolved.review_count : 0}개)</Text>
 						</View>
 						<View style={styles.reviewHeaderRight}>
