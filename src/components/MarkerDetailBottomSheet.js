@@ -58,7 +58,8 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 		.catch(error => {
 			console.log(error);
 		})
-	}, [])
+	}, []);
+	
 	return (
 		<SkeletonContent
 			containerStyle = {{}} // 없으면 오류

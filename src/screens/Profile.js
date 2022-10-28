@@ -170,7 +170,9 @@ const Profile = ({navigation}) => {
 						</CircularContainer>
 						<Text style={{...containerStyles.label, marginTop: 30}}>활동 관리</Text>
 						<CircularContainer title={`현재 등록된 리뷰`}>
-							<CircularButton title={"전체보기"} color={'#AE46FF'}/>
+							<CircularButton title={"전체보기"} color={'#AE46FF'} onPress={() => {navigation.push(SCREEN.ReviewList, {
+								user: user.role,
+							})}}/>
 						</CircularContainer>
 						<CircularContainer title={`현재 등록된 마커`} style={{marginTop: 12}}>
 							<CircularButton title={"전체보기"} color={'#AE46FF'} onPress={() => {navigation.push(SCREEN.MarkerManage)}}/>

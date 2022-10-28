@@ -32,6 +32,7 @@ const ReviewList = ({navigation, route}) => {
             setText('내가 쓴 리뷰');
         } else {
             setColor('#AE46FF');
+            setText('나에게 작성된 리뷰');
         }
     })
 
@@ -43,7 +44,6 @@ const ReviewList = ({navigation, route}) => {
                 </TouchableOpacity>
                 <Text style={{fontSize: 16, color: 'white'}}>리뷰 관리하기</Text>
             </View>
-            {}
             <Text style={styles.title}>{text} : {reviewResolved ? reviewResolved.length : 0}개</Text>
             
             <FlatList

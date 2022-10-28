@@ -6,10 +6,13 @@ import { Shadow } from 'react-native-shadow-2';
 import Icon from "react-native-vector-icons/AntDesign";
 import  {useApi} from "@apis/useApi";
 import {deleteReview} from "@apis/apiServices";
+import {useRecoilValue} from "recoil";
+import {userState, SCREEN} from "@apis/atoms";
 
 const ReviewBox = ({name, star, date, content, author, id, reviewAPI}) => {
     const [color, setColor] = useState('#00A3FF');
     const [a, b, c] = useApi(deleteReview, true);
+    const user = useRecoilValue(userState);
 
     return (
         <Shadow style={styles.container} distance={3} offset={[3,3]}>
@@ -31,7 +34,7 @@ const ReviewBox = ({name, star, date, content, author, id, reviewAPI}) => {
                         console.log("아니 이게 왜안됨");
                     });
                 }}>
-                    <Icon size={25} name={"delete"} color={color} />
+                    {user === 'Teen' ? <Icon size={25} name={"delete"} color={color} /> : null}
                 </TouchableOpacity>
             </View>
             <Text style={[styles.content ,{color: color}]} multiline ={true}>{content}</Text>
