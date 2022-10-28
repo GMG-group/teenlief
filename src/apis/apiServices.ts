@@ -257,3 +257,13 @@ export const getMarkerInfo = (header: any, id: number) :Promise<AxiosResponse> =
         }
     )
 }
+
+export const deleteReview = (header: any, id: number) :Promise<AxiosResponse> => {
+    return axios.delete(
+        `${URL}/api/review/${id}/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}

@@ -12,7 +12,7 @@ const ReviewList = ({navigation, route}) => {
     const [color, setColor] = useState('black');
     const [text, setText] = useState('');
 
-    useEffect(() => {
+    const reviewAPI = () => {
         reviewApi()
         .then(res => {
             console.log(res, 'im here');
@@ -20,6 +20,10 @@ const ReviewList = ({navigation, route}) => {
         .catch(error => {
             console.log(error, 'get review error');
         })
+    }
+
+    useEffect(() => {
+        reviewAPI();
     }, []);
 
     useEffect(() => {
@@ -52,10 +56,10 @@ const ReviewList = ({navigation, route}) => {
                             <ReviewBox 
                                 name={item.author.first_name} 
                                 star={item.stars} 
-                                date={item.date} 
+                                date={item.created_at} 
                                 content={item.content} 
-                                author={item.author.role}
                                 id={item.id}
+                                reviewAPI={reviewAPI}
                                 />
                         )
                     }}

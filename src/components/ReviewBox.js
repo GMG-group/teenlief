@@ -8,16 +8,8 @@ import  {useApi} from "@apis/useApi";
 import {deleteReview} from "@apis/apiServices";
 
 const ReviewBox = ({name, star, date, content, author, id, reviewAPI}) => {
-    const [color, setColor] = useState('white');
+    const [color, setColor] = useState('#00A3FF');
     const [a, b, c] = useApi(deleteReview, true);
-
-    useEffect(() => {
-        if (author === 'Teen') {
-            setColor('#00A3FF');
-        } else {
-            setColor('#AE46FF');
-        }
-    }, []);
 
     return (
         <Shadow style={styles.container} distance={3} offset={[3,3]}>
