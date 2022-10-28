@@ -19,7 +19,9 @@ import {tokenState} from "@apis/atoms";
 import Promise from "@screens/Promise";
 import SplashScreen from '@screens/SplashScreen';
 import MarkerManage from '@screens/profile/MarkerManage';
-import ReviewList from '@screens/ReviewList';
+import Profile from '@screens/Profile';
+import MarkerRiviewList from '@screens/MarkerReviewList';
+import ReviewList from "@screens/ReviewList";
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
@@ -116,6 +118,13 @@ const Main = () => {
 							<Stack.Screen
 								name={SCREEN.ReviewList}
 								component={ReviewList}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name={SCREEN.MarkerRiviewList}
+								component={MarkerRiviewList}
 								options={{
 									headerShown: false,
 								}}

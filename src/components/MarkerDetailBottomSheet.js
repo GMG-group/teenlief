@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, Image} from "react-native";
 import {TouchableOpacity, TouchableWithoutFeedback} from "@gorhom/bottom-sheet";
 import { vw } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
-import {getMarkerDetail, postChatRoom, getMarkerInfo} from "@apis/apiServices";
+import {getMarkerDetail, postChatRoom, getMarkerReview, getMarkerInfo} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useRecoilValue} from "recoil";
 import {userState, SCREEN} from "@apis/atoms";
@@ -48,18 +48,31 @@ const SkeletonLayout = [
 const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }) => {
 	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
 	const [markerinfoLoading, markerInfoSolved, markerInfoApi] = useApi(getMarkerInfo, true);
+	const [markerReviewLoading, markerReviewResolved, markerReviewApi] = useApi(getMarkerReview, true);
+	
 	const user = useRecoilValue(userState);
-	
+
 	useEffect(() => {
-		markerInfoApi(35)
-		.then(res => {
-			console.log(res, 'get marker info');
-		})
-		.catch(error => {
-			console.log(error);
-		})
+		markerInfoApi(detail?.helper.id)
+			.then(res => {
+				console.log(res, 'here');
+				console.log(detail.helper.id, 'helper id');
+			})
+			.catch(error => {
+				console.log(error);
+			})
 	}, []);
-	
+
+	useEffect(() => {
+		markerReviewApi(detail?.helper.id)
+			.then(res => {
+				console.log(res, 'arker review');
+			})
+			.catch(error => {
+				console.log("error");
+			})
+	}, []);
+
 	return (
 		<SkeletonContent
 			containerStyle = {{}} // 없으면 오류
@@ -161,13 +174,17 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 						</View>
 						<View style={styles.reviewHeaderRight}>
 							<View>
+								<Text>다음에 꼭 보답할게요</Text>
 								<Text>헬퍼분이 너무 친절하세요!</Text>
-								<Text>제 은인이십니다</Text>
-								<Text>감사합니다.. 나중에 꼭 보답할게요</Text>
+								<Text>감사합니다</Text>
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
-									navigation.navigate(SCREEN.Review);
+									// navigation.navigate(SCREEN.Review);
+									navigation.navigate(SCREEN.ReviewList, {
+										markerReviewResolved: markerReviewResolved,
+										name: detail.helper.first_name,
+									});
 									bottomSheetModalRef.current.close();
 								}}>
 									<Text style={{color: "#2990f6"}}>모든 리뷰 보기</Text>

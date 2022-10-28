@@ -11,6 +11,7 @@ const ReviewList = ({navigation, route}) => {
     const [unReviewLoading, unReviewResolved, unReviewApi] = useApi(getMyUnReview, true);
     const [color, setColor] = useState('black');
     const [text, setText] = useState('');
+    const [marker, setMarker] = useState(false);
 
     const reviewAPI = () => {
         reviewApi()
@@ -23,21 +24,22 @@ const ReviewList = ({navigation, route}) => {
     }
 
     useEffect(() => {
-        reviewAPI();
+        if (route.params.markerReviewResolved) {
+            setMarker(true);
+        } else {
+            if (route.params.user === 'Teen') {
+                setColor('#00A3FF');
+                setText('내가 쓴 리뷰');
+            } else {
+                setColor('#AE46FF');
+                setText('나에게 작성된 리뷰');
+            }
+            reviewAPI();
+        }
     }, []);
 
-    useEffect(() => {
-        if (route.params.user === 'Teen') {
-            setColor('#00A3FF');
-            setText('내가 쓴 리뷰');
-        } else {
-            setColor('#AE46FF');
-            setText('나에게 작성된 리뷰');
-        }
-    })
-
     return (
-        <View style={{display: 'flex'}}> 
+        <View style={{display: 'flex'}}>
             <View style={[styles.nav, {backgroundColor: color}]}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <EvilIcons name="chevron-left" size={45} color={'white'} />
@@ -45,19 +47,19 @@ const ReviewList = ({navigation, route}) => {
                 <Text style={{fontSize: 16, color: 'white'}}>리뷰 관리하기</Text>
             </View>
             <Text style={styles.title}>{text} : {reviewResolved ? reviewResolved.length : 0}개</Text>
-            
+
             <FlatList
                 style={styles.flatList}
                 scrollEnabled={true}
-				data={reviewResolved}
-                extraData={reviewResolved}
+				data={marker ? route.params.markerReviewResolved : reviewResolved}
+                extraData={marker ? route.params.markerReviewResolved : reviewResolved}
 				renderItem={({item}) => {
 					    return (
-                            <ReviewBox 
-                                name={item.author.first_name} 
-                                star={item.stars} 
-                                date={item.created_at} 
-                                content={item.content} 
+                            <ReviewBox
+                                name={item.author.first_name}
+                                star={item.stars}
+                                date={item.created_at}
+                                content={item.content}
                                 id={item.id}
                                 reviewAPI={reviewAPI}
                                 />
@@ -67,7 +69,6 @@ const ReviewList = ({navigation, route}) => {
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     nav: {
@@ -82,10 +83,11 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
         fontSize: 18,
         marginBottom: 20
-    },  
+    },
     flatList: {
         width: vw(100),
         marginLeft: '5%'
     }
 });
+
 export default ReviewList;
