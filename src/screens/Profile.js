@@ -180,7 +180,9 @@ const Profile = ({navigation}) => {
 					<>
 						<Text style={{...containerStyles.label, marginTop: 30}}>리뷰 관리</Text>
 						<CircularContainer title={`현재 등록한 리뷰 ${100}개`}>
-							<CircularButton title={"전체 보기"} color={'#00A3FF'}/>
+							<CircularButton title={"전체 보기"} color={'#00A3FF'} onPress={() => {navigation.push(SCREEN.ReviewList, {
+								user: user.role,
+							})}}/>
 						</CircularContainer>
 						<CircularContainer title={"올릴 리뷰"} style={{marginTop: 12}}>
 							<CircularButton title={"리뷰 작성하기"} color={'#00A3FF'}/>

@@ -225,3 +225,14 @@ export const postCertificate = (header: any, body: any) :Promise<AxiosResponse> 
         }
     )
 }
+
+export const getMyReview = (header: any) :Promise<AxiosResponse> => {
+    console.log("getReview", header);
+    return axios.get(
+        `${URL}/api/review/my`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
