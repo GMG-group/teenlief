@@ -225,3 +225,78 @@ export const postCertificate = (header: any, body: any) :Promise<AxiosResponse> 
         }
     )
 }
+
+export const getMyReview = (header: any) :Promise<AxiosResponse> => {
+    console.log("getReview", header);
+    return axios.get(
+        `${URL}/api/review/my`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
+
+export const getMyUnReview = (header: any) :Promise<AxiosResponse> => {
+    console.log("getUnReview", header);
+    return axios.get(
+        `${URL}/api/promise/unreviwed/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
+
+export const getMarkerInfo = (header: any, id: number) :Promise<AxiosResponse> => {
+    return axios.get(
+        `${URL}/api/helper-info/${id}/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
+
+export const deleteReview = (header: any, id: number) :Promise<AxiosResponse> => {
+    return axios.delete(
+        `${URL}/api/review/${id}/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
+
+export const getReview = (header: any) :Promise<AxiosResponse> => {
+    console.log("getReview", header);
+    return axios.get(
+        `${URL}/api/review/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
+
+export const getMarkerReview = (header: any, id: any):Promise<AxiosResponse> => {
+    return axios.get(
+        `${URL}/api/review/${id}/`,
+        {
+            withCredentials: false,
+            headers: header
+        }
+    )
+}
+
+export const postMarkerReview = (header: any, body: any):Promise<AxiosResponse> => {
+    return axios.post(
+        `${URL}/api/review/`,
+        body, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                ...header
+            }
+        }
+    )
+}

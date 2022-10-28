@@ -1,14 +1,15 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, Image} from "react-native";
 import {TouchableOpacity, TouchableWithoutFeedback} from "@gorhom/bottom-sheet";
 import { vw } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
-import {getMarkerDetail, postChatRoom} from "@apis/apiServices";
+import {getMarkerDetail, postChatRoom, getMarkerReview, getMarkerInfo} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useRecoilValue} from "recoil";
 import {userState, SCREEN} from "@apis/atoms";
 import {Tag} from "@components/Tag";
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import Star from 'react-native-star-view';
 
 const SkeletonLayout = [
 	{
@@ -46,7 +47,31 @@ const SkeletonLayout = [
 
 const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }) => {
 	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
+	const [markerinfoLoading, markerInfoSolved, markerInfoApi] = useApi(getMarkerInfo, true);
+	const [markerReviewLoading, markerReviewResolved, markerReviewApi] = useApi(getMarkerReview, true);
+	
 	const user = useRecoilValue(userState);
+
+	useEffect(() => {
+		markerInfoApi(detail?.helper.id)
+			.then(res => {
+				console.log(res, 'here');
+				console.log(detail.helper.id, 'helper id');
+			})
+			.catch(error => {
+				console.log(error);
+			})
+	}, []);
+
+	useEffect(() => {
+		markerReviewApi(detail?.helper.id)
+			.then(res => {
+				console.log(res, 'arker review');
+			})
+			.catch(error => {
+				console.log("error");
+			})
+	}, []);
 
 	return (
 		<SkeletonContent
@@ -61,12 +86,10 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 				<View style={styles.helperInfoText}>
 					<Text style={styles.name}>{detail?.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
-						<Text>5.0</Text>
-						<Text style={styles.helperStar}>
-							★★★★★
-						</Text>
+						<Text>{markerInfoSolved ? markerInfoSolved.score : 0}</Text>
+						<Star score={markerInfoSolved ? parseInt(markerInfoSolved.score) : 0} style={styles.helperStar} />
 						<Text>
-							(119개)
+							({markerInfoSolved ? markerInfoSolved.review_count : 0}개)
 						</Text>
 					</View>
 				</View>
@@ -145,21 +168,23 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 				<View style={styles.review}>
 					<View style={styles.reviewHeader}>
 						<View style={styles.reviewHeaderLeft}>
-							<Text style={{color: "#ffc107", fontSize: 30}}>5.0</Text>
-							<Text style={{color: "#ffc107", fontSize: 20}}>
-								★★★★★
-							</Text>
-							<Text>(119개)</Text>
+							<Text style={{color: "#ffc107", fontSize: 30}}>{markerInfoSolved ? markerInfoSolved.score : 0.0}</Text>
+							<Star score={markerInfoSolved ? parseInt(markerInfoSolved.score) : 0} style={styles.helperStar} />
+							<Text>({markerInfoSolved ? markerInfoSolved.review_count : 0}개)</Text>
 						</View>
 						<View style={styles.reviewHeaderRight}>
 							<View>
+								<Text>다음에 꼭 보답할게요</Text>
 								<Text>헬퍼분이 너무 친절하세요!</Text>
-								<Text>제 은인이십니다</Text>
-								<Text>감사합니다.. 나중에 꼭 보답할게요</Text>
+								<Text>감사합니다</Text>
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
-									navigation.navigate(SCREEN.Review);
+									// navigation.navigate(SCREEN.Review);
+									navigation.navigate(SCREEN.ReviewList, {
+										markerReviewResolved: markerReviewResolved,
+										name: detail.helper.first_name,
+									});
 									bottomSheetModalRef.current.close();
 								}}>
 									<Text style={{color: "#2990f6"}}>모든 리뷰 보기</Text>
@@ -238,7 +263,8 @@ const styles = StyleSheet.create({
 		marginTop: 5
 	},
 	helperStar: {
-		color: "#ffc107",
+		width: 100,
+		height: 20,
 		marginLeft: 5,
 		marginRight: 5
 	},
