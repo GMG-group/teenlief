@@ -36,7 +36,7 @@ const ReviewList = ({navigation, route}) => {
     })
 
     return (
-        <View style={{display: 'flex'}}> 
+        <View style={{display: 'flex'}}>
             <View style={[styles.nav, {backgroundColor: color}]}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <EvilIcons name="chevron-left" size={45} color={'white'} />
@@ -45,7 +45,7 @@ const ReviewList = ({navigation, route}) => {
             </View>
             {}
             <Text style={styles.title}>{text} : {reviewResolved ? reviewResolved.length : 0}개</Text>
-            
+
             <FlatList
                 style={styles.flatList}
                 scrollEnabled={true}
@@ -53,11 +53,11 @@ const ReviewList = ({navigation, route}) => {
                 extraData={reviewResolved}
 				renderItem={({item}) => {
 					    return (
-                            <ReviewBox 
-                                name={item.author.first_name} 
-                                star={item.stars} 
-                                date={item.created_at} 
-                                content={item.content} 
+                            <ReviewBox
+                                name={item.author.first_name}
+                                star={item.stars}
+                                date={item.created_at}
+                                content={item.content}
                                 id={item.id}
                                 reviewAPI={reviewAPI}
                                 />
@@ -67,7 +67,6 @@ const ReviewList = ({navigation, route}) => {
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     nav: {
@@ -82,10 +81,11 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
         fontSize: 18,
         marginBottom: 20
-    },  
+    },
     flatList: {
         width: vw(100),
         marginLeft: '5%'
     }
 });
+
 export default ReviewList;

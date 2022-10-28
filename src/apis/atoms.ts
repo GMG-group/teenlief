@@ -24,6 +24,7 @@ export const SCREEN = {
     Donate: 'Donate',
     Certification: 'Certification',
     ReviewList: 'ReviewList',
+    MarkerRiviewList: 'MarkerRiviewList',
 } as const;
 type SCREEN = typeof SCREEN[keyof typeof SCREEN];
 
