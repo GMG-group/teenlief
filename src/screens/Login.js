@@ -47,17 +47,17 @@ const Login = ({ navigation }) => {
     const submit = () => {
         console.log(`이메일 :${email}`);
         console.log(`비밀번호 :${password}`);
-        if (email === '') {
-            setEmailColor('red');
-            setEmailLabel('email을 확인해 주세요');
-        } else if (password === '') {
-            setPasswordColor('red');
-            setPasswordLabel('password를 확인해 주세요');
-        }
         postLoginCallback({
             email: email,
             password: password
-        }).then(r => navigation.replace("Home")) ;
+        })
+        .then(r => navigation.replace("Home"))
+        .catch(error => {
+            setEmailColor('#FB5644');
+            setEmailLabel('잘못 입력 되었거나 찾지 못했습니다');
+            setPasswordColor('#FB5644');
+            setPasswordLabel('잘못 입력 되었거나 찾지 못했습니다');
+        });
     }
 
     return (
@@ -94,6 +94,7 @@ const Login = ({ navigation }) => {
                         label={emailLabel}
                         value={email}
                         onChangeText={value => setEmail(value)}
+                        animationDuration={150}
                         containerStyles={{
                             height: 60,
                             border: 'none',
@@ -113,6 +114,7 @@ const Login = ({ navigation }) => {
                         label={passwordLabel}
                         value={password}
                         onChangeText={value => setPassword(value)}
+                        animationDuration={150}
                         isPassword
                         customShowPasswordComponent={<Icon name="eye" size={25} color={passwordColor} />}
                         customHidePasswordComponent={<Icon name="eye-with-line" size={25} color={passwordColor} />}

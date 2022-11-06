@@ -34,7 +34,17 @@ const ReviewList = ({navigation, route}) => {
                 setColor('#AE46FF');
                 setText('나에게 작성된 리뷰');
             }
-            reviewAPI();
+            if (route.params.unReview) {
+                unReviewApi()
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            } else {
+                reviewAPI();
+            }
         }
     }, []);
 
@@ -51,8 +61,8 @@ const ReviewList = ({navigation, route}) => {
             <FlatList
                 style={styles.flatList}
                 scrollEnabled={true}
-				data={marker ? route.params.markerReviewResolved : reviewResolved}
-                extraData={marker ? route.params.markerReviewResolved : reviewResolved}
+				data={marker ? route.params.markerReviewResolved : route.params.unReview ? unReviewResolved : reviewResolved}
+                extraData={marker ? route.params.markerReviewResolved : route.params.unReview ? unReviewResolved : reviewResolved}
 				renderItem={({item}) => {
 					    return (
                             <ReviewBox
