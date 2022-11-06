@@ -53,25 +53,28 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 	const user = useRecoilValue(userState);
 
 	useEffect(() => {
-		markerInfoApi(detail?.helper.id)
+		if (detail) {
+			markerInfoApi(detail?.helper.id)
 			.then(res => {
-				console.log(res, 'here');
-				console.log(detail.helper.id, 'helper id');
+				console.log(res, 'helper info');
 			})
 			.catch(error => {
 				console.log(error);
 			})
-	}, []);
+		}
+	}, [detail]);
 
 	useEffect(() => {
-		markerReviewApi(detail?.helper.id)
+		if (detail) {
+			markerReviewApi(detail?.helper.id)
 			.then(res => {
-				console.log(res, 'arker review');
+				console.log(res, 'mrker review');
 			})
 			.catch(error => {
 				console.log("error");
 			})
-	}, []);
+		}
+	}, [detail]);
 
 	return (
 		<SkeletonContent
@@ -86,7 +89,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 				<View style={styles.helperInfoText}>
 					<Text style={styles.name}>{detail?.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
-						<Text>{markerInfoSolved ? markerInfoSolved.score : 0}</Text>
+						<Text>{markerInfoSolved ? markerInfoSolved.score.slice(0, -1) : 0}</Text>
 						<Star score={markerInfoSolved ? markerInfoSolved.score : 0} style={styles.helperStar} />
 						<Text>
 							({markerInfoSolved ? markerInfoSolved.review_count : 0}개)
@@ -168,15 +171,15 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 				<View style={styles.review}>
 					<View style={styles.reviewHeader}>
 						<View style={styles.reviewHeaderLeft}>
-							<Text style={{color: "#ffc107", fontSize: 30}}>{markerInfoSolved ? markerInfoSolved.score : 0.0}</Text>
+							<Text style={{color: "#ffc107", fontSize: 30}}>{markerInfoSolved ? markerInfoSolved.score.slice(0, -1) : 0.0}</Text>
 							<Star score={markerInfoSolved ? markerInfoSolved.score : 0} style={styles.helperStar} />
 							<Text>({markerInfoSolved ? markerInfoSolved.review_count : 0}개)</Text>
 						</View>
 						<View style={styles.reviewHeaderRight}>
 							<View>
-								<Text>다음에 꼭 보답할게요</Text>
-								<Text>헬퍼분이 너무 친절하세요!</Text>
-								<Text>감사합니다</Text>
+								{markerReviewResolved ? markerReviewResolved.map((review, idx) => {
+									idx < 3 ? <Text>hello</Text> : null
+								}) : null}
 							</View>
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
