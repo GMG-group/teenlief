@@ -29,6 +29,7 @@ const Map = ({ route, navigation }) => {
 	const [shelterPressed, setShelterPressed] = useState(false);
 	const [selectedShelterId, setSelectedShelterId] = useState();
 	const [filteredMarker, setFilteredMarker] = useState([]);
+	const [shelterFiltered, setShelterFiltered] = useState(false);
 
 	const [user, setUser] = useRecoilState(userState);
 
@@ -127,17 +128,18 @@ const Map = ({ route, navigation }) => {
 				sheltersLoading={sheltersLoading}
 				shelters={shelters}
 				setSelectedShelterId={setSelectedShelterId}
+				shelterFiltered={shelterFiltered}
 			/>}
 
 			{
-				action===ACTION.Upload ? null : <Search filteredMarker={filteredMarker} setFilterdMarker={setFilteredMarker} displayTag={true}/>
+				action===ACTION.Upload ? null : <Search filteredMarker={filteredMarker} setFilterdMarker={setFilteredMarker} displayTag={true} setShelterFiltered={setShelterFiltered}/>
 			}
 
 		</>
 	);
 };
 
-const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers, setSelectedMarkerId, setShelterPressed, bottomSheetModalRef, sheltersLoading, shelters, setSelectedShelterId}) => {
+const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers, setSelectedMarkerId, setShelterPressed, bottomSheetModalRef, sheltersLoading, shelters, setSelectedShelterId, shelterFiltered}) => {
 
 	const generateMarkerPoints = () => {
 		const points = [];
@@ -233,7 +235,7 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 					/>
 				);
 			})}
-			{shelterCluster.clusters.map(cluster => {
+			{shelterFiltered && shelterCluster.clusters.map(cluster => {
 				const [longitude, latitude] = cluster.geometry.coordinates;
 				const {
 					cluster: isCluster,

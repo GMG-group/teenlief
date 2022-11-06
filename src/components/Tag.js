@@ -4,7 +4,7 @@ import {useApi} from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
 import {FlatList, Text, View} from "react-native";
 
-export const Tag = ({tags, all=false, size='m', onSelected, select=false}) => { // 표시할 태그(숫자), 모두 표시할지, 사이즈
+export const Tag = ({tags, all=false, size='m', onSelected, select=false, shelter=false}) => { // 표시할 태그(숫자), 모두 표시할지, 사이즈, 쉘터 표시할지
     const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
     const [filterTag, setFilterTag] = useState([]);
     const tagListRef = useRef(null);
@@ -22,6 +22,7 @@ export const Tag = ({tags, all=false, size='m', onSelected, select=false}) => { 
             let newTag = []
             if(all) {
                 newTag = tagResolved.map((tag) => ({...tag, selected: select}));
+                if(shelter) newTag.push({id: tagResolved.length+1, tag: "쉘터", selected: select}); // 쉘터 옵션이 켜진 경우만 쉘터 표시
             } else {
                 tags.forEach((tag) => {
                     newTag.push({...tagResolved[tag-1], selected: select});
