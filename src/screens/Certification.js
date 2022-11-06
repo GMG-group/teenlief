@@ -22,7 +22,7 @@ const Certification = ({ navigation }) => {
         //기타 설정
         const extra = {
             app_scheme: "teenlief", //ios의 경우 카드사 앱 호출 후 되돌아오기 위한 앱 스키마명
-            show_close_button: true, // x 닫기 버튼 삽입 (닫기버튼이 없는 PG사를 위한 옵션)
+            // show_close_button: true, // x 닫기 버튼 삽입 (닫기버튼이 없는 PG사를 위한 옵션)
         }
 
         // const extra = new Extra();

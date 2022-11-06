@@ -44,7 +44,7 @@ const ChatRoom = ({ navigation, route }) => {
                 };
 
                 webSocket.current.onerror = (e) => {
-                    console.log('errror!', e);
+                    console.log('error!', e);
                 };
 
                 webSocket.current.onclose = (e) => {
@@ -84,7 +84,7 @@ const ChatRoom = ({ navigation, route }) => {
     }
 
     return (
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
             <View style={styles.nav}>
                 <View style={styles.navContainer}>
                     <TouchableOpacity
@@ -167,8 +167,6 @@ const ChatRoom = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#ffffff',
-        width: '100%',
-        height: '100%',
     },
     nav: {
         display: 'flex',
@@ -197,7 +195,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
-        height: 55,
         backgroundColor: 'white',
         paddingLeft: 15,
         paddingRight: 15,
