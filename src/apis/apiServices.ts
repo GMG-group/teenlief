@@ -240,7 +240,7 @@ export const getMyReview = (header: any) :Promise<AxiosResponse> => {
 export const getMyUnReview = (header: any) :Promise<AxiosResponse> => {
     console.log("getUnReview", header);
     return axios.get(
-        `${URL}/api/promise/unreviwed/`,
+        `${URL}/api/promise/unreviewed/`,
         {
             withCredentials: false,
             headers: header
