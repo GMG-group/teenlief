@@ -45,12 +45,15 @@ export const PromiseMessage = ({ navigation, item, displayProfile }) => {
                         <Text style={{fontSize: 18, color: 'black'}}>알림</Text>
                         <Text style={styles.promiseTimeText}>30 분 전</Text>
                     </View>
-                    <TouchableOpacity onPress={() => {navigation.navigate(SCREEN.Review, {helper: item.user})}} style={[styles.promiseFinButton, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
-                        <Text style={{color: 'white'}}>완료</Text>
-                    </TouchableOpacity>
+                    {
+                        user.role !== "Helper" ? (
+                            <TouchableOpacity onPress={() => {navigation.navigate(SCREEN.Review, {helper: item.user})}} style={[styles.promiseFinButton, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
+                                <Text style={{color: 'white'}}>완료</Text>
+                            </TouchableOpacity>
+                        ) : null
+                    }
                 </View>
             </View>
-
         </View>
     );
 }
@@ -144,8 +147,9 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
-
         elevation: 7,
+        borderWidth: 1,
+        borderColor: "#AE46FF"
     },
     promiseHeaderText: {
         fontSize: 20,
