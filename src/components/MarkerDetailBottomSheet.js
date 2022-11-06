@@ -184,7 +184,8 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 							<View style={styles.reviewHeaderRightMoreButton}>
 								<TouchableWithoutFeedback onPress={() => {
 									// navigation.navigate(SCREEN.Review);
-									navigation.navigate(SCREEN.ReviewList, {
+									navigation.navigate(SCREEN.MarkerRiviewList, {
+										user: user?.role,
 										markerReviewResolved: markerReviewResolved,
 										name: detail.helper.first_name,
 									});

@@ -1,42 +1,55 @@
-import React, {useRef, useEffect, useState} from 'react';
-import {Text, TextInput, View, StyleSheet, ScrollView, FlatList, TouchableOpacity} from "react-native";
-import { Shadow } from 'react-native-shadow-2';
-import { vw, vh } from "react-native-css-vh-vw";
-import MarkerReviewBox from '@components/MarkerReviewBox';
-import {userState} from "@apis/atoms";
-import {useRecoilState} from "recoil";
+import React, {useEffect, useState} from 'react';
+import {Text, View, StyleSheet, TouchableOpacity, FlatList} from "react-native";
+import ReviewBox from "@components/ReviewBox";
+import {getMyReview, getMyUnReview} from "@apis/apiServices";
+import  {useApi} from "@apis/useApi";
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import ReviewBox from '~/components/ReviewBox';
+import { vw, vh } from "react-native-css-vh-vw";
 
 const MarkerReviewList = ({navigation, route}) => {
-    const [user, setUser] = useRecoilState(userState);
-    const [color, setColor] = useState('black');
+    const [color, setColor] = useState('white');
+    const [marker, setMarker] = useState(false);
+
     useEffect(() => {
-        user.role==="Helper" ? setColor('#AE46FF') : setColor('#00A3FF');
+        if (route.params.user === 'Teen') {
+            setColor('#00A3FF');
+        } else {
+            setColor('#AE46FF');
+        }
     }, []);
 
     return (
-        <View style={styles.container}>
+        <View style={{display: 'flex'}}>
             <View style={[styles.nav, {backgroundColor: color}]}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <EvilIcons name="chevron-left" size={45} color={'white'} />
                 </TouchableOpacity>
-                <Text style={{fontSize: 16, color: 'white'}}>{route.params.name}</Text>
+                <Text style={{fontSize: 16, color: 'white'}}>리뷰 관리하기</Text>
             </View>
-            <ReviewBox />
+            <Text style={styles.title}>등록된 리뷰 : {route.params.markerReviewResolved.length}개</Text>
+
+            <FlatList
+                style={styles.flatList}
+                scrollEnabled={true}
+				data={route.params.markerReviewResolved}
+				renderItem={({item}) => {
+					    return (
+                            <ReviewBox
+                                name={item.author.first_name}
+                                star={item.stars}
+                                date={item.created_at}
+                                content={item.content}
+                                id={item.id}
+                                reviewAPI={reviewAPI}
+                                />
+                        )
+                    }}
+            />
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        width: vw(90),
-        borderRadius: 20,
-        backgroundColor: 'white',
-        padding: 10,
-        marginBottom: 20
-    },
     nav: {
         height: vh(7),
         width: vw(100),
@@ -45,6 +58,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 20,
     },
-})
+    title: {
+        marginLeft: '5%',
+        fontSize: 18,
+        marginBottom: 20
+    },
+    flatList: {
+        width: vw(100),
+        marginLeft: '5%'
+    }
+});
 
 export default MarkerReviewList;
