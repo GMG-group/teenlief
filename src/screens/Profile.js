@@ -216,7 +216,7 @@ const Profile = ({ navigation }) => {
 			}
 
 				<Text style={{...containerStyles.label, marginTop: 40}}>개인정보 관리</Text>
-				<LineButton title={"비밀번호 변경"}/>
+				{/* <LineButton title={"비밀번호 변경"}/> */}
 				{
 					user.role === "Helper" ? (<LineButton title={"계좌 관리"}/>) : null
 				}
