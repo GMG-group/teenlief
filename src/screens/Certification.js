@@ -32,10 +32,12 @@ const Certification = ({ navigation }) => {
         <KeyboardAvoidingView style={styles.container}>
             <View style={styles.textContainer}>
                 <View style={{ marginBottom: vh(1) }}>
-                    <Text style={styles.mainText}>휴대폰 번호를 입력해주세요.</Text>
+                    <Text style={styles.mainText}>이름과 휴대폰 번호를 입력해주세요.</Text>
                     <Text style={styles.subText}>본인 인증을 위해 필요합니다.</Text>
                 </View>
-                <TextInput style={{ borderBottomWidth: 1 }} value={phone} onChangeText={setPhone} />
+                <TextInput style={{ borderBottomWidth: 1, marginBottom: vh(2) }} placeholder={"이름"} />
+                <TextInput style={{ borderBottomWidth: 1 }} value={phone} onChangeText={setPhone} placeholder={"전화번호"} />
+
             </View>
 
             <TouchableHighlight
