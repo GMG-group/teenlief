@@ -55,16 +55,16 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 	useEffect(() => {
 		if (detail) {
 			markerInfoApi(detail?.helper.id)
-			.then(res => {
-				console.log(res, 'helper info');
-			})
-			.catch(error => {
-				console.log(error);
-			})
+				.then(res => {
+					console.log(res, 'helper info');
+				})
+				.catch(error => {
+					console.log(error);
+				})
 			markerReviewApi(detail?.helper.id)
-			.then(res => {
-				console.log(res, 'mrker review');
-			})
+				.then(res => {
+					console.log(res, 'marker review');
+				})
 			.catch(error => {
 				console.log("error");
 			})
@@ -165,14 +165,20 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 					</View>
 					<View style={styles.reviewHeaderRight}>
 						<View>
-							<Text>다음에 꼭 보답할게요</Text>
-							<Text>헬퍼분이 너무 친절하세요!</Text>
-							<Text>감사합니다</Text>
+							{
+								markerReviewResolved && markerReviewResolved.map((review, idx) => {
+									if (idx <= 3) {
+										return (
+											<Text>{review.content}</Text>
+										);
+									}
+								})
+							}
 						</View>
 						<View style={styles.reviewHeaderRightMoreButton}>
 							<TouchableWithoutFeedback onPress={() => {
 								// navigation.navigate(SCREEN.Review);
-								navigation.navigate(SCREEN.MarkerRiviewList, {
+								navigation.navigate(SCREEN.MarkerReviewList, {
 									user: user?.role,
 									markerReviewResolved: markerReviewResolved,
 									name: detail.helper.first_name,
