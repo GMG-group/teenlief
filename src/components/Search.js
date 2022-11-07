@@ -39,7 +39,7 @@ const Search = ({ displayTag, filteredMarker, setFilterdMarker, setShelterFilter
 			</View>
 
 			{ displayTag && <Tag select all shelter onSelected={(selected) => {
-				setShelterFiltered(selected[selected.length-1].selected);
+				setShelterFiltered(!selected[selected.length-1].selected);
 				setFilterdMarker(prev => (
 					prev.map((marker) => {
 						console.log("selected", selected);

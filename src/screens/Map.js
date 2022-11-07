@@ -235,7 +235,7 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 					/>
 				);
 			})}
-			{shelterFiltered && shelterCluster.clusters.map(cluster => {
+			{!shelterFiltered && shelterCluster.clusters.map(cluster => {
 				const [longitude, latitude] = cluster.geometry.coordinates;
 				const {
 					cluster: isCluster,
