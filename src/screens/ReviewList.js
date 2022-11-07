@@ -23,6 +23,15 @@ const ReviewList = ({navigation, route}) => {
         })
     }
 
+    const unReviewAPI = () => {
+        unReviewApi()
+            .then(res => {
+                console.log(res, 'UN REVIEW');
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
     useEffect(() => {
         if (route.params.user === 'Teen') {
             setColor('#00A3FF');
@@ -36,13 +45,7 @@ const ReviewList = ({navigation, route}) => {
             setText('나에게 작성된 리뷰');
         }
         if (route.params.unReview) {
-            unReviewApi()
-            .then(res => {
-                console.log(res, 'UN REVIEW');
-            })
-            .catch(error => {
-                console.log(error);
-            })
+            unReviewAPI();
         } else {
             reviewAPI();
         }
@@ -67,7 +70,7 @@ const ReviewList = ({navigation, route}) => {
 					    return (
                             <ReviewBox
                                 navigation={navigation}
-                                name={route.params.unReview ? item.helper.first_name : item.author.first_name}
+                                name={ route.params.unReview ? item.helper.first_name : item.author.first_name}
                                 star={route.params.unReview ? 0 : item.stars}
                                 date={route.params.unReview ? "" : item.created_at}
                                 content={route.params.unReview ? "" : item.content}

@@ -165,9 +165,9 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 					</View>
 					<View style={styles.reviewHeaderRight}>
 						<View>
-							{markerReviewResolved ? markerReviewResolved.map((review, idx) => {
-								idx < 3 ? <Text>hello</Text> : null
-							}) : null}
+							<Text>다음에 꼭 보답할게요</Text>
+							<Text>헬퍼분이 너무 친절하세요!</Text>
+							<Text>감사합니다</Text>
 						</View>
 						<View style={styles.reviewHeaderRightMoreButton}>
 							<TouchableWithoutFeedback onPress={() => {

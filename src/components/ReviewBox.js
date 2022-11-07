@@ -42,7 +42,8 @@ const ReviewBox = ({navigation, name, star, date, content, myReview, id, reviewA
                 </TouchableOpacity>
             </View>
             {unReview ? <View style={{position: 'absolute', right: 10, top: 10}}>
-                <TouchableOpacity onPress={() => {navigation.push(SCREEN.Review, {
+                <TouchableOpacity onPress={() => {
+                    navigation.push(SCREEN.Review, {
                     helper: helper,
                     promiseId: id
                 })}}>
