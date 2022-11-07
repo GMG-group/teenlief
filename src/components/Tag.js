@@ -9,9 +9,9 @@ export const Tag = ({tags, all=false, size='m', onSelected, select=false, shelte
     const [filterTag, setFilterTag] = useState([]);
     const tagListRef = useRef(null);
 
-    const height = size === 'm' ? 25 : 15;
-    const width = size === 'm' ? 90 : 50;
-    const fontSize = size === 'm' ? 14 : 10;
+    const height = size === 'm' ? 25 : 16;
+    const width = size === 'm' ? 90 : 52;
+    const fontSize = size === 'm' ? 14 : 11;
 
     useEffect(() => {
         tagApi();
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         elevation: 3,
-        margin: 3
+        marginHorizontal: 3
     },
 })
 
