@@ -188,7 +188,7 @@ const SignUp = ( { navigation } ) => {
             </View>
 
             <View style={bottomStyle.container}>
-                <TouchableOpacity style={bottomStyle.login} onPress={() => role === "Teen" ? signUpSubmit() : bootPayAuth()}>
+                <TouchableOpacity style={bottomStyle.login} onPress={() => signUpSubmit()}>
                     <View>
                         <Text style={bottomStyle.loginText}>회원가입</Text>
                     </View>

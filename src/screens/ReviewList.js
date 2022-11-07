@@ -24,27 +24,23 @@ const ReviewList = ({navigation, route}) => {
     }
 
     useEffect(() => {
-        if (route.params.markerReviewResolved) {
-            setMarker(true);
+        if (route.params.user === 'Teen') {
+            setColor('#00A3FF');
+            setText('내가 쓴 리뷰');
         } else {
-            if (route.params.user === 'Teen') {
-                setColor('#00A3FF');
-                setText('내가 쓴 리뷰');
-            } else {
-                setColor('#AE46FF');
-                setText('나에게 작성된 리뷰');
-            }
-            if (route.params.unReview) {
-                unReviewApi()
-                .then(res => {
-                    console.log(res);
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-            } else {
-                reviewAPI();
-            }
+            setColor('#AE46FF');
+            setText('나에게 작성된 리뷰');
+        }
+        if (route.params.unReview) {
+            unReviewApi()
+            .then(res => {
+                console.log(res, 'UN REVIEW');
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        } else {
+            reviewAPI();
         }
     }, []);
 
@@ -58,7 +54,7 @@ const ReviewList = ({navigation, route}) => {
             </View>
             <Text style={styles.title}>{text} : {reviewResolved ? reviewResolved.length : 0}개</Text>
 
-            <FlatList
+            {/* <FlatList
                 style={styles.flatList}
                 scrollEnabled={true}
 				data={marker ? route.params.markerReviewResolved : route.params.unReview ? unReviewResolved : reviewResolved}
@@ -75,7 +71,7 @@ const ReviewList = ({navigation, route}) => {
                                 />
                         )
                     }}
-            />
+            /> */}
         </View>
     );
 }
