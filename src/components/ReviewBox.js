@@ -8,12 +8,16 @@ import  {useApi} from "@apis/useApi";
 import {deleteReview} from "@apis/apiServices";
 import {useRecoilValue} from "recoil";
 import {userState, SCREEN} from "@apis/atoms";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-const ReviewBox = ({name, star, date, content, author, id, reviewAPI}) => {
+const ReviewBox = ({navigation, name, star, date, content, myReview, id, reviewAPI, unReview, helper}) => {
     const [color, setColor] = useState('#00A3FF');
+    const [cutDate, setCutDate] = useState('');
     const [a, b, c] = useApi(deleteReview, true);
     const user = useRecoilValue(userState);
-
+    useEffect(() => {
+        setCutDate(date.split('T')[0]);
+    }, [])
     return (
         <Shadow style={styles.container} distance={3} offset={[3,3]}>
             <View style={styles.profileContainer}>
@@ -23,7 +27,7 @@ const ReviewBox = ({name, star, date, content, author, id, reviewAPI}) => {
                     <View style={{display: 'flex', flexDirection: 'row'}}>
                         <Text style={{color: color}}>평점 : </Text><Star score={parseInt(star)} style={styles.starStyle} />
                     </View>
-                    <Text style={{color: color}}>날짜 : {date}</Text>
+                    <Text style={{color: color}}>날짜 : {cutDate}</Text>
                 </View>
                 <TouchableOpacity style={styles.deleteIcon} onPress={() => {
                     c(id).then((r) => {
@@ -34,10 +38,17 @@ const ReviewBox = ({name, star, date, content, author, id, reviewAPI}) => {
                         console.log("아니 이게 왜안됨");
                     });
                 }}>
-                    {user === 'Teen' ? <Icon size={25} name={"delete"} color={color} /> : null}
+                    {myReview ? <Icon size={25} name={"delete"} color={color} /> : null}
                 </TouchableOpacity>
             </View>
-            <Text style={[styles.content ,{color: color}]} multiline ={true}>{content}</Text>
+            {unReview ? <View style={{position: 'absolute', right: 10, top: 10}}>
+                <TouchableOpacity onPress={() => {navigation.push(SCREEN.Review, {
+                    helper: helper,
+                    promiseId: id
+                })}}>
+                    <Ionicons name="paper-plane-outline" size={25} color={color} />
+                </TouchableOpacity>
+            </View> : <Text style={[styles.content ,{color: color}]} multiline ={true}>{content}</Text>}
         </Shadow>
     )
 }

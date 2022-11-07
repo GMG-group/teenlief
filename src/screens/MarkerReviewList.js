@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, FlatList} from "react-native";
 import ReviewBox from "@components/ReviewBox";
-import {getMyReview, getMyUnReview} from "@apis/apiServices";
-import  {useApi} from "@apis/useApi";
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { vw, vh } from "react-native-css-vh-vw";
 
@@ -24,7 +22,7 @@ const MarkerReviewList = ({navigation, route}) => {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <EvilIcons name="chevron-left" size={45} color={'white'} />
                 </TouchableOpacity>
-                <Text style={{fontSize: 16, color: 'white'}}>리뷰 관리하기</Text>
+                <Text style={{fontSize: 16, color: 'white'}}>전체 리뷰</Text>
             </View>
             <Text style={styles.title}>등록된 리뷰 : {route.params.markerReviewResolved.length}개</Text>
 
@@ -39,8 +37,8 @@ const MarkerReviewList = ({navigation, route}) => {
                                 star={item.stars}
                                 date={item.created_at}
                                 content={item.content}
+                                myReview={false}
                                 id={item.id}
-                                reviewAPI={reviewAPI}
                                 />
                         )
                     }}

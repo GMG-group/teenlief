@@ -22,6 +22,7 @@ import MarkerManage from '@screens/profile/MarkerManage';
 import Profile from '@screens/Profile';
 import MarkerRiviewList from '@screens/MarkerReviewList';
 import ReviewList from "@screens/ReviewList";
+import ReviewBox from '@components/ReviewBox';
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
