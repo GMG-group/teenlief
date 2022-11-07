@@ -1,83 +1,93 @@
-import React, {useEffect, useRef} from 'react';
-import { Bootpay } from 'react-native-bootpay-api';
+import React, {useEffect, useRef, useState} from 'react';
+import {KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableHighlight, View} from "react-native";
 import {useRecoilState} from "recoil";
 import {ACTION, SCREEN, actionState, userState} from "@apis/atoms";
 import useApi from "@apis/useApi";
 import {getUser, postCertificate} from "@apis/apiServices";
+import {vh, vw} from "react-native-css-vh-vw";
+import VerifyCertification from "@screens/VerifyCertification";
 
 const Certification = ({ navigation }) => {
-    const bootpay = useRef(null);
     const [action, setAction] = useRecoilState(actionState);
     const [user, setUser] = useRecoilState(userState);
+
+    const [phone, setPhone] = useState("");
+
     const [getUserLoading, getUserResult, getUserApi] = useApi(getUser, true);
     const [postCertificateLoading, postCertificateResult, postCertificateApi] = useApi(postCertificate, true);
 
-    useEffect(() => {
-        const payload = {
-            pg: '다날',
-            method: '본인인증',
-            order_name: '본인인증',
-            authentication_id: '12345_21345', //개발사에 관리하는 주문번호 (본인인증용)
-        }
-        //기타 설정
-        const extra = {
-            app_scheme: "teenlief", //ios의 경우 카드사 앱 호출 후 되돌아오기 위한 앱 스키마명
-            // show_close_button: true, // x 닫기 버튼 삽입 (닫기버튼이 없는 PG사를 위한 옵션)
-        }
 
-        // const extra = new Extra();
-        if(bootpay != null && bootpay.current != null) bootpay.current.requestAuthentication(payload, [], {}, extra);
-    }, []);
-
-    const onCancel = (data) => {
-        console.log('-- cancel', data);
-    }
-
-    const onError = (data) => {
-        console.log('-- error', data);
-    }
-
-    const onIssued = (data) => {
-        console.log('-- issued', data);
-    }
-
-    const onConfirm = (data) => {
-        console.log('-- confirm', data);
-        if (bootpay != null && bootpay.current != null) bootpay.current.transactionConfirm(data);
-    }
-
-    const onDone = (data) => {
-        console.log('-- done', data);
-
-        postCertificateApi();
-
-        setAction(ACTION.Upload);
-    }
-
-    const onClose = () => {
-        console.log('-- closed');
-        getUserApi()
+    const requestCertificate = () => {
+        const formData = new FormData();
+        formData.append("phone", phone);
+        postCertificateApi(formData)
             .then((res) => {
-                setUser(res);
-            })
-        navigation.navigate(SCREEN.Home);
+                if (res.status === "success") {
+                    navigation.push(SCREEN.VerifyCertification);
+                }
+            });
     }
 
     return (
-        <Bootpay
-            ref={bootpay}
-            ios_application_id={'5b8f6a4d396fa665fdc2b5e9'}
-            android_application_id={'5b8f6a4d396fa665fdc2b5e8'}
-            // ios_application_id={'5b9f51264457636ab9a07cdd'}
-            // android_application_id={'5b9f51264457636ab9a07cdc'}
-            onCancel={onCancel}
-            onError={onError}
-            onIssued={onIssued}
-            onConfirm={onConfirm}
-            onDone={onDone}
-            onClose={onClose}
-        />
+        <KeyboardAvoidingView style={styles.container}>
+            <View style={styles.textContainer}>
+                <View style={{ marginBottom: vh(1) }}>
+                    <Text style={styles.mainText}>휴대폰 번호를 입력해주세요.</Text>
+                    <Text style={styles.subText}>본인 인증을 위해 필요합니다.</Text>
+                </View>
+                <TextInput style={{ borderBottomWidth: 1 }} value={phone} onChangeText={setPhone} />
+            </View>
+
+            <TouchableHighlight
+                style={styles.submitButton}
+                onPress={requestCertificate}
+            >
+                <View>
+                    <Text style={{ color: 'white' }}>확 인</Text>
+                </View>
+            </TouchableHighlight>
+        </KeyboardAvoidingView>
     );
 };
 
 export default Certification;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "white",
+        paddingHorizontal: vw(5)
+    },
+    textContainer: {
+        marginTop: vh(16)
+    },
+    mainText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: "#252525"
+    },
+    subText: {
+        fontSize: 16,
+        color: "#969696"
+    },
+    submitButton: {
+        width: '100%',
+        height: vh(6),
+        backgroundColor: '#252525',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 8,
+        marginTop: vh(4)
+    }
+});
+
+/*
+ 1. 프론트 -> 백 인증 요청
+ 2. 백에서 랜덤 6자리 문자 생성 후 db에 user, expire time과 함께 저장
+ 3. 위에서 생성한 랜덤 6자리 문자로 사용자에게 문자 전송
+ 4. 문자가 도착한 사용자는 프론트에 문자로 받은 랜덤 6자리 문자 입력
+ 5. 백에 사용자로부터 입력받은 랜덤 6자리 문자 전송
+ 6. db에서 user로 인증 정보를 불러와 문자 인증 번호가 맞는지 검증
+ 7. 맞으면 user.certificate를 1로 바꿈
+ */
