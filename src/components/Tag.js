@@ -51,7 +51,7 @@ export const Tag = ({tags, all=false, size='m', onSelected, select=false, shelte
             contentContainerStyle={{
                 flexGrow: 1,
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'flex-start',
                 width: filterTag.length * (width * 1.3),
             }}
             renderItem={({item, index}) =>
