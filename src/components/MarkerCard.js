@@ -24,7 +24,10 @@ const MarkerCard = ({marker, style, deleteApi}) => {
                         </TextTicker>
 
                         <Tag tags={marker.tag} size={'s'}/>
-                        <StarRating rating={5} onChange={()=> {}} starSize={15} starStyle={{marginHorizontal: 0}}/>
+                        {/*<StarRating rating={5} onChange={()=> {}} starSize={15} starStyle={{marginHorizontal: 0}}/>*/}
+                        <Text style={styles.count}>
+                            생성된 약속: {marker.promise_count}
+                        </Text>
                         <Moment style={styles.dateText} format="YYYY/MM/DD" element={Text}>{marker.created_at}</Moment>
 
                     </View>
@@ -64,7 +67,7 @@ const styles = StyleSheet.create({
     },
     contentDetail: {
         color: "#AE46FF",
-        fontSize: 12
+        fontSize: 13
     },
     detailContainer: {
         flexDirection: "row",
@@ -75,6 +78,9 @@ const styles = StyleSheet.create({
         bottom: 5,
         right: 5,
         fontSize: 8
+    },
+    count: {
+        fontSize: 11
     }
 });
 
