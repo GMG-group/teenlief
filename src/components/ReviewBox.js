@@ -13,8 +13,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 const ReviewBox = ({navigation, name, star, date, content, myReview, id, reviewAPI, unReview, helper}) => {
     const [color, setColor] = useState('#00A3FF');
     const [cutDate, setCutDate] = useState('');
-    const [a, b, c] = useApi(deleteReview, true);
-    const user = useRecoilValue(userState);
     useEffect(() => {
         setCutDate(date.split('T')[0]);
     }, [])
@@ -29,27 +27,8 @@ const ReviewBox = ({navigation, name, star, date, content, myReview, id, reviewA
                     </View>
                     <Text style={{color: color}}>날짜 : {cutDate}</Text>
                 </View>
-                <TouchableOpacity style={styles.deleteIcon} onPress={() => {
-                    c(id).then((r) => {
-                        console.log('삭제 완료');
-                        reviewAPI();
-                    })
-                    .catch(error => {
-                        console.log("아니 이게 왜안됨");
-                    });
-                }}>
-                    {myReview ? <Icon size={25} name={"delete"} color={color} /> : null}
-                </TouchableOpacity>
             </View>
-            {unReview ? <View style={{position: 'absolute', right: 10, top: 10}}>
-                <TouchableOpacity onPress={() => {
-                    navigation.push(SCREEN.Review, {
-                    helper: helper,
-                    promiseId: id
-                })}}>
-                    <Ionicons name="paper-plane-outline" size={25} color={color} />
-                </TouchableOpacity>
-            </View> : <Text style={[styles.content ,{color: color}]} multiline ={true}>{content}</Text>}
+            {unReview ? null : <Text style={[styles.content ,{color: color}]} multiline ={true}>{content}</Text>}
         </Shadow>
     )
 }
@@ -62,6 +41,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 10,
         marginBottom: 20
+        // borderBottomWidth: 20,
     },
     profileImage: {
         width: 60,

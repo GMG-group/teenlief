@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, FlatList} from "react-native";
 import ReviewBox from "@components/ReviewBox";
-import {getMyReview, getMyUnReview} from "@apis/apiServices";
+import {getMyReview, getMyUnReview, deleteReview} from "@apis/apiServices";
 import  {useApi} from "@apis/useApi";
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { vw, vh } from "react-native-css-vh-vw";
+import SwipeableFlatList from "react-native-swipeable-list";
+import {userState, SCREEN} from "@apis/atoms";
 
 const ReviewList = ({navigation, route}) => {
     const [reviewLoading, reviewResolved, reviewApi] = useApi(getMyReview, true);
     const [unReviewLoading, unReviewResolved, unReviewApi] = useApi(getMyUnReview, true);
+    const [deleteLoading, deleteResolved, deleteApi, setDeleteLoading] = useApi(deleteReview, true);
     const [color, setColor] = useState('black');
     const [text, setText] = useState('');
     const [marker, setMarker] = useState(false);
@@ -51,6 +54,30 @@ const ReviewList = ({navigation, route}) => {
         }
     }, []);
 
+    const button = (marker) => {
+        if (route.params.unReview) {
+            navigation.push(SCREEN.Review, {
+                helper: marker.helper,
+                promiseId: marker.id
+            })
+        } else {
+            deleteApi(marker.id);
+            reviewAPI();
+        }
+    }
+
+    const QuickActions = (index, marker) => {
+        console.log(marker, 'here marker');
+        return (
+            <View style={styles.qaContainer}>
+                <TouchableOpacity onPress={() => button(marker)}>
+                    <View style={[styles.button, {backgroundColor: color}]}>
+                        <Text style={styles.buttonText}>{route.params.unReview ? "작성" : "삭제"}</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        );
+    };
     return (
         <View style={{display: 'flex'}}>
             <View style={[styles.nav, {backgroundColor: color}]}>
@@ -61,6 +88,7 @@ const ReviewList = ({navigation, route}) => {
             </View>
             <Text style={styles.title}>{text} : {route.params.unReview ? unReviewResolved ? unReviewResolved.length : 0 : reviewResolved ? reviewResolved.length : 0}개</Text>
 
+            {route.params.user === 'Helper' ? (
             <FlatList
                 style={styles.flatList}
                 scrollEnabled={true}
@@ -83,6 +111,34 @@ const ReviewList = ({navigation, route}) => {
                         )
                     }}
             />
+            ) : (
+            <SwipeableFlatList
+                style={styles.flatList}
+                scrollEnabled={true}
+				data={route.params.unReview ? unReviewResolved : reviewResolved}
+                extraData={route.params.unReview ? unReviewResolved : reviewResolved}
+                keyExtractor={(item) => item.id}
+				renderItem={({item}) => {
+					    return (
+                            <ReviewBox
+                                navigation={navigation}
+                                name={ route.params.unReview ? item.helper.first_name : item.author.first_name}
+                                star={route.params.unReview ? 0 : item.stars}
+                                date={route.params.unReview ? "" : item.created_at}
+                                content={route.params.unReview ? "" : item.content}
+                                helper={route.params.unReview ? item.helper : null}
+                                unReview={route.params.unReview}
+                                myReview={route.params.delete}
+                                id={item.id}
+                                reviewAPI={reviewAPI}
+                                />
+                        )
+                    }}
+                maxSwipeDistance={110}
+                renderQuickActions={({index, item}) => QuickActions(index, item)}
+                shouldBounceOnMount={true}
+            />
+            )}
         </View>
     );
 }
@@ -104,6 +160,26 @@ const styles = StyleSheet.create({
     flatList: {
         width: vw(100),
         marginLeft: '5%'
+    },
+    qaContainer: {
+        flex: 1,
+        marginRight: vw(5),
+        padding: 20,
+        paddingTop: 0,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    button: {
+        alignSelf: "center",
+        height: '100%',
+        width: 100,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    buttonText: {
+        fontWeight: 'bold',
+        color: 'white'
     }
 });
 

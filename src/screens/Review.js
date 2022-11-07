@@ -6,13 +6,13 @@ import { TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useRecoilValue} from "recoil";
 import {SCREEN} from "@apis/atoms";
-import {postMarkerReview} from "@apis/apiServices";
+import {postMarkerReview, getMyUnReview} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 
 const Review = ({route, navigation}) => {
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
-
+    const [unReviewLoading, unReviewResolved, unReviewApi] = useApi(getMyUnReview, true);
     const [postMarkerReviewLoading, postMarkerReviewRes, postMarkerReviewApi] = useApi(postMarkerReview, true);
 
     const onDone = () => {
@@ -23,6 +23,13 @@ const Review = ({route, navigation}) => {
         formData.append("content", review);
         console.log(formData);
         postMarkerReviewApi(formData);
+        unReviewApi()
+            .then(res => {
+                console.log(res, 'UN REVIEW');
+            })
+            .catch(error => {
+                console.log(error);
+            })
         navigation.goBack();
     }
 
