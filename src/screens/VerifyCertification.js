@@ -34,7 +34,7 @@ const VerifyCertification = ({ navigation }) => {
                 <View style={{ marginBottom: vh(1) }}>
                     <Text style={styles.mainText}>문자로 받은 인증 번호를 입력해주세요.</Text>
                 </View>
-                <TextInput style={{ borderBottomWidth: 1 }} value={code} onChangeText={setCode} />
+                <TextInput style={{ borderBottomWidth: 1 }} value={code} onChangeText={setCode} placeholder={"인증번호"} />
             </View>
 
             <TouchableHighlight
