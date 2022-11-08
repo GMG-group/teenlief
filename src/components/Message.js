@@ -47,17 +47,21 @@ export const PromiseMessage = ({ navigation, item, displayProfile }) => {
                         <Text style={{fontSize: 18, color: 'black'}}>알림</Text>
                         <Text style={styles.promiseTimeText}>30 분 전</Text>
                     </View>
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate(SCREEN.Review, {
-                                helper: item.user,
-                                promiseId: promiseId
-                            })
-                        }}
-                        style={[styles.promiseFinButton, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}
-                    >
-                        <Text style={{color: 'white'}}>완료</Text>
-                    </TouchableOpacity>
+
+                    {
+                        user.role === 'Teen' &&
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.navigate(SCREEN.Review, {
+                                        helper: item.user,
+                                        promiseId: promiseId
+                                    })
+                                }}
+                                style={[styles.promiseFinButton, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}
+                            >
+                                <Text style={{color: 'white'}}>완료</Text>
+                            </TouchableOpacity>
+                    }
                 </View>
             </View>
         </View>
