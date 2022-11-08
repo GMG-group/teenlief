@@ -20,7 +20,7 @@ export const CustomMarker = ({
                         height={height}
                         coordinate={coordinate}
                         onClick={() => {
-                            onClick();
+                            onClick && onClick();
                         }}
                         image={image}
                     />

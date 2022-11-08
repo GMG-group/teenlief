@@ -23,6 +23,8 @@ export const SCREEN = {
     Profile: 'Profile',
     Donate: 'Donate',
     Certification: 'Certification',
+    ReviewList: 'ReviewList',
+    MarkerRiviewList: 'MarkerRiviewList',
 } as const;
 type SCREEN = typeof SCREEN[keyof typeof SCREEN];
 

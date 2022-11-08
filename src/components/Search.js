@@ -5,7 +5,7 @@ import useApi from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
 import {Tag} from "@components/Tag";
 
-const Search = ({ displayTag, filteredMarker, setFilterdMarker }) => {
+const Search = ({ displayTag, filteredMarker, setFilterdMarker, setShelterFiltered }) => {
 	const [search, setSearch] = useState(null);
 	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
 	const [filterTag, setFilterTag] = useState([]);
@@ -38,7 +38,8 @@ const Search = ({ displayTag, filteredMarker, setFilterdMarker }) => {
 				</View>
 			</View>
 
-			{ displayTag && <Tag select all={true} onSelected={(selected) => {
+			{ displayTag && <Tag select all shelter onSelected={(selected) => {
+				setShelterFiltered(!selected[selected.length-1].selected);
 				setFilterdMarker(prev => (
 					prev.map((marker) => {
 						console.log("selected", selected);
