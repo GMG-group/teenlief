@@ -108,7 +108,7 @@ export const TabBar = ({ navigation }) => {
 	}
 
 	if(action === "upload") {
-		return <Map/>
+		return <Map navigation={navigation}/>
 	}
 
 	return (

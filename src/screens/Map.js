@@ -1,11 +1,11 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import NaverMapView, { Marker } from "react-native-nmap";
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import NaverMapView from "react-native-nmap";
 import {BottomSheetModal} from "@gorhom/bottom-sheet";
-import {Dimensions, Image, Platform, StyleSheet, Text, View} from "react-native";
+import {Dimensions, StyleSheet, Text, View} from "react-native";
 import Search from "@components/Search";
 import MarkerDetailBottomSheet from "@components/MarkerDetailBottomSheet";
 import useApi from "@apis/useApi";
-import {getMarkerSimple, getShelters, getUser, postMarker} from "@apis/apiServices";
+import {getMarkerSimple, getShelters, getUser} from "@apis/apiServices";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {ACTION, actionState, userState} from "@apis/atoms";
 import {BackButton} from "@components/BackButton";
@@ -29,16 +29,11 @@ const Map = ({ route, navigation }) => {
 	const [shelterPressed, setShelterPressed] = useState(false);
 	const [selectedShelterId, setSelectedShelterId] = useState();
 	const [filteredMarker, setFilteredMarker] = useState([]);
+	const [shelterFiltered, setShelterFiltered] = useState(false);
 
 	const [user, setUser] = useRecoilState(userState);
 
 	const [getUserLoading, userResolved, getUserApi] = useApi(getUser, true);
-	useEffect(() => {
-		getUserApi()
-			.then((res) => {
-				setUser(res);
-			})
-	}, []);
 
 	const action = useRecoilValue(actionState);
 	const snapPoints = useMemo(() => {
@@ -60,6 +55,10 @@ const Map = ({ route, navigation }) => {
 				setFilteredMarker(res.map((marker) => ({...marker, filtered: false})));
 			});
 		getSheltersCallback();
+		getUserApi()
+			.then((res) => {
+				setUser(res);
+			})
 	},[])
 
 	useEffect(() => {
@@ -67,6 +66,15 @@ const Map = ({ route, navigation }) => {
 			bottomSheetModalRef.current?.present();
 		}
 	},[action])
+
+	React.useEffect(() => { // 화면이 focus되었을때 마커를 다시 불러오기 위한 리스너
+		navigation.addListener('focus', () => {
+			getMarkers()
+				.then((res) => {
+					setFilteredMarker(res.map((marker) => ({...marker, filtered: false})));
+				});
+		});
+	}, [navigation]);
 
 
 	const handleBottomSheet = () => {
@@ -120,17 +128,18 @@ const Map = ({ route, navigation }) => {
 				sheltersLoading={sheltersLoading}
 				shelters={shelters}
 				setSelectedShelterId={setSelectedShelterId}
+				shelterFiltered={shelterFiltered}
 			/>}
 
 			{
-				action===ACTION.Upload ? null : <Search filteredMarker={filteredMarker} setFilterdMarker={setFilteredMarker} displayTag={true}/>
+				action===ACTION.Upload ? null : <Search filteredMarker={filteredMarker} setFilterdMarker={setFilteredMarker} displayTag={true} setShelterFiltered={setShelterFiltered}/>
 			}
 
 		</>
 	);
 };
 
-const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers, setSelectedMarkerId, setShelterPressed, bottomSheetModalRef, sheltersLoading, shelters, setSelectedShelterId}) => {
+const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers, setSelectedMarkerId, setShelterPressed, bottomSheetModalRef, sheltersLoading, shelters, setSelectedShelterId, shelterFiltered}) => {
 
 	const generateMarkerPoints = () => {
 		const points = [];
@@ -226,7 +235,7 @@ const ClusterMap = ({cameraInfo, setCameraInfo, markersLoading, action, markers,
 					/>
 				);
 			})}
-			{shelterCluster.clusters.map(cluster => {
+			{!shelterFiltered && shelterCluster.clusters.map(cluster => {
 				const [longitude, latitude] = cluster.geometry.coordinates;
 				const {
 					cluster: isCluster,
