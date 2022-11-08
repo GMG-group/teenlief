@@ -67,7 +67,7 @@ const Map = ({ route, navigation }) => {
 		}
 	},[action])
 
-	React.useEffect(() => { // 화면이 focus되었을때 마커를 다시 불러오기 위한 리스너
+	useEffect(() => { // 화면이 focus되었을때 마커를 다시 불러오기 위한 리스너
 		navigation.addListener('focus', () => {
 			getMarkers()
 				.then((res) => {

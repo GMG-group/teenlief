@@ -47,12 +47,18 @@ const ReviewList = ({navigation, route}) => {
             setColor('#AE46FF');
             setText('나에게 작성된 리뷰');
         }
-        if (route.params.unReview) {
-            unReviewAPI();
-        } else {
-            reviewAPI();
-        }
     }, []);
+
+    useEffect(() => { // 화면이 focus되었을때 리뷰를 불러오기 위한 리스너
+        console.log("unreview", route.params.unReview)
+        navigation.addListener('focus', () => {
+            if (route.params.unReview) {
+                unReviewAPI();
+            } else {
+                reviewAPI();
+            }
+        })
+    }, [navigation]);
 
     const button = (marker) => {
         if (route.params.unReview) {
