@@ -6,11 +6,33 @@ import { TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useRecoilValue} from "recoil";
 import {SCREEN} from "@apis/atoms";
+import {postMarkerReview, getMyUnReview} from "@apis/apiServices";
+import useApi from "@apis/useApi";
 
 const Review = ({route, navigation}) => {
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
-    const {helper} = route.params;
+    const [postMarkerReviewLoading, postMarkerReviewRes, postMarkerReviewApi] = useApi(postMarkerReview, true);
+
+    const onDone = () => {
+        const formData = new FormData();
+        formData.append("helper", route.params.helper.id);
+        formData.append("stars", rating);
+        formData.append("promise", route.params.promiseId);
+        formData.append("content", review);
+        console.log(formData);
+        postMarkerReviewApi(formData);
+        if (route.params.reload) {
+            route.params.unReviewApi()
+            .then(res => {
+                console.log(res, 'UN REVIEW');
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        }
+        navigation.goBack();
+    }
 
     return (
         <View style={styles.container}>
@@ -30,8 +52,8 @@ const Review = ({route, navigation}) => {
             </TouchableOpacity>
 
             <Image style={styles.profile} source={require("@assets/images/test.png")} />
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>{helper.first_name}</Text>
-            <Text style={{fontSize: 15, marginBottom: 5}}>{helper.email}</Text>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>{route.params.helper.first_name}</Text>
+            <Text style={{fontSize: 15, marginBottom: 5}}>{route.params.helper.email}</Text>
             <View>
                 <StarRating
                     style={{marginBottom: 5}}
@@ -43,7 +65,7 @@ const Review = ({route, navigation}) => {
 
             <TextInput value={review} onChangeText={setReview} multiline={true} numberOfLines = {20} style={styles.textInput} />
             
-            <TouchableOpacity style={styles.btn} onPress={() => {navigation.navigate(SCREEN.Home)}}>
+            <TouchableOpacity style={styles.btn} onPress={() => onDone()}>
                 <Text style={{color: 'white', fontSize: 17}}>완료</Text>
             </TouchableOpacity>
         </View>
@@ -64,8 +86,8 @@ const styles = StyleSheet.create({
     profile: {
         borderRadius: 100,
         backgroundColor: 'black',
-        width: vw(30),
-        height: vw(30),
+        width: vw(20),
+        height: vw(20),
         marginBottom: 10
     },
     textInput: {
@@ -76,6 +98,7 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top',
         marginBottom: 10,
         borderRadius: 10,
+        padding: 20,
     },
     btn: {
         display: 'flex',

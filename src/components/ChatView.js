@@ -6,10 +6,19 @@ import Star from 'react-native-star-view';
 import test from "@assets/images/test.png";
 import {useRecoilValue} from "recoil";
 import {userState, SCREEN} from "@apis/atoms";
+import useApi from '@apis/useApi';
+import { getMarkerInfo } from '@apis/apiServices';
 
 const ChatView = ({ navigation, data }) => {
     const [heart, setHeart] = useState(data.favorite);
     const user = useRecoilValue(userState);
+    const [helperinfoLoading, helperinfoSolved, helperinfoApi] = useApi(getMarkerInfo, true);
+
+    useEffect(() => {
+        helperinfoApi(data.helper.id)
+        .then(res => console.log(res))
+        .catch(error => console.log(error));
+    }, []);
 
     return (
         <TouchableOpacity
@@ -20,7 +29,7 @@ const ChatView = ({ navigation, data }) => {
                 profile: data.profile,
                 teen: data.teen,
                 helper: data.helper,
-                score: data.score,
+                score: helperinfoSolved ? helperinfoSolved.score.slice(0, -1) : 0
             })}
         >
             <View style={styles.leftContainer}>
@@ -35,14 +44,18 @@ const ChatView = ({ navigation, data }) => {
                         }
                     </Text>
                     <View style={styles.starContainer}>
-                        <Text>{data.score.toFixed(1)} : </Text>
-                        <Star score={data.score} style={styles.star} />
+                        {
+                            user.role === 'Teen' ? <Text>{helperinfoSolved ? helperinfoSolved.score.slice(0, -1) : 0}</Text> : null
+                        }
+                        {
+                            user.role === 'Teen' ? <Star score={helperinfoSolved ? parseFloat(helperinfoSolved.score) : 0} style={styles.star} /> : null
+                        }
                     </View>
                 </View>
             </View>
-            <TouchableOpacity onPress={() => setHeart(!heart)}>
-                <Icon size={30} name={heart ? "heart" : "heart-outline"} color={heart ? "red" : null} />
-            </TouchableOpacity>
+            <View>
+            {user.role === 'Teen' ? <Text style={{color: '#AE46FF', fontSize: 22, fontWeight: 'bold',fontStyle: 'italic' }}>Helper</Text> : <Text style={{color: '#00A3FF', fontSize: 22, fontWeight: 'bold',fontStyle: 'italic' }}>Teen</Text>}
+            </View>
         </TouchableOpacity>
     )
 }

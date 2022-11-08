@@ -8,6 +8,7 @@ import {SCREEN, userState} from "@apis/atoms";
 export const PromiseMessage = ({ navigation, item, displayProfile }) => {
     const user = useRecoilValue(userState);
     const [promise, setPromise] = useState(new Date());
+    const [promiseId, setPromiseId] = useState(0);
 
     useEffect(() => {
         // parse date
@@ -15,6 +16,7 @@ export const PromiseMessage = ({ navigation, item, displayProfile }) => {
         const day = item.content.split('/')[3];
         const hour = item.content.split('/')[4];
         const minute = item.content.split('/')[5];
+        setPromiseId(item.content.split('/')[7]);
 
         setPromise(new Date('2022', month, day, hour, minute));
     }, [item]);
@@ -45,12 +47,19 @@ export const PromiseMessage = ({ navigation, item, displayProfile }) => {
                         <Text style={{fontSize: 18, color: 'black'}}>알림</Text>
                         <Text style={styles.promiseTimeText}>30 분 전</Text>
                     </View>
-                    <TouchableOpacity onPress={() => {navigation.navigate(SCREEN.Review, {helper: item.user})}} style={[styles.promiseFinButton, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate(SCREEN.Review, {
+                                helper: item.user,
+                                promiseId: promiseId
+                            })
+                        }}
+                        style={[styles.promiseFinButton, item.user.role === 'Helper' ? {backgroundColor: '#AE46FF'} : null]}
+                    >
                         <Text style={{color: 'white'}}>완료</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-
         </View>
     );
 }
@@ -144,8 +153,9 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
-
         elevation: 7,
+        borderWidth: 1,
+        borderColor: "#AE46FF"
     },
     promiseHeaderText: {
         fontSize: 20,

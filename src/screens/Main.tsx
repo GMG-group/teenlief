@@ -19,6 +19,11 @@ import {tokenState} from "@apis/atoms";
 import Promise from "@screens/Promise";
 import SplashScreen from '@screens/SplashScreen';
 import MarkerManage from '@screens/profile/MarkerManage';
+import VerifyCertification from "@screens/VerifyCertification";
+import Profile from '@screens/Profile';
+import MarkerReviewList from '@screens/MarkerReviewList';
+import ReviewList from "@screens/ReviewList";
+import ReviewBox from '@components/ReviewBox';
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
@@ -108,6 +113,27 @@ const Main = () => {
 							<Stack.Screen
 								name={SCREEN.Certification}
 								component={Certification}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name={SCREEN.VerifyCertification}
+								component={VerifyCertification}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name={SCREEN.ReviewList}
+								component={ReviewList}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name={SCREEN.MarkerReviewList}
+								component={MarkerReviewList}
 								options={{
 									headerShown: false,
 								}}

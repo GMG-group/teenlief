@@ -58,7 +58,7 @@ const LineButton = ({title, onPress}) => (
 	</TouchableOpacity>
 )
 
-const Profile = ({navigation}) => {
+const Profile = ({ navigation }) => {
 	const [user, setUser] = useRecoilState(userState)
 	const [token, setToken] = useRecoilState(tokenState);
 
@@ -168,10 +168,28 @@ const Profile = ({navigation}) => {
 							<CircularButton title={"입금하기"} color={'#AE46FF'} onPress={handleDeposit} />
 							<CircularButton title={"출금하기"} color={'#AE46FF'} />
 						</CircularContainer>
+
 						<Text style={{...containerStyles.label, marginTop: 30}}>활동 관리</Text>
-						<CircularContainer title={`현재 등록된 리뷰`}>
-							<CircularButton title={"전체보기"} color={'#AE46FF'}/>
+						<CircularContainer title={`나에게 등록된 리뷰`} style={{marginTop: 12}}>
+							<CircularButton
+								title={"전체보기"}
+								color={'#AE46FF'}
+								onPress={() => {navigation.push(SCREEN.ReviewList, {
+									user: user.role,
+									unReview: false,
+									delete: false,
+								})}}
+							/>
 						</CircularContainer>
+
+						{/* <CircularContainer title={`내가 등록한 리뷰`} style={{marginTop: 12}}>
+							<CircularButton
+								title={"전체보기"}
+								color={'#AE46FF'}
+								onPress={() => {navigation.push(SCREEN.ReviewList, {
+									user: user.role,
+								})}}/>
+						</CircularContainer> */}
 						<CircularContainer title={`현재 등록된 마커`} style={{marginTop: 12}}>
 							<CircularButton title={"전체보기"} color={'#AE46FF'} onPress={() => {navigation.push(SCREEN.MarkerManage)}}/>
 						</CircularContainer>
@@ -179,21 +197,29 @@ const Profile = ({navigation}) => {
 				) : (
 					<>
 						<Text style={{...containerStyles.label, marginTop: 30}}>리뷰 관리</Text>
-						<CircularContainer title={`현재 등록한 리뷰 ${100}개`}>
-							<CircularButton title={"전체 보기"} color={'#00A3FF'}/>
+						<CircularContainer title={`내가 등록한 리뷰`}>
+							<CircularButton title={"전체 보기"} color={'#00A3FF'} onPress={() => {navigation.push(SCREEN.ReviewList, {
+								user: user.role,
+								unReview: false,
+								delete: true,
+							})}}/>
 						</CircularContainer>
-						<CircularContainer title={"올릴 리뷰"} style={{marginTop: 12}}>
-							<CircularButton title={"리뷰 작성하기"} color={'#00A3FF'}/>
+						<CircularContainer title={"리뷰 작성하기"} style={{marginTop: 12}}>
+							<CircularButton title={"전체 보기"} color={'#00A3FF'} onPress={() => {navigation.push(SCREEN.ReviewList, {
+								user: user.role,
+								unReview: true,
+								delete: false,
+							})}}/>
 						</CircularContainer>
 					</>
 				)
 			}
 
 				<Text style={{...containerStyles.label, marginTop: 40}}>개인정보 관리</Text>
-				<LineButton title={"비밀번호 변경"}/>
-				{
+				{/* <LineButton title={"비밀번호 변경"}/> */}
+				{/* {
 					user.role === "Helper" ? (<LineButton title={"계좌 관리"}/>) : null
-				}
+				} */}
 				<LineButton title={"로그아웃"} onPress={() => {logout(setToken)}}/>
 			</View>
 		</ScrollView>

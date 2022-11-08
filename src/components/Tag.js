@@ -4,14 +4,14 @@ import {useApi} from "@apis/useApi";
 import {getTag} from "@apis/apiServices";
 import {FlatList, Text, View} from "react-native";
 
-export const Tag = ({tags, all=false, size='m', onSelected, select=false}) => { // 표시할 태그(숫자), 모두 표시할지, 사이즈
+export const Tag = ({tags, all=false, size='m', onSelected, select=false, shelter=false}) => { // 표시할 태그(숫자), 모두 표시할지, 사이즈, 쉘터 표시할지
     const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
     const [filterTag, setFilterTag] = useState([]);
     const tagListRef = useRef(null);
 
-    const height = size === 'm' ? 25 : 15;
-    const width = size === 'm' ? 90 : 50;
-    const fontSize = size === 'm' ? 14 : 10;
+    const height = size === 'm' ? 25 : 16;
+    const width = size === 'm' ? 90 : 52;
+    const fontSize = size === 'm' ? 14 : 11;
 
     useEffect(() => {
         tagApi();
@@ -22,6 +22,7 @@ export const Tag = ({tags, all=false, size='m', onSelected, select=false}) => { 
             let newTag = []
             if(all) {
                 newTag = tagResolved.map((tag) => ({...tag, selected: select}));
+                if(shelter) newTag.push({id: tagResolved.length+1, tag: "쉘터", selected: select}); // 쉘터 옵션이 켜진 경우만 쉘터 표시
             } else {
                 tags.forEach((tag) => {
                     newTag.push({...tagResolved[tag-1], selected: select});
@@ -50,7 +51,7 @@ export const Tag = ({tags, all=false, size='m', onSelected, select=false}) => { 
             contentContainerStyle={{
                 flexGrow: 1,
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'flex-start',
                 width: filterTag.length * (width * 1.3),
             }}
             renderItem={({item, index}) =>
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         elevation: 3,
-        margin: 3
+        marginHorizontal: 3
     },
 })
 
