@@ -58,7 +58,9 @@ const ReviewList = ({navigation, route}) => {
         if (route.params.unReview) {
             navigation.push(SCREEN.Review, {
                 helper: marker.helper,
-                promiseId: marker.id
+                promiseId: marker.id,
+                unReviewApi: unReviewApi,
+                reload: true,
             })
         } else {
             deleteApi(marker.id);
@@ -124,7 +126,7 @@ const ReviewList = ({navigation, route}) => {
                                 navigation={navigation}
                                 name={ route.params.unReview ? item.helper.first_name : item.author.first_name}
                                 star={route.params.unReview ? 0 : item.stars}
-                                date={route.params.unReview ? "" : item.created_at}
+                                date={item.created_at}
                                 content={route.params.unReview ? "" : item.content}
                                 helper={route.params.unReview ? item.helper : null}
                                 unReview={route.params.unReview}
