@@ -135,7 +135,7 @@ const Login = ({ navigation }) => {
                     />
 
                 <TouchableOpacity>
-                    <Text style={middleStyle.text}>비밀번호를 잊으셨습니까?</Text>
+                    {/*<Text style={middleStyle.text}>비밀번호를 잊으셨습니까?</Text>*/}
                 </TouchableOpacity>
             </View>
             
