@@ -53,22 +53,23 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 	const user = useRecoilValue(userState);
 
 	useEffect(() => {
-		markerInfoApi(detail?.helper.id)
-			.then(res => {
-				console.log(res, 'here');
-				console.log(detail.helper.id, 'helper id');
-			})
-			.catch(error => {
-				console.log(error);
-			})
-		markerReviewApi(detail?.helper.id)
-			.then(res => {
-				console.log(res, 'arker review');
-			})
+		if (detail) {
+			markerInfoApi(detail?.helper.id)
+				.then(res => {
+					console.log(res, 'helper info');
+				})
+				.catch(error => {
+					console.log(error);
+				})
+			markerReviewApi(detail?.helper.id)
+				.then(res => {
+					console.log(res, 'marker review');
+				})
 			.catch(error => {
 				console.log("error");
 			})
-	}, [JSON.stringify(detail)]);
+		}
+	}, [detail]);
 
 	return (
 		<><View style={styles.helperInfoContainer}>
@@ -78,7 +79,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 				<View style={styles.helperInfoText}>
 					<Text style={styles.name}>{detail?.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
-						<Text>{markerInfoSolved ? markerInfoSolved.score : 0}</Text>
+						<Text>{markerInfoSolved ? markerInfoSolved.score.slice(0, -1) : 0}</Text>
 						<Star score={markerInfoSolved ? parseInt(markerInfoSolved.score) : 0}
 							  style={styles.helperStar}/>
 						<Text>
@@ -158,24 +159,27 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 			<View style={styles.review}>
 				<View style={styles.reviewHeader}>
 					<View style={styles.reviewHeaderLeft}>
-						<Text style={{
-							color: "#ffc107",
-							fontSize: 30
-						}}>{markerInfoSolved ? markerInfoSolved.score : 0.0}</Text>
-						<Star score={markerInfoSolved ? parseInt(markerInfoSolved.score) : 0}
-							  style={styles.helperStar}/>
+						<Text style={{color: "#ffc107", fontSize: 30}}>{markerInfoSolved ? markerInfoSolved.score.slice(0, -1) : 0.0}</Text>
+						<Star score={markerInfoSolved ? parseFloat(markerInfoSolved.score) : 0} style={styles.helperStar} />
 						<Text>({markerInfoSolved ? markerInfoSolved.review_count : 0}개)</Text>
 					</View>
 					<View style={styles.reviewHeaderRight}>
 						<View>
-							<Text>다음에 꼭 보답할게요</Text>
-							<Text>헬퍼분이 너무 친절하세요!</Text>
-							<Text>감사합니다</Text>
+							{
+								markerReviewResolved && markerReviewResolved.map((review, idx) => {
+									if (idx <= 3) {
+										return (
+											<Text>{review.content}</Text>
+										);
+									}
+								})
+							}
 						</View>
 						<View style={styles.reviewHeaderRightMoreButton}>
 							<TouchableWithoutFeedback onPress={() => {
 								// navigation.navigate(SCREEN.Review);
-								navigation.navigate(SCREEN.ReviewList, {
+								navigation.navigate(SCREEN.MarkerReviewList, {
+									user: user?.role,
 									markerReviewResolved: markerReviewResolved,
 									name: detail.helper.first_name,
 								});
@@ -187,7 +191,8 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }
 					</View>
 				</View>
 			</View>
-		</ScrollView></>
+		</ScrollView>
+		</>
 	)
 }
 

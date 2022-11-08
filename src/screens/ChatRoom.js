@@ -102,11 +102,12 @@ const ChatRoom = ({ navigation, route }) => {
                         }
                     </Text>
                 </View>
-
+                {user.role === 'Teen' ? 
                 <View style={styles.navContainer}>
                     <StarIcon name="star" size={20} style={{color: '#ffd45b'}} />
                     <Text style={styles.marginLeft}>{route.params.score}</Text>
-                </View>
+                </View> : null
+                }
             </View>
 
             <FlatList

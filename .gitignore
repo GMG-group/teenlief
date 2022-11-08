@@ -260,3 +260,4 @@ yarn.lock
 Pods
 Teenlief.xcworkspace
 Podfile.lock
+package-lock.json

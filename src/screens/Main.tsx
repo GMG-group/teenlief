@@ -21,8 +21,9 @@ import SplashScreen from '@screens/SplashScreen';
 import MarkerManage from '@screens/profile/MarkerManage';
 import VerifyCertification from "@screens/VerifyCertification";
 import Profile from '@screens/Profile';
-import MarkerRiviewList from '@screens/MarkerReviewList';
+import MarkerReviewList from '@screens/MarkerReviewList';
 import ReviewList from "@screens/ReviewList";
+import ReviewBox from '@components/ReviewBox';
 
 export const navigationRef: React.RefObject<NavigationContainerRef<any>> =
 	React.createRef();
@@ -131,8 +132,8 @@ const Main = () => {
 								}}
 							/>
 							<Stack.Screen
-								name={SCREEN.MarkerRiviewList}
-								component={MarkerRiviewList}
+								name={SCREEN.MarkerReviewList}
+								component={MarkerReviewList}
 								options={{
 									headerShown: false,
 								}}

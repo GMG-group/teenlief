@@ -26,7 +26,7 @@ export const SCREEN = {
     Certification: 'Certification',
     VerifyCertification: 'VerifyCertification',
     ReviewList: 'ReviewList',
-    MarkerRiviewList: 'MarkerRiviewList',
+    MarkerReviewList: 'MarkerReviewList',
 } as const;
 type SCREEN = typeof SCREEN[keyof typeof SCREEN];
 

@@ -6,13 +6,12 @@ import { TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useRecoilValue} from "recoil";
 import {SCREEN} from "@apis/atoms";
-import {postMarkerReview} from "@apis/apiServices";
+import {postMarkerReview, getMyUnReview} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 
 const Review = ({route, navigation}) => {
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
-
     const [postMarkerReviewLoading, postMarkerReviewRes, postMarkerReviewApi] = useApi(postMarkerReview, true);
 
     const onDone = () => {
@@ -21,8 +20,17 @@ const Review = ({route, navigation}) => {
         formData.append("stars", rating);
         formData.append("promise", route.params.promiseId);
         formData.append("content", review);
-        console.log(formData)
+        console.log(formData);
         postMarkerReviewApi(formData);
+        if (route.params.reload) {
+            route.params.unReviewApi()
+            .then(res => {
+                console.log(res, 'UN REVIEW');
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        }
         navigation.goBack();
     }
 
@@ -78,8 +86,8 @@ const styles = StyleSheet.create({
     profile: {
         borderRadius: 100,
         backgroundColor: 'black',
-        width: vw(30),
-        height: vw(30),
+        width: vw(20),
+        height: vw(20),
         marginBottom: 10
     },
     textInput: {
@@ -90,6 +98,7 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top',
         marginBottom: 10,
         borderRadius: 10,
+        padding: 20,
     },
     btn: {
         display: 'flex',
