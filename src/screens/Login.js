@@ -29,7 +29,7 @@ const Login = ({ navigation }) => {
     const [emailColor, setEmailColor] = useState('white');
     const [emailLabel, setEmailLabel] = useState('email');
     const [passwordColor, setPasswordColor] = useState('white');
-    const [passwordLabel,  setPasswordLabel] = useState('passoword')
+    const [passwordLabel,  setPasswordLabel] = useState('password')
     const postLoginCallback = usePostLoginCallback();
     const backgroundAnimation = useRef(new Animated.Value(0)).current;
     const blobChangeAnimation = useRef(new Animated.Value(0)).current;
