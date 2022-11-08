@@ -25,13 +25,25 @@ const Search = ({ displayTag, filteredMarker, setFilterdMarker, setShelterFilter
 		displayTag && tagApi()
 	},[]);
 
+	const handleOnChange = (value) => {
+		setFilterdMarker(prev => {
+			return prev.map((marker) => {
+				return {
+					...marker,
+					filtered: !marker.helper_name.includes(value)
+				}
+			})
+		})
+		setSearch(value);
+	}
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.search}>
 				<View style={styles.innerSearch}>
 					<TextInput
 						style={styles.input}
-						onChangeText={setSearch}
+						onChangeText={handleOnChange}
 						value={search}
 						placeholder="여기서 검색"
 					/>
