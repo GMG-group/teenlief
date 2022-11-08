@@ -9,13 +9,12 @@ import { View,
 } from "react-native";
 import SwitchSelector from 'react-native-switch-selector';
 import Background from "@components/Background";
-import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import {usePostLoginCallback} from "@apis/apiCallbackes";
 import Icon from 'react-native-vector-icons/Entypo';
 import { FloatingLabelInput } from 'react-native-floating-label-input';
-const vw = Dimensions.get('window').width;
-const vh = Dimensions.get('window').height;
+import { SCREEN } from '@apis/atoms';
+
 const color = '#1E90FF';
 const options = [
     { label: '청소년', value: 'Teen' },
@@ -30,7 +29,7 @@ const Login = ({ navigation }) => {
     const [emailColor, setEmailColor] = useState('white');
     const [emailLabel, setEmailLabel] = useState('email');
     const [passwordColor, setPasswordColor] = useState('white');
-    const [passwordLabel,  setPasswordLabel] = useState('passoword')
+    const [passwordLabel,  setPasswordLabel] = useState('password')
     const postLoginCallback = usePostLoginCallback();
     const backgroundAnimation = useRef(new Animated.Value(0)).current;
     const blobChangeAnimation = useRef(new Animated.Value(0)).current;
@@ -48,17 +47,17 @@ const Login = ({ navigation }) => {
     const submit = () => {
         console.log(`이메일 :${email}`);
         console.log(`비밀번호 :${password}`);
-        if (email === '') {
-            setEmailColor('red');
-            setEmailLabel('email을 확인해 주세요');
-        } else if (password === '') {
-            setPasswordColor('red');
-            setPasswordLabel('password를 확인해 주세요');
-        }
         postLoginCallback({
             email: email,
             password: password
-        }).then(r => navigation.replace("Home")) ;
+        })
+        .then(r => navigation.replace("Home"))
+        .catch(error => {
+            setEmailColor('#FB5644');
+            setEmailLabel('잘못 입력 되었거나 찾지 못했습니다');
+            setPasswordColor('#FB5644');
+            setPasswordLabel('잘못 입력 되었거나 찾지 못했습니다');
+        });
     }
 
     return (
@@ -95,6 +94,7 @@ const Login = ({ navigation }) => {
                         label={emailLabel}
                         value={email}
                         onChangeText={value => setEmail(value)}
+                        animationDuration={150}
                         containerStyles={{
                             height: 60,
                             border: 'none',
@@ -114,6 +114,7 @@ const Login = ({ navigation }) => {
                         label={passwordLabel}
                         value={password}
                         onChangeText={value => setPassword(value)}
+                        animationDuration={150}
                         isPassword
                         customShowPasswordComponent={<Icon name="eye" size={25} color={passwordColor} />}
                         customHidePasswordComponent={<Icon name="eye-with-line" size={25} color={passwordColor} />}
@@ -134,7 +135,7 @@ const Login = ({ navigation }) => {
                     />
 
                 <TouchableOpacity>
-                    <Text style={middleStyle.text}>비밀번호를 잊으셨습니까?</Text>
+                    {/*<Text style={middleStyle.text}>비밀번호를 잊으셨습니까?</Text>*/}
                 </TouchableOpacity>
             </View>
             
@@ -149,7 +150,7 @@ const Login = ({ navigation }) => {
 
                 <View style={bottomStyle.signupText}>
                     <Text style={{color: 'black'}}>계정이 없으신가요?</Text>
-                    <TouchableOpacity onPress={() => navigation.push('Sign up')}>
+                    <TouchableOpacity onPress={() => navigation.push(SCREEN.SignUp)}>
                         <Text style={{color: color}}> 회원가입</Text>
                     </TouchableOpacity>
                 </View>

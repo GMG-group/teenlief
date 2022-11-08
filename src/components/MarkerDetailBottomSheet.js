@@ -1,49 +1,105 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, Image} from "react-native";
 import {TouchableOpacity, TouchableWithoutFeedback} from "@gorhom/bottom-sheet";
-import { vw, vh } from "react-native-css-vh-vw";
+import { vw } from "react-native-css-vh-vw";
 import { ScrollView } from 'react-native-gesture-handler';
-import {getMarkerDetail, getTag, postChatRoom} from "@apis/apiServices";
+import {getMarkerDetail, postChatRoom, getMarkerReview, getMarkerInfo} from "@apis/apiServices";
 import useApi from "@apis/useApi";
 import {useRecoilValue} from "recoil";
-import {userState} from "@apis/atoms";
+import {userState, SCREEN} from "@apis/atoms";
+import {Tag} from "@components/Tag";
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import Star from 'react-native-star-view';
 
-const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
+const SkeletonLayout = [
+	{
+		flexDirection: 'row',
+		children: [
+			{
+				width: 75,
+				height: 75,
+				borderRadius: 50,
+			},
+			{
+				marginLeft: 20,
+				flexDirection: 'column',
+				children: [
+					{
+						width: 100,
+						height: 20,
+						marginBottom: 6,
+					},
+					{
+						width: 200,
+						height: 20,
+						marginBottom: 6,
+					},
+					{
+						width: 100,
+						height: 20,
+						marginBottom: 6,
+					},
+				],
+			},
+		]
+	},
+];
+
+const MarkerDetail = ({ bottomSheetModalRef, detail, navigation, detailLoading }) => {
 	const [postLoading, postResolved, postChatRoomApi] = useApi(postChatRoom, true);
+	const [markerinfoLoading, markerInfoSolved, markerInfoApi] = useApi(getMarkerInfo, true);
+	const [markerReviewLoading, markerReviewResolved, markerReviewApi] = useApi(getMarkerReview, true);
 
 	const user = useRecoilValue(userState);
 
-	return (
-		<View>
-			<View style={styles.helperInfoContainer}>
-				<View style={styles.helperInfo}>
-					<Image style={styles.profileImage} source={require('./img/test.png')}>
+	useEffect(() => {
+		if (detail) {
+			markerInfoApi(detail?.helper.id)
+				.then(res => {
+					console.log(res, 'helper info');
+				})
+				.catch(error => {
+					console.log(error);
+				})
+			markerReviewApi(detail?.helper.id)
+				.then(res => {
+					console.log(res, 'marker review');
+				})
+			.catch(error => {
+				console.log("error");
+			})
+		}
+	}, [detail]);
 
-					</Image>
+	return (
+		<><View style={styles.helperInfoContainer}>
+			<View style={styles.helperInfo}>
+				<Image style={styles.profileImage} source={require('@assets/images/test.png')}/>
+
 				<View style={styles.helperInfoText}>
-					<Text style={styles.name}>{detail.helper.first_name}</Text>
+					<Text style={styles.name}>{detail?.helper.first_name}</Text>
 					<View style={styles.helperStarContainer}>
-						<Text>5.0</Text>
-						<Text style={styles.helperStar}>
-							★★★★★
-						</Text>
+						<Text>{markerInfoSolved ? markerInfoSolved.score.slice(0, -1) : 0}</Text>
+						<Star score={markerInfoSolved ? parseInt(markerInfoSolved.score) : 0}
+							  style={styles.helperStar}/>
 						<Text>
-							(119개)
+							({markerInfoSolved ? markerInfoSolved.review_count : 0}개)
 						</Text>
 					</View>
 				</View>
 			</View>
 
+			{user?.role === 'Teen' ? (
 				<View style={styles.connectButton}>
 					<TouchableOpacity
 						onPress={() => {
 							if (!postResolved) {
 								const formData = new FormData();
 								formData.append('helper_id', detail.helper.id);
-								formData.append('teen_id', user.user.id);
+								formData.append('teen_id', user.id);
 								postChatRoomApi(formData)
 									.then((res) => {
-										navigation.navigate('ChatRoom', {
+										navigation.navigate(SCREEN.ChatRoom, {
 											id: res.id,
 											roomName: res.room_name,
 											teen: res.teen,
@@ -51,7 +107,7 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 										});
 
 										bottomSheetModalRef.current?.close();
-									})
+									});
 								console.log("연결");
 							}
 						}}
@@ -59,114 +115,113 @@ const MarkerDetail = ({ bottomSheetModalRef, detail, tags, navigation }) => {
 						<Text style={{color: "#ffffff"}}>연결</Text>
 					</TouchableOpacity>
 				</View>
-			</View>
-			<ScrollView>
-				<View style={styles.canHelpInfo}>
-					<View style={styles.canHelpInfoText}>
-						<Text style={{color: "#26c967"}}>메세지 가능</Text>
-						<Text>오전 9:00부터 메세지 가능</Text>
-					</View>
-					<View style={styles.tag}>
-						{
-							detail.tag.map((tagNum) => (
-								<View key={"tag"+tagNum} style={styles.tagItem}>
-									<Text style={{color: 'black'}}>{tags[tagNum-1].tag}</Text>
-								</View>
-							))
-						}
+			) : (
+				<View style={{...styles.connectButton, backgroundColor: "#AE46FF"}}>
+					<TouchableOpacity
+						onPress={() => {
+							navigation.navigate(SCREEN.Donate, {
+								helper: detail?.helper,
+							});
+							bottomSheetModalRef.current?.close();
+						}}
+					>
+						<Text style={{color: "white"}}>후원</Text>
+					</TouchableOpacity>
+				</View>
+			)}
 
-					</View>
+		</View><ScrollView>
+			<View style={styles.canHelpInfo}>
+				<View style={styles.canHelpInfoText}>
+					<Text style={{color: "#26c967"}}>메세지 가능</Text>
+					<Text>오전 9:00부터 메세지 가능</Text>
 				</View>
-				<View style={styles.activityImages}>
-					<Image source={{uri: detail.image}} style={styles.activityImage1} />
-					{/*<View style={styles.activityImageContainer}>*/}
-					{/*	<Image source={require("../../imageTest1.png")} style={styles.activityImage2} />*/}
-					{/*	<Image source={require("../../imageTest1.png")} style={styles.activityImage2} />*/}
-					{/*</View>*/}
+				<View style={styles.tag}>
+					<Tag tags={detail?.tag}/>
 				</View>
-				<View>
-					<Text style={{fontSize: 24}}>개요</Text>
-					<View style={styles.helperContentItem}>
-						<Text style={{color: "black"}}>저는 헬퍼 {detail.helper.first_name}입니다.</Text>
-					</View>
-					<View style={styles.helperContentItem}>
-						<Text style={{color: "black"}}>{detail.explanation}</Text>
-					</View>
+			</View>
+			<View style={styles.activityImages}>
+				<Image source={{uri: detail?.image}} style={styles.activityImage1}/>
+				{/*<View style={styles.activityImageContainer}>*/}
+				{/*	<Image source={require("../../imageTest1.png")} style={styles.activityImage2} />*/}
+				{/*	<Image source={require("../../imageTest1.png")} style={styles.activityImage2} />*/}
+				{/*</View>*/}
+			</View>
+			<View>
+				<Text style={{fontSize: 24}}>개요</Text>
+				<View style={styles.helperContentItem}>
+					<Text style={{color: "black"}}>저는 헬퍼 {detail?.helper.first_name}입니다.</Text>
 				</View>
-				<View style={styles.review}>
-					<View style={styles.reviewHeader}>
-						<View style={styles.reviewHeaderLeft}>
-							<Text style={{color: "#ffc107", fontSize: 30}}>5.0</Text>
-							<Text style={{color: "#ffc107", fontSize: 20}}>
-								★★★★★
-							</Text>
-							<Text>(119개)</Text>
+				<View style={styles.helperContentItem}>
+					<Text style={{color: "black"}}>{detail?.explanation}</Text>
+				</View>
+			</View>
+			<View style={styles.review}>
+				<View style={styles.reviewHeader}>
+					<View style={styles.reviewHeaderLeft}>
+						<Text style={{color: "#ffc107", fontSize: 30}}>{markerInfoSolved ? markerInfoSolved.score.slice(0, -1) : 0.0}</Text>
+						<Star score={markerInfoSolved ? parseFloat(markerInfoSolved.score) : 0} style={styles.helperStar} />
+						<Text>({markerInfoSolved ? markerInfoSolved.review_count : 0}개)</Text>
+					</View>
+					<View style={styles.reviewHeaderRight}>
+						<View>
+							{
+								markerReviewResolved && markerReviewResolved.map((review, idx) => {
+									if (idx <= 3) {
+										return (
+											<Text>{review.content}</Text>
+										);
+									}
+								})
+							}
 						</View>
-						<View style={styles.reviewHeaderRight}>
-							<View>
-								<Text>헬퍼분이 너무 친절하세요!</Text>
-								<Text>제 은인이십니다</Text>
-								<Text>감사합니다.. 나중에 꼭 보답할게요</Text>
-							</View>
-							<View style={styles.reviewHeaderRightMoreButton}>
-								<TouchableWithoutFeedback onPress={() => {
-									navigation.navigate('Review');
-									bottomSheetModalRef.current.close();
-								}}>
-									<Text style={{color: "#2990f6"}}>모든 리뷰 보기</Text>
-								</TouchableWithoutFeedback>
-							</View>
+						<View style={styles.reviewHeaderRightMoreButton}>
+							<TouchableWithoutFeedback onPress={() => {
+								// navigation.navigate(SCREEN.Review);
+								navigation.navigate(SCREEN.MarkerReviewList, {
+									user: user?.role,
+									markerReviewResolved: markerReviewResolved,
+									name: detail.helper.first_name,
+								});
+								bottomSheetModalRef.current.close();
+							}}>
+								<Text style={{color: "#2990f6"}}>모든 리뷰 보기</Text>
+							</TouchableWithoutFeedback>
 						</View>
 					</View>
 				</View>
-			</ScrollView>
-		</View>
+			</View>
+		</ScrollView>
+		</>
 	)
 }
 
 const MarkerDetailBottomSheet = ({ navigation, bottomSheetModalRef, selectedMarkerId }) => {
-	const [detailLoading, detailResolved, getDetail] = useApi(getMarkerDetail, true);
-	const [tagLoading, tagResolved, tagApi] = useApi(getTag, true);
+	const [detailLoading, detailResolved, getDetail, setDetailLoading] = useApi(getMarkerDetail, true);
 
 	useEffect(() => {
+		setDetailLoading(true);
 		getDetail(selectedMarkerId);
-		tagApi();
-		console.log("HelperInfoBottomSheet")
 	},[selectedMarkerId])
-
-	useEffect(() => {
-		if(!detailLoading) {
-			console.log("detailResolved", detailResolved);
-		}
-	},[detailLoading])
 
 	return (
 		<View style={styles.container}>
-			{/*들어가야 할 내용*/}
-			{/*1. 프로필 사진*/}
-			{/*2. 이름*/}
-			{/*3. 별점*/}
-			{/*4. 무엇을 지원해줄 수 있는 헬퍼인지*/}
-			{/*5. 메세지 가능 여부*/}
-			{/*6. 메세지 가능 시간*/}
-			{/*7. 태그*/}
-			{/*8. 헬퍼의 활동 사진(이건 헬퍼가 직접 올리는건가?)*/}
-			{/*9. 북마크 버튼*/}
 			{
-				(tagLoading || detailLoading) ? (
-					<View>
-						<Text>Loading</Text>
-					</View>
+				detailLoading ? (
+					<SkeletonContent
+						containerStyle = {{}} // 없으면 오류
+						layout={SkeletonLayout}
+						isLoading = { detailLoading }
+					/>
 				) : (
 					<MarkerDetail
 						bottomSheetModalRef={bottomSheetModalRef}
+						detailLoading={detailLoading}
 						detail={detailResolved}
-						tags={tagResolved}
 						navigation={navigation}
 					/>
 				)
 			}
-
 
 		</View>
 	);
@@ -217,7 +272,8 @@ const styles = StyleSheet.create({
 		marginTop: 5
 	},
 	helperStar: {
-		color: "#ffc107",
+		width: 100,
+		height: 20,
 		marginLeft: 5,
 		marginRight: 5
 	},
@@ -245,29 +301,9 @@ const styles = StyleSheet.create({
 		width: "100%",
 	},
 	tag: {
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "flex-start",
-		alignItems: "center",
-		marginTop: 10
-	},
-	tagItem: {
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-		width: 90,
-		height: 30,
-		backgroundColor: "white",
-		borderColor: "lightgray",
-		borderRadius: 50,
-		marginRight: 10,
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.25,
-		elevation: 3,
+		display: 'flex',
+		flexDirection: 'row',
+		width: vw(100)
 	},
 	activityImages: {
 		display: "flex",

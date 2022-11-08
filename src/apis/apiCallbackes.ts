@@ -14,16 +14,15 @@ import RNRestart from 'react-native-restart';
 export const usePostGoogleLoginFinishCallback = () => {
     return useRecoilCallback(({snapshot, set}) =>
             async (body) => {
-                const {data} = await postGooleLoginFinish(body);
+                const {data} = await postGooleLoginFinish(body)
+                    .catch(err => {console.log("err!!",err.message); return err})
                 console.log("postGooleLoginFinish ", data);
                 set(tokenState, {
                     accessToken: data.access_token,
                     refreshToken: data.refresh_token
                 });
 
-                set(userState, {
-                    user: data.user
-                });
+                set(userState, data.user);
             },
         [],
     );
@@ -39,9 +38,7 @@ export const usePostLoginCallback = () => {
                     refreshToken: data.refresh_token
                 });
 
-                set(userState, {
-                    user: data.user
-                });
+                set(userState, data.user);
             },
         [],
     );
@@ -57,9 +54,7 @@ export const usePostRegistrationCallback = () => {
                     refreshToken: data.refresh_token
                 });
 
-                set(userState, {
-                    user: data.user
-                });
+                set(userState, data.user);
             },
         [],
     );

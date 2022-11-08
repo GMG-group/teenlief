@@ -8,16 +8,13 @@ import { View,
     SafeAreaView
 } from "react-native";
 import Background from "@components/Background";
-import CustomInput from "@components/CustomInput";
 import SocialLogin from "@components/SocialLogin";
 import SwitchSelector from "react-native-switch-selector";
-import {usePostLoginCallback, usePostRegistrationCallback} from "@apis/apiCallbackes";
+import { usePostRegistrationCallback } from "@apis/apiCallbackes";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import Icon from 'react-native-vector-icons/Entypo';
+import {SCREEN} from '@apis/atoms';
 
-const vw = Dimensions.get('window').width;
-const vh = Dimensions.get('window').height;
-const color = '#1E90FF';
 const options = [
     { label: '청소년', value: 'Teen' },
     { label: '헬퍼', value: 'Helper' },
@@ -30,6 +27,8 @@ const SignUp = ( { navigation } ) => {
     const [name, setName] = useState("");
     const [confirm, setConfirm] = useState("");
     const [role, setRole] = useState("Teen");
+    const [labelColor, setLabelColor] = useState('white');
+    const [labelErrorMessage, setLabelErrorMessage] = useState('');
     const postRegistrationCallback = usePostRegistrationCallback();
     const backgroundAnimation = useRef(new Animated.Value(0)).current;
     const blobChangeAnimation = useRef(new Animated.Value(0)).current;
@@ -57,15 +56,20 @@ const SignUp = ( { navigation } ) => {
             first_name: name,
             gender: "M",
             role: role
-        }).then(r => {navigation.replace("Home")})
-     }
+        })
+        .then(r => {navigation.replace("Home")})
+        .catch(error => {
+            setLabelColor('#FB5644');
+            setLabelErrorMessage('을 다시 입력해 주세요')
+        })
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <Background
                 backgroundAnimation={backgroundAnimation}
                 blobChangeAnimation={blobChangeAnimation}
-                changeColor={changeColor} 
+                changeColor={changeColor}
                 blobColor={blobChangeAnimation.interpolate({
                     inputRange: [0, 1],
                     outputRange: ['#16A9FC', '#B355FC']
@@ -74,7 +78,7 @@ const SignUp = ( { navigation } ) => {
                     inputRange: [0, 1],
                     outputRange: ['#00A3FF', '#AE46FF'],
                 })}
-                />
+            />
 
             <View style={middleStyle.middleContainer}>
                 <AnimationSwitchSelector
@@ -95,90 +99,94 @@ const SignUp = ( { navigation } ) => {
                 />
 
                 <FloatingLabelInput
-                    label={'email'}
+                    label={'email' + labelErrorMessage}
                     value={email}
                     onChangeText={value => setEmail(value)}
+                    animationDuration={150}
                     containerStyles={{
                         height: 60,
                         border: 'none',
                         borderBottomWidth: 2,
-                        borderColor: 'white',
+                        borderColor: labelColor,
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
-                        color: 'white',
-                        colorFocused: 'white',
-                        colorBlurred: 'white',
+                    customLabelStyles={{
+                        color: labelColor,
+                        colorFocused: labelColor,
+                        colorBlurred: labelColor,
                         fontSizeFocused: 15,
                         fontSizeBlurred: 17,
                     }}
                 />
                 <FloatingLabelInput
-                    label={'name'}
+                    label={'name' + labelErrorMessage}
                     value={name}
                     onChangeText={value => setName(value)}
+                    animationDuration={150}
                     containerStyles={{
                         height: 60,
                         border: 'none',
                         borderBottomWidth: 2,
-                        borderColor: 'white',
+                        borderColor: labelColor,
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
-                        color: 'white',
-                        colorFocused: 'white',
-                        colorBlurred: 'white',
+                    customLabelStyles={{
+                        color: labelColor,
+                        colorFocused: labelColor,
+                        colorBlurred: labelColor,
                         fontSizeFocused: 15,
                         fontSizeBlurred: 17,
                     }}
                 />
                 <FloatingLabelInput
-                    label={'password'}
+                    label={'password' + labelErrorMessage}
                     value={password}
                     onChangeText={value => setPassword(value)}
                     isPassword
-                    customShowPasswordComponent={<Icon name="eye" size={25} color="white" />}
-                    customHidePasswordComponent={<Icon name="eye-with-line" size={25} color="white" />}
+                    animationDuration={150}
+                    customShowPasswordComponent={<Icon name="eye" size={25} color={labelColor} />}
+                    customHidePasswordComponent={<Icon name="eye-with-line" size={25} color={labelColor} />}
                     containerStyles={{
                         height: 60,
                         border: 'none',
                         borderBottomWidth: 2,
-                        borderColor: 'white',
+                        borderColor: labelColor,
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
-                        color: 'white',
-                        colorFocused: 'white',
-                        colorBlurred: 'white',
+                    customLabelStyles={{
+                        color: labelColor,
+                        colorFocused: labelColor,
+                        colorBlurred: labelColor,
                         fontSizeFocused: 15,
                         fontSizeBlurred: 17,
                     }}
-                    />
+                />
                 <FloatingLabelInput
-                    label={'confirm'}
+                    label={'confirm' + labelErrorMessage}
                     value={confirm}
                     onChangeText={value => setConfirm(value)}
                     isPassword
-                    customShowPasswordComponent={<Icon name="eye" size={25} color="white" />}
-                    customHidePasswordComponent={<Icon name="eye-with-line" size={25} color="white" />}
+                    animationDuration={150}
+                    customShowPasswordComponent={<Icon name="eye" size={25} color={labelColor} />}
+                    customHidePasswordComponent={<Icon name="eye-with-line" size={25} color={labelColor} />}
                     containerStyles={{
                         height: 60,
                         border: 'none',
                         borderBottomWidth: 2,
-                        borderColor: 'white',
+                        borderColor: labelColor,
                         marginBottom: 10,
                     }}
-                      customLabelStyles={{
-                        color: 'white',
-                        colorFocused: 'white',
-                        colorBlurred: 'white',
+                    customLabelStyles={{
+                        color: labelColor,
+                        colorFocused: labelColor,
+                        colorBlurred: labelColor,
                         fontSizeFocused: 15,
                         fontSizeBlurred: 17,
                     }}
                 />
 
             </View>
-            
+
             <View style={bottomStyle.container}>
                 <TouchableOpacity style={bottomStyle.login} onPress={() => signUpSubmit()}>
                     <View>
@@ -190,12 +198,12 @@ const SignUp = ( { navigation } ) => {
 
                 <View style={bottomStyle.signupText}>
                     <Text style={{color: 'black'}}>계정이 있으신가요?</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('Login') }>
-                        <Text style={{color: color}}> 로그인</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate(SCREEN.Login) }>
+                        <Text style={{color: '#1E90FF'}}> 로그인</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            
+
         </SafeAreaView>
     );
 }

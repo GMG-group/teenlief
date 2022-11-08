@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import ReactNativeRecoilPersist from "react-native-recoil-persist";
+import VerifyCertification from "@screens/VerifyCertification";
 
 export interface Token {
     accessToken: string;
@@ -9,6 +10,25 @@ export interface Token {
 export interface User {
     user: any
 }
+
+export const SCREEN = {
+    Login: 'Login',
+    SignUp: 'SignUp',
+    Home: 'Home',
+    Review: 'Review',
+    ChatRoom: 'ChatRoom',
+    Promise: 'Promise',
+    MarkerManage: 'MarkerManage',
+    Map: 'Map',
+    Chat: 'Chat',
+    Profile: 'Profile',
+    Donate: 'Donate',
+    Certification: 'Certification',
+    VerifyCertification: 'VerifyCertification',
+    ReviewList: 'ReviewList',
+    MarkerReviewList: 'MarkerReviewList',
+} as const;
+type SCREEN = typeof SCREEN[keyof typeof SCREEN];
 
 export const ACTION = {
     Main: 'main',

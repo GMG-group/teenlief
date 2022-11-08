@@ -8,7 +8,7 @@ import { View,
     SafeAreaView,
     Image
 } from "react-native";
-import src from "@components/img/teenliefLogo.svg";
+import src from "@assets/images/teenliefLogo.svg";
 import { WithLocalSvg } from 'react-native-svg';
 import { vw, vh } from "react-native-css-vh-vw";
 import Lottie from 'lottie-react-native';
@@ -24,7 +24,7 @@ const SplashScreen = ({
                 asset={src} />
             
             <Lottie
-                source={require('../components/img/splash.json')}
+                source={require('@assets/images/splash.json')}
                 autoPlay
                 loop={false}
                 onAnimationFinish={() => {

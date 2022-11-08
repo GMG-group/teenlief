@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Alert, Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { useState } from 'react';
+import { Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { CurvedBottomBar } from 'react-native-curved-bottom-bar';
 import { scale } from 'react-native-utils-scale';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
@@ -7,8 +7,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Chat from "~/screens/Chat";
 import Profile from "@screens/Profile";
 import Map from "@screens/Map";
-import {useRecoilState, useRecoilValue} from "recoil";
-import {ACTION, actionState, userState} from "@apis/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { ACTION, SCREEN, actionState, userState } from "@apis/atoms";
 
 export const TabBar = ({ navigation }) => {
 	const [route, setRoute] = useState("Map");
@@ -52,15 +52,15 @@ export const TabBar = ({ navigation }) => {
 	};
 
 	const MapCircle = () => (
-		<Animated.View style={{...styles.btnCircle, backgroundColor: user.user?.role==='Helper' ? '#AE46FF' : '#00A3FF'}}>
+		<Animated.View style={{...styles.btnCircle, backgroundColor: user?.role==='Helper' ? '#AE46FF' : '#00A3FF'}}>
 			<TouchableOpacity
 				style={{
 					flex: 1,
 					justifyContent: 'center',
 				}}
 				onPress={() => {
-					setRoute("Map");
-					navigation.navigate("Map")
+					setRoute(SCREEN.Map);
+					navigation.navigate(SCREEN.Map)
 				}}>
 				<EntypoIcon style={{alignSelf: 'center'}} name={'home'} color="white" size={scale(25)} />
 				<Text  style={styles.btnCircleText}>홈 화면</Text>
@@ -68,25 +68,47 @@ export const TabBar = ({ navigation }) => {
 		</Animated.View>
 	)
 
-	const AddMarkerCircle = () => (
-		<Animated.View style={{...styles.btnCircle, backgroundColor: user.user?.role==='Helper' ? '#AE46FF' : '#00A3FF'}}>
-			<TouchableOpacity
-				style={{
-					flex: 1,
-					justifyContent: 'center'
-				}}
-				onPress={() => {
-					setAction(ACTION.Upload);
-					navigation.navigate("Map")
-				}}>
-				<EntypoIcon style={{alignSelf: 'center'}} name={'flag'} color="white" size={scale(25)} />
-				<Text style={styles.btnCircleText}>깃발 놓기</Text>
-			</TouchableOpacity>
-		</Animated.View>
-	)
+	const AddMarkerCircle = () => {
+		if (user.certificated) {
+			return (
+				<Animated.View
+					style={{...styles.btnCircle, backgroundColor: user?.role === 'Helper' ? '#AE46FF' : '#00A3FF'}}>
+					<TouchableOpacity
+						style={{
+							flex: 1,
+							justifyContent: 'center'
+						}}
+						onPress={() => {
+							setAction(ACTION.Upload);
+							navigation.navigate(SCREEN.Map)
+						}}>
+						<EntypoIcon style={{alignSelf: 'center'}} name={'flag'} color="white" size={scale(25)}/>
+						<Text style={styles.btnCircleText}>깃발 놓기</Text>
+					</TouchableOpacity>
+				</Animated.View>
+			);
+		} else {
+			return (
+				<Animated.View
+					style={{...styles.btnCircle, backgroundColor: user?.role === 'Helper' ? '#AE46FF' : '#00A3FF'}}>
+					<TouchableOpacity
+						style={{
+							flex: 1,
+							justifyContent: 'center'
+						}}
+						onPress={() => {
+							navigation.navigate(SCREEN.Certification);
+						}}>
+						<EntypoIcon style={{alignSelf: 'center'}} name={'flag'} color="white" size={scale(25)}/>
+						<Text style={styles.btnCircleText}>본인 인증</Text>
+					</TouchableOpacity>
+				</Animated.View>
+			);
+		}
+	}
 
 	if(action === "upload") {
-		return <Map/>
+		return <Map navigation={navigation}/>
 	}
 
 	return (
@@ -98,7 +120,7 @@ export const TabBar = ({ navigation }) => {
 				circleWidth={scale(60)}
 				bgColor="white"
 				initialRouteName="Map"
-				renderCircle={route==="Map" && user.user?.role==="Helper" ? AddMarkerCircle : MapCircle}
+				renderCircle={route==="Map" && user?.role==="Helper" ? AddMarkerCircle : MapCircle}
 				tabBar={renderTabBar}>
 				<CurvedBottomBar.Screen
 					options={{ headerShown: false }}

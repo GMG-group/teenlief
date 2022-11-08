@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { TextInput, View, StyleSheet, Text, TouchableOpacity, Dimensions, SafeAreaView, Image } from "react-native";
 import {GoogleSignin, statusCodes} from "@react-native-google-signin/google-signin";
 import {useRecoilState} from "recoil";
-import {tokenState} from "@apis/atoms";
+import {SCREEN, tokenState} from "@apis/atoms";
 import {usePostGoogleLoginFinishCallback} from "@apis/apiCallbackes";
 
 const color = '#00AAFF';
@@ -17,7 +17,7 @@ GoogleSignin.configure({
     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
     // hostedDomain: '', // specifies a hosted domain restriction
     forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-    //iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+    iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
 });
 
 const SocialLogin = ({navigation}) => {
@@ -36,7 +36,7 @@ const SocialLogin = ({navigation}) => {
                 "code": user.serverAuthCode,
                 "id_token": user.idToken
             }).then(r => {
-                navigation.navigate("Map")
+                navigation.navigate(SCREEN.Map)
             })
         }
 
@@ -76,7 +76,7 @@ const SocialLogin = ({navigation}) => {
             {/* social login container here */}
             <View style={styles.socialLoginContainer}>
                 <TouchableOpacity style={styles.socialLoginBox} onPress={loginGoogle}>
-                    <Image style={{width: '30%'}} source={require("./img/google.png")} resizeMode='contain' />
+                    <Image style={{width: '30%'}} source={require("@assets/images/google.png")} resizeMode='contain' />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.socialLoginBox}>
                     <View />
