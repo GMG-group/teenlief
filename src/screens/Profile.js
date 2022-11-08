@@ -1,21 +1,21 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useRecoilState} from "recoil";
 import {tokenState, userState, SCREEN} from "@apis/atoms";
 import {vh, vw} from "react-native-css-vh-vw";
 import { Shadow } from 'react-native-shadow-2';
 import {logout} from "@utils/Logout";
-// import { BootpayWebView } from 'react-native-bootpay';
+import { BootpayWebView } from 'react-native-bootpay';
 import useApi from "@apis/useApi";
 import {getUser, postPointEvent} from "@apis/apiServices";
 
 const ProfileCard = ({user}) => {
 	return (
-		<Shadow distance={3} offset={[3,23]}>
+		<Shadow distance={3} offset={[3, 23]}>
 			<View style={{...profileCardStyles.profileCard, backgroundColor:user.role==="Helper" ? '#AE46FF' : '#00A3FF'}}>
 				<View style={profileCardStyles.userInfoContainer}>
 					<View style={profileCardStyles.userInfo}>
-						<Image style={profileCardStyles.profileImage} source={require('@assets/images/test.png')}/>
+						<Image style={profileCardStyles.profileImage} source={require('@assets/images/test.png')} />
 						<View style={profileCardStyles.helperInfoText}>
 							<Text style={profileCardStyles.name}>{user.first_name}</Text>
 							<View style={profileCardStyles.helperStarContainer}>
@@ -25,7 +25,7 @@ const ProfileCard = ({user}) => {
 					</View>
 
 					<View style={profileCardStyles.connectButton}>
-						<Image style={{width: 40, height: 40}} source={require('@assets/images/app_icon.png')}/>
+						<Image style={{width: 40, height: 40}} source={require('@assets/images/app_icon.png')} />
 					</View>
 				</View>
 				<Text style={profileCardStyles.role}>{user.role}</Text>
@@ -66,6 +66,13 @@ const Profile = ({ navigation }) => {
 
 	const [postChargePointLoading, postChargePointResolved, chargePoint] = useApi(postPointEvent, true);
 	const [getUsersLoading, getUsersResolved, getUserCallback] = useApi(getUser, true);
+
+	useEffect(() => {
+		getUserCallback()
+			.then((res) => {
+				setUser(res);
+			})
+	}, []);
 
 	const handleDeposit = () => {
 		const payload = {
@@ -134,7 +141,10 @@ const Profile = ({ navigation }) => {
 		formData.append('data', JSON.stringify(data));
 		chargePoint(formData)
 			.then((res) => {
-				getUserCallback();
+				getUserCallback()
+					.then((res) => {
+						setUser(res);
+					});
 			})
 	}
 
@@ -144,21 +154,20 @@ const Profile = ({ navigation }) => {
 
 	return (
 		<ScrollView>
-			{/*<BootpayWebView*/}
-			{/*	ref={bootpay}*/}
-			{/*	ios_application_id={'6326ebe2d01c7e001cf5ee1a'}*/}
-			{/*	android_application_id={'6326ebe2d01c7e001cf5ee19'}*/}
-			{/*	onCancel={onCancel}*/}
-			{/*	onError={onError}*/}
-			{/*	onReady={onReady}*/}
-			{/*	onConfirm={onConfirm}*/}
-			{/*	onDone={onDone}*/}
-			{/*	onClose={onClose}*/}
-			{/*/>*/}
+			<BootpayWebView
+				ref={bootpay}
+				ios_application_id={'6326ebe2d01c7e001cf5ee1a'}
+				android_application_id={'6326ebe2d01c7e001cf5ee19'}
+				onCancel={onCancel}
+				onError={onError}
+				onReady={onReady}
+				onConfirm={onConfirm}
+				onDone={onDone}
+				onClose={onClose}
+			/>
 
 			<View style={containerStyles.container}>
 				<ProfileCard user={user}/>
-
 
 			{
 				user.role==="Helper" ? (
