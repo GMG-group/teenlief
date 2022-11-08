@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import ReactNativeRecoilPersist from "react-native-recoil-persist";
+import VerifyCertification from "@screens/VerifyCertification";
 
 export interface Token {
     accessToken: string;
@@ -23,6 +24,7 @@ export const SCREEN = {
     Profile: 'Profile',
     Donate: 'Donate',
     Certification: 'Certification',
+    VerifyCertification: 'VerifyCertification',
     ReviewList: 'ReviewList',
     MarkerRiviewList: 'MarkerRiviewList',
 } as const;

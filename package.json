@@ -28,7 +28,7 @@
     "react-moment": "^1.1.2",
     "react-native": "0.69.1",
     "react-native-animated-input": "^1.1.0",
-    "react-native-bootpay-api": "^4.1.55",
+    "react-native-bootpay": "^1.2.4",
     "react-native-config": "^1.4.6",
     "react-native-css-vh-vw": "^1.0.5",
     "react-native-curved-bottom-bar": "^2.0.1",
@@ -59,7 +59,6 @@
     "react-native-utils-scale": "^2.6.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-vector-image": "^0.3.3",
-    "react-native-webview-bootpay": "^11.22.87",
     "recoil": "^0.7.4",
     "supercluster": "^7.1.5",
     "use-supercluster": "^0.4.0"

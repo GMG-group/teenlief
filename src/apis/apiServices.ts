@@ -220,8 +220,24 @@ export const postCertificate = (header: any, body: any) :Promise<AxiosResponse> 
     return axios.post(
         `${URL}/api/certificate/`,
         body, {
-            withCredentials: false,
-            headers: header
+            headers: {
+                withCredentials: false,
+                'Content-Type': 'multipart/form-data',
+                ...header
+            }
+        }
+    )
+}
+
+export const verifyCertificate = (header: any, body: any) :Promise<AxiosResponse> => {
+    return axios.post(
+        `${URL}/api/certificate/verify/`,
+        body, {
+            headers: {
+                withCredentials: false,
+                'Content-Type': 'multipart/form-data',
+                ...header
+            }
         }
     )
 }

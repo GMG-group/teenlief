@@ -60,7 +60,6 @@ export const PromiseMessage = ({ navigation, item, displayProfile }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-
         </View>
     );
 }
@@ -154,8 +153,9 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
-
         elevation: 7,
+        borderWidth: 1,
+        borderColor: "#AE46FF"
     },
     promiseHeaderText: {
         fontSize: 20,

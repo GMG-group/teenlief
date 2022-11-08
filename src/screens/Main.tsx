@@ -19,6 +19,7 @@ import {tokenState} from "@apis/atoms";
 import Promise from "@screens/Promise";
 import SplashScreen from '@screens/SplashScreen';
 import MarkerManage from '@screens/profile/MarkerManage';
+import VerifyCertification from "@screens/VerifyCertification";
 import Profile from '@screens/Profile';
 import MarkerRiviewList from '@screens/MarkerReviewList';
 import ReviewList from "@screens/ReviewList";
@@ -111,6 +112,13 @@ const Main = () => {
 							<Stack.Screen
 								name={SCREEN.Certification}
 								component={Certification}
+								options={{
+									headerShown: false,
+								}}
+							/>
+							<Stack.Screen
+								name={SCREEN.VerifyCertification}
+								component={VerifyCertification}
 								options={{
 									headerShown: false,
 								}}

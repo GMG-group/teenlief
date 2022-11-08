@@ -1,83 +1,105 @@
-import React, {useEffect, useRef} from 'react';
-import { Bootpay } from 'react-native-bootpay-api';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+    Animated,
+    KeyboardAvoidingView,
+    Platform,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableHighlight,
+    View
+} from "react-native";
 import {useRecoilState} from "recoil";
 import {ACTION, SCREEN, actionState, userState} from "@apis/atoms";
 import useApi from "@apis/useApi";
 import {getUser, postCertificate} from "@apis/apiServices";
+import {vh, vw} from "react-native-css-vh-vw";
+import SwitchSelector from "react-native-switch-selector";
+
+const AnimationSwitchSelector = Animated.createAnimatedComponent(SwitchSelector);
+const options = [
+    { label: '남성', value: 'M' },
+    { label: '여성', value: 'F' },
+];
 
 const Certification = ({ navigation }) => {
-    const bootpay = useRef(null);
-    const [action, setAction] = useRecoilState(actionState);
-    const [user, setUser] = useRecoilState(userState);
-    const [getUserLoading, getUserResult, getUserApi] = useApi(getUser, true);
+    const [phone, setPhone] = useState("");
+    const [gender, setGender] = useState("M");
     const [postCertificateLoading, postCertificateResult, postCertificateApi] = useApi(postCertificate, true);
 
-    useEffect(() => {
-        const payload = {
-            pg: '다날',
-            method: '본인인증',
-            order_name: '본인인증',
-            authentication_id: '12345_21345', //개발사에 관리하는 주문번호 (본인인증용)
-        }
-        //기타 설정
-        const extra = {
-            app_scheme: "teenlief", //ios의 경우 카드사 앱 호출 후 되돌아오기 위한 앱 스키마명
-            show_close_button: true, // x 닫기 버튼 삽입 (닫기버튼이 없는 PG사를 위한 옵션)
-        }
-
-        // const extra = new Extra();
-        if(bootpay != null && bootpay.current != null) bootpay.current.requestAuthentication(payload, [], {}, extra);
-    }, []);
-
-    const onCancel = (data) => {
-        console.log('-- cancel', data);
-    }
-
-    const onError = (data) => {
-        console.log('-- error', data);
-    }
-
-    const onIssued = (data) => {
-        console.log('-- issued', data);
-    }
-
-    const onConfirm = (data) => {
-        console.log('-- confirm', data);
-        if (bootpay != null && bootpay.current != null) bootpay.current.transactionConfirm(data);
-    }
-
-    const onDone = (data) => {
-        console.log('-- done', data);
-
-        postCertificateApi();
-
-        setAction(ACTION.Upload);
-    }
-
-    const onClose = () => {
-        console.log('-- closed');
-        getUserApi()
+    const requestCertificate = () => {
+        const formData = new FormData();
+        formData.append("gender", gender);
+        formData.append("phone", phone);
+        postCertificateApi(formData)
             .then((res) => {
-                setUser(res);
-            })
-        navigation.navigate(SCREEN.Home);
+                if (res.status === "success") {
+                    navigation.push(SCREEN.VerifyCertification);
+                }
+            });
     }
 
     return (
-        <Bootpay
-            ref={bootpay}
-            ios_application_id={'5b8f6a4d396fa665fdc2b5e9'}
-            android_application_id={'5b8f6a4d396fa665fdc2b5e8'}
-            // ios_application_id={'5b9f51264457636ab9a07cdd'}
-            // android_application_id={'5b9f51264457636ab9a07cdc'}
-            onCancel={onCancel}
-            onError={onError}
-            onIssued={onIssued}
-            onConfirm={onConfirm}
-            onDone={onDone}
-            onClose={onClose}
-        />
+        <KeyboardAvoidingView style={styles.container}>
+            <View style={styles.textContainer}>
+                <View style={{ marginBottom: vh(1) }}>
+                    <Text style={styles.mainText}>이름과 성별, 휴대폰 번호를 입력해주세요.</Text>
+                    <Text style={styles.subText}>본인 인증을 위해 필요합니다.</Text>
+                </View>
+                <TextInput style={{ borderBottomWidth: 1, marginBottom: vh(2) }} placeholder={"이름"} />
+                <TextInput style={{ borderBottomWidth: 1 }} value={phone} onChangeText={setPhone} placeholder={"전화번호"} />
+                <AnimationSwitchSelector
+                    style={{ width: '100%', marginTop: vh(5) }}
+                    options={options}
+                    initial={0}
+                    hasPadding={true}
+                    textColor='black'
+                    buttonColor={'#AE46FF'}
+                    height={40}
+                    onPress={(value) => setGender(value)}
+                />
+            </View>
+
+            <TouchableHighlight
+                style={styles.submitButton}이강혁
+                onPress={requestCertificate}
+            >
+                <View>
+                    <Text style={{ color: 'white' }}>확 인</Text>
+                </View>
+            </TouchableHighlight>
+        </KeyboardAvoidingView>
     );
 };
 
 export default Certification;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "white",
+        paddingHorizontal: vw(5)
+    },
+    textContainer: {
+        marginTop: vh(16)
+    },
+    mainText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: "#252525"
+    },
+    subText: {
+        fontSize: 16,
+        color: "#969696"
+    },
+    submitButton: {
+        width: '100%',
+        height: vh(6),
+        backgroundColor: '#252525',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 8,
+        marginTop: vh(4)
+    }
+});
