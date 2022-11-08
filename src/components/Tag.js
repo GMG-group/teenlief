@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         elevation: 3,
-        marginHorizontal: 3
+        margin: 3
     },
 })
 
